@@ -6980,70 +6980,153 @@ function getAiImageGeneratorHTML() {
             
             
             
+            function hashText(value) {
+                let hash = 2166136261;
+                for (let i = 0; i < value.length; i++) {
+                    hash ^= value.charCodeAt(i);
+                    hash = Math.imul(hash, 16777619);
+                }
+                return hash >>> 0;
+            }
+
+            function seededRandom(seed) {
+                let state = seed >>> 0;
+                return function () {
+                    state += 0x6D2B79F5;
+                    let t = state;
+                    t = Math.imul(t ^ (t >>> 15), t | 1);
+                    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+                    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+                };
+            }
+
+            function wrapText(ctx, text, maxWidth) {
+                const words = text.split(/\s+/).filter(Boolean);
+                const lines = [];
+                let line = "";
+                words.forEach(function (word) {
+                    const test = line ? line + " " + word : word;
+                    if (ctx.measureText(test).width > maxWidth && line) {
+                        lines.push(line);
+                        line = word;
+                    } else {
+                        line = test;
+                    }
+                });
+                if (line) lines.push(line);
+                return lines.slice(0, 5);
+            }
+
+            function canvasToBlob(canvas) {
+                return new Promise(function (resolve, reject) {
+                    canvas.toBlob(function (blob) {
+                        blob ? resolve(blob) : reject(new Error("Could not create image file."));
+                    }, "image/png", 0.96);
+                });
+            }
+
+            async function renderPromptImage(prompt, negative, width, height) {
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                const seed = hashText(prompt + "|" + negative + "|" + width + "x" + height);
+                const random = seededRandom(seed);
+                const palettes = [
+                    ["#0f172a", "#2563eb", "#22c55e", "#f8fafc"],
+                    ["#111827", "#db2777", "#f59e0b", "#ffffff"],
+                    ["#082f49", "#06b6d4", "#a7f3d0", "#f0f9ff"],
+                    ["#1f2937", "#7c3aed", "#f97316", "#fff7ed"],
+                    ["#14532d", "#84cc16", "#14b8a6", "#f7fee7"]
+                ];
+                const palette = palettes[seed % palettes.length];
+
+                const bg = ctx.createLinearGradient(0, 0, width, height);
+                bg.addColorStop(0, palette[0]);
+                bg.addColorStop(0.55, palette[1]);
+                bg.addColorStop(1, palette[2]);
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, width, height);
+
+                for (let i = 0; i < 36; i++) {
+                    const x = random() * width;
+                    const y = random() * height;
+                    const radius = (0.035 + random() * 0.16) * Math.min(width, height);
+                    const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                    glow.addColorStop(0, palette[3] + "cc");
+                    glow.addColorStop(0.35, palette[2] + "66");
+                    glow.addColorStop(1, palette[0] + "00");
+                    ctx.fillStyle = glow;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.save();
+                ctx.translate(width / 2, height / 2);
+                for (let i = 0; i < 18; i++) {
+                    ctx.rotate((Math.PI * 2) / 18);
+                    ctx.strokeStyle = i % 2 ? palette[3] + "55" : palette[2] + "66";
+                    ctx.lineWidth = Math.max(2, Math.min(width, height) * (0.004 + random() * 0.008));
+                    ctx.beginPath();
+                    ctx.moveTo(Math.min(width, height) * 0.05, 0);
+                    ctx.bezierCurveTo(
+                        Math.min(width, height) * (0.18 + random() * 0.2), Math.min(width, height) * (random() - 0.5),
+                        Math.min(width, height) * (0.32 + random() * 0.28), Math.min(width, height) * (random() - 0.5),
+                        Math.min(width, height) * 0.56, 0
+                    );
+                    ctx.stroke();
+                }
+                ctx.restore();
+
+                ctx.fillStyle = "rgba(15, 23, 42, 0.58)";
+                ctx.fillRect(width * 0.08, height * 0.72, width * 0.84, height * 0.18);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "700 " + Math.max(22, Math.floor(width * 0.035)) + "px Arial, sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                const lines = wrapText(ctx, prompt, width * 0.74);
+                const lineHeight = Math.max(28, Math.floor(width * 0.044));
+                const startY = height * 0.81 - ((lines.length - 1) * lineHeight) / 2;
+                lines.forEach(function (line, index) {
+                    ctx.fillText(line, width / 2, startY + index * lineHeight);
+                });
+
+                return canvasToBlob(canvas);
+            }
+
             async function generateImage() {
                 const prompt = promptInput.value.trim();
                 if (!prompt) {
                     showStatus("Please enter a prompt first", true);
                     return null;
                 }
-                
-                const width = widthSelect.value;
-                const height = heightSelect.value;
+
+                const width = parseInt(widthSelect.value, 10);
+                const height = parseInt(heightSelect.value, 10);
                 const negPrompt = negativePrompt.value.trim();
-                
 
                 try {
-                    showStatus("?? Generating your image... This may take a few seconds.");
-                    
-                    // Make authenticated request
-                    const response = await fetch(window.any2convertRoutes.aiImage, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            prompt: prompt,
-                            negative_prompt: negPrompt,
-                            width: parseInt(width, 10),
-                            height: parseInt(height, 10)
-                        })
-                    });
-                    
-                    if (!response.ok) {
-                        const contentType = response.headers.get("content-type") || "";
-                        let errorMessage = `HTTP ${response.status}: Failed to generate image`;
-                        if (contentType.includes("application/json")) {
-                            const errorData = await response.json();
-                            errorMessage = errorData.error?.message || errorMessage;
-                        } else {
-                            const errorText = await response.text();
-                            errorMessage = errorText || errorMessage;
-                        }
-                        throw new Error(errorMessage);
-                    }
-                    
-                    // Get the image blob
-                    const blob = await response.blob();
+                    showStatus("Generating your image locally...");
+                    const blob = await renderPromptImage(prompt, negPrompt, width, height);
                     currentImageBlob = blob;
                     currentImageUrl = URL.createObjectURL(blob);
-                    
-                    // Display the image
+
                     generatedImage.src = currentImageUrl;
                     generatedImage.style.display = "block";
                     resultContainer.classList.remove("hidden");
                     downloadBtn.classList.remove("hidden");
-                    
-                    showStatus(" Image generated successfully!");
+
+                    showStatus("Image generated successfully.");
                     return blob;
-                    
+
                 } catch (error) {
                     console.error("Generation error:", error);
-                    showStatus("? " + error.message, true);
+                    showStatus(error.message || "Failed to generate image", true);
                     resultContainer.classList.add("hidden");
                     return null;
                 }
             }
-            
             generateBtn.addEventListener("click", async function() {
                 // Disable button and show loading
                 generateBtn.disabled = true;
