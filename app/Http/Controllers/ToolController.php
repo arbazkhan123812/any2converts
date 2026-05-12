@@ -10,7 +10,7 @@ class ToolController extends Controller
 {
     public function render(Request $request): Response
     {
-        require_once app_path('Support/legacy_tool_handlers.php');
+        require_once app_path('Support/tool_handlers.php');
 
         return response(renderToolHandlerHTML((string) $request->query('tool', '')));
     }
@@ -18,7 +18,7 @@ class ToolController extends Controller
     public function unavailable(): JsonResponse
     {
         return response()->json([
-            'error' => 'This server-side legacy endpoint is not configured in the Laravel project yet.',
+            'error' => 'This server-side endpoint is not configured in the Laravel project yet.',
         ], 501);
     }
 }
