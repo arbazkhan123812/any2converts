@@ -5016,10 +5016,10 @@ function getWordToPdfHTML() {
 }
 
 function getExcelToPdfHTML() {
-    return '
+    return <<<'HTML'
     <div class="space-y-6">
-        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'excelToPdfInput\').click()">
-            <input type="file" id="excelToPdfInput" class="hidden" accept=".xls,.xlsx,.csv">
+        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById('excelToPdfInput').click()">
+            <input type="file" id="excelToPdfInput" class="hidden" accept=".xls,.xlsx,.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="76" height="54" viewBox="0 0 76 54" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 34V20"></path><path d="M14 34V14"></path><path d="M20 34V24"></path><path d="M30 27h12"></path><path d="m37 21 6 6-6 6"></path><path d="M49 9h17l6 6v24a3 3 0 0 1-3 3H49a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"></path><path d="M66 9v8h8"></path></svg></div>
             <p class="font-medium">Select Excel/CSV file to convert to PDF</p>
             <p class="text-sm text-gray-500 mt-2">XLS/XLSX/CSV to PDF conversion with table formatting</p>
@@ -5042,146 +5042,156 @@ function getExcelToPdfHTML() {
         <div id="excelProgress" class="text-sm text-gray-500 text-center hidden">Processing...</div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        const excelInput = document.getElementById("excelToPdfInput");
-        const excelPreview = document.getElementById("excelPreview");
-        
-        excelInput.addEventListener("change", function() {
-            if(this.files[0]) {
-                excelPreview.innerHTML = "Selected: " + this.files[0].name + " (" + (this.files[0].size / 1024).toFixed(2) + " KB)";
-                excelPreview.classList.remove("hidden");
-            }
-        });
-        
-        document.getElementById("excelToPdfBtn").addEventListener("click", async function() {
-            const input = document.getElementById("excelToPdfInput");
-            if (!input.files.length) return alert("Please select an Excel/CSV file");
+        (function () {
+            const excelInput = document.getElementById("excelToPdfInput");
+            const excelPreview = document.getElementById("excelPreview");
+            const convertBtn = document.getElementById("excelToPdfBtn");
             const progress = document.getElementById("excelProgress");
-            progress.classList.remove("hidden");
-            progress.innerHTML = "Reading Excel file...";
-            
-            try {
-                const file = input.files[0];
-                const data = await file.arrayBuffer();
-                const workbook = XLSX.read(data);
-                const orientation = document.getElementById("pageOrientation").value;
-                const pageSize = document.getElementById("pageSize").value;
-                
-                let allSheetsHtml = "";
-                
-                for (let s = 0; s < workbook.SheetNames.length; s++) {
-                    const sheetName = workbook.SheetNames[s];
-                    const worksheet = workbook.Sheets[sheetName];
-                    
-                    // Convert to HTML with better formatting
-                    const htmlTable = XLSX.utils.sheet_to_html(worksheet, { editable: false });
-                    
-                    allSheetsHtml += `
-                        <div class="sheet" style="page-break-after: ${s < workbook.SheetNames.length - 1 ? "always" : "auto"};">
-                            <h2 style="color: #000; font-size: 14pt; margin: 15px 0 10px 0; text-align: center;">Sheet: ${escapeHtml(sheetName)}</h2>
-                            ${htmlTable}
-                        </div>
-                    `;
-                }
-                
-                const htmlContent = `<!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Excel to PDF Conversion</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            font-size: 10pt;
-                            color: #000;
-                            background: white;
-                            margin: 0;
-                            padding: 0.5in;
-                        }
-                        .sheet {
-                            margin-bottom: 20px;
-                        }
-                        table {
-                            border-collapse: collapse;
-                            width: 100%;
-                            margin: 10px 0;
-                            font-size: 9pt;
-                        }
-                        th, td {
-                            border: 1px solid #000;
-                            padding: 6px 8px;
-                            text-align: left;
-                            vertical-align: top;
-                        }
-                        th {
-                            background-color: #f2f2f2;
-                            font-weight: bold;
-                        }
-                        h2 {
-                            color: #000;
-                            font-size: 14pt;
-                            margin: 15px 0 10px 0;
-                            page-break-after: avoid;
-                        }
-                        @media print {
-                            body {
-                                margin: 0;
-                                padding: 0.5in;
-                            }
-                            table {
-                                page-break-inside: avoid;
-                            }
-                            tr {
-                                page-break-inside: avoid;
-                                page-break-after: avoid;
-                            }
-                            thead {
-                                display: table-header-group;
-                            }
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${allSheetsHtml}
-                </body>
-                </html>`;
-                
-                const opt = {
-                    margin: [0.5, 0.5, 0.5, 0.5],
-                    filename: "excel_to_pdf.pdf",
-                    image: { type: "jpeg", quality: 0.98 },
-                    html2canvas: { scale: 2, letterRendering: true, backgroundColor: "#ffffff" },
-                    jsPDF: { unit: "in", format: pageSize, orientation: orientation }
-                };
-                
-                progress.innerHTML = "Generating PDF...";
-                
-                const element = document.createElement("div");
-                element.style.position = "absolute";
-                element.style.left = "-9999px";
-                element.style.top = "-9999px";
-                element.innerHTML = htmlContent;
-                document.body.appendChild(element);
-                
-                await new Promise(resolve => setTimeout(resolve, 300));
-                await html2pdf().set(opt).from(element).save();
-                element.remove();
-                alert("Conversion complete! PDF downloaded with all sheets formatted.");
-            } catch(e) {
-                alert("Error converting Excel file: " + e.message);
-            }
-            progress.classList.add("hidden");
-        });
-        
-        function escapeHtml(text) {
-            const div = document.createElement("div");
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    </script>';
-}
 
+            excelInput.addEventListener("change", function () {
+                if (this.files[0]) {
+                    excelPreview.textContent = "Selected: " + this.files[0].name + " (" + (this.files[0].size / 1024).toFixed(2) + " KB)";
+                    excelPreview.classList.remove("hidden");
+                }
+            });
+
+            function setProgress(message, isError) {
+                progress.textContent = message;
+                progress.classList.remove("hidden", "text-red-500", "text-gray-500");
+                progress.classList.add(isError ? "text-red-500" : "text-gray-500");
+            }
+
+            function normalizeCell(value) {
+                if (value === null || value === undefined) return "";
+                if (value instanceof Date) return value.toLocaleDateString();
+                return String(value).replace(/\s+/g, " ").trim();
+            }
+
+            function pagePoints(format, orientation) {
+                const sizes = {
+                    a4: [595.28, 841.89],
+                    letter: [612, 792],
+                    legal: [612, 1008]
+                };
+                const base = sizes[format] || sizes.a4;
+                return orientation === "landscape" ? [base[1], base[0]] : base;
+            }
+
+            function drawWrappedText(doc, text, x, y, width, lineHeight) {
+                const lines = doc.splitTextToSize(text || "", Math.max(8, width - 6));
+                const visible = lines.slice(0, 3);
+                visible.forEach(function (line, index) {
+                    doc.text(line, x + 3, y + 10 + index * lineHeight);
+                });
+                return Math.max(lineHeight + 8, visible.length * lineHeight + 8);
+            }
+
+            function drawSheet(doc, sheetName, rows, settings, state) {
+                const margin = 28;
+                const pageWidth = state.pageWidth;
+                const pageHeight = state.pageHeight;
+                const usableWidth = pageWidth - margin * 2;
+                const lineHeight = 9;
+                const maxCols = Math.min(Math.max.apply(null, rows.map(function (row) { return row.length; }).concat([1])), 10);
+                const colWidth = usableWidth / maxCols;
+                let y = state.y;
+
+                function newPage() {
+                    doc.addPage(settings.pageSize, settings.orientation);
+                    y = margin;
+                }
+
+                if (y > margin || state.hasContent) newPage();
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(13);
+                doc.text("Sheet: " + sheetName, margin, y);
+                y += 18;
+
+                const cleanRows = rows.filter(function (row) {
+                    return row.some(function (cell) { return normalizeCell(cell) !== ""; });
+                });
+
+                if (!cleanRows.length) {
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                    doc.text("No printable rows found in this sheet.", margin, y);
+                    state.y = y + 20;
+                    state.hasContent = true;
+                    return;
+                }
+
+                cleanRows.forEach(function (row, rowIndex) {
+                    const cells = [];
+                    for (let i = 0; i < maxCols; i++) cells.push(normalizeCell(row[i]));
+                    const wrappedHeights = cells.map(function (cell) {
+                        const lines = doc.splitTextToSize(cell, Math.max(8, colWidth - 6)).slice(0, 3);
+                        return Math.max(18, lines.length * lineHeight + 8);
+                    });
+                    const rowHeight = Math.max.apply(null, wrappedHeights);
+
+                    if (y + rowHeight > pageHeight - margin) newPage();
+
+                    cells.forEach(function (cell, colIndex) {
+                        const x = margin + colIndex * colWidth;
+                        if (rowIndex === 0) {
+                            doc.setFillColor(240, 244, 248);
+                            doc.rect(x, y, colWidth, rowHeight, "FD");
+                            doc.setFont("helvetica", "bold");
+                        } else {
+                            doc.rect(x, y, colWidth, rowHeight);
+                            doc.setFont("helvetica", "normal");
+                        }
+                        doc.setFontSize(rowIndex === 0 ? 8.5 : 8);
+                        drawWrappedText(doc, cell, x, y, colWidth, lineHeight);
+                    });
+                    y += rowHeight;
+                });
+
+                state.y = y + 20;
+                state.hasContent = true;
+            }
+
+            convertBtn.addEventListener("click", async function () {
+                if (!excelInput.files.length) return alert("Please select an Excel/CSV file");
+                if (!window.XLSX) return setProgress("Excel library failed to load. Please refresh and try again.", true);
+                if (!window.jspdf || !window.jspdf.jsPDF) return setProgress("PDF library failed to load. Please refresh and try again.", true);
+
+                convertBtn.disabled = true;
+                convertBtn.classList.add("opacity-70", "cursor-not-allowed");
+                setProgress("Reading spreadsheet...", false);
+
+                try {
+                    const file = excelInput.files[0];
+                    const workbook = XLSX.read(await file.arrayBuffer(), { type: "array", cellDates: true });
+                    const orientation = document.getElementById("pageOrientation").value;
+                    const pageSize = document.getElementById("pageSize").value;
+                    const points = pagePoints(pageSize, orientation);
+                    const doc = new window.jspdf.jsPDF({ orientation: orientation, unit: "pt", format: pageSize });
+                    const state = { pageWidth: points[0], pageHeight: points[1], y: 28, hasContent: false };
+
+                    workbook.SheetNames.forEach(function (sheetName, index) {
+                        setProgress("Rendering sheet " + (index + 1) + " of " + workbook.SheetNames.length + "...", false);
+                        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, raw: false, defval: "" });
+                        drawSheet(doc, sheetName, rows, { pageSize: pageSize, orientation: orientation }, state);
+                    });
+
+                    const baseName = file.name.replace(/\.[^.]+$/, "") || "excel";
+                    doc.save(baseName + ".pdf");
+                    setProgress("Conversion complete. PDF downloaded.", false);
+                } catch (error) {
+                    console.error(error);
+                    setProgress("Error converting Excel file: " + (error.message || "Unknown error"), true);
+                } finally {
+                    convertBtn.disabled = false;
+                    convertBtn.classList.remove("opacity-70", "cursor-not-allowed");
+                }
+            });
+        })();
+    </script>
+HTML;
+}
 function getPptToPdfHTML() {
     return '
     <div class="space-y-6">
@@ -8521,8 +8531,10 @@ function getPdfToWordPureJS() {
         <button id="pdfToWordBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Convert to Word</button>
         <div id="wordProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://unpkg.com/docx@8.2.3/build/index.js"></script>
     <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
         document.getElementById("pdfToWordInput").addEventListener("change", function() {
             if(this.files[0]) {
                 const p = document.getElementById("pdfPreview");
@@ -8581,7 +8593,10 @@ function getPdfToPptPureJS() {
         <button id="pdfToPptBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Convert to PowerPoint</button>
         <div id="pptProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
         document.getElementById("pdfToPptInput").addEventListener("change", function() {
             if(this.files[0]) {
                 const p = document.getElementById("pptPreview");
@@ -8644,7 +8659,10 @@ function getPdfToExcelPureJS() {
         <button id="pdfToExcelBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Extract to Excel</button>
         <div id="excelProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
         document.getElementById("pdfToExcelInput").addEventListener("change", function() {
             if(this.files[0]) {
                 const p = document.getElementById("excelPreview");
@@ -8711,6 +8729,8 @@ function getWordToPdfPureJS() {
         <button id="wordToPdfBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Convert to PDF</button>
         <div id="wordProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.2/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         document.getElementById("wordToPdfInput").addEventListener("change", function() {
             if(this.files[0]) {
