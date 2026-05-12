@@ -1072,7 +1072,7 @@ $itemListSchema = [
             <!-- Logo -->
             <a href="{{ route('home') }}" style="text-decoration:none" class="flex items-center gap-2">
                 <div style="width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                   <img src="{{ asser('any2convertlogo.png') }}" alt="">
+                   <img src="{{ asset('any2convertlogo.png') }}" alt="">
                 </div>
                 <span class="logo-text">Any2Convert<span class="logo-dot">.</span></span>
             </a>
