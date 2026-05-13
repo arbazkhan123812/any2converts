@@ -1176,7 +1176,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
 
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
             <?php foreach ($trustHighlights as $highlight): ?>
-            <a href="highlights.php?topic=<?= urlencode($highlight['slug']) ?>" class="stat-item">
+            <a href="/highlights?topic=<?= urlencode($highlight['slug']) ?>" class="stat-item">
                 <?= $highlight['icon'] ?>
                 <?= htmlspecialchars($highlight['label']) ?>
             </a>
@@ -1352,7 +1352,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
             ];
             foreach($features as $f):
                 $featureSlug = $f['slug'] ?? 'works-on-any-device'; ?>
-            <a href="highlights.php?topic=<?= urlencode($featureSlug) ?>" class="detail-card" style="padding:24px;">
+            <a href="/highlights?topic=<?= urlencode($featureSlug) ?>" class="detail-card" style="padding:24px;">
                 <div style="width:40px;height:40px;border-radius:10px;background:<?= $f['bg'] ?>;color:<?= $f['color'] ?>;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
                     <?= $f['icon'] ?>
                 </div>
@@ -1395,14 +1395,14 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
     <section>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
             <h2 class="section-heading">Guides & Tips</h2>
-            <a href="blog/index.php" style="text-decoration:none;font-size:0.82rem;color:var(--accent);display:flex;align-items:center;gap:4px;">
+            <a href="/blog" style="text-decoration:none;font-size:0.82rem;color:var(--accent);display:flex;align-items:center;gap:4px;">
                 View all
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
 
-            <a href="blog/security-benefits.php" class="blog-card">
+            <a href="/blog/security-benefits" class="blog-card">
                 <div style="width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,0.1);color:#F87171;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </div>
@@ -1414,7 +1414,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
                 </div>
             </a>
 
-            <a href="blog/qr-guide.php" class="blog-card">
+            <a href="/blog/qr-guide" class="blog-card">
                 <div style="width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,0.1);color:#A78BFA;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/></svg>
                 </div>
@@ -1460,17 +1460,17 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
             <div>
                 <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Company</div>
                 <div style="display:flex;flex-direction:column;gap:9px;">
-                    <a href="about.php" class="footer-link">About</a>
-                    <a href="contact.php" class="footer-link">Contact</a>
-                    <a href="privacy.php" class="footer-link">Privacy Policy</a>
-                    <a href="terms.php" class="footer-link">Terms</a>
+                    <a href="/about" class="footer-link">About</a>
+                    <a href="/contact" class="footer-link">Contact</a>
+                    <a href="/privacy" class="footer-link">Privacy Policy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
                 </div>
             </div>
 
             <div>
                 <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Resources</div>
                 <div style="display:flex;flex-direction:column;gap:9px;">
-                    <a href="blog/index.php" class="footer-link">Blog</a>
+                    <a href="/blog" class="footer-link">Blog</a>
                 </div>
             </div>
         </div>
