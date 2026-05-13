@@ -261,15 +261,41 @@ $itemListSchema = [
     'numberOfItems' => count($toolListSchemaItems),
     'itemListElement' => $toolListSchemaItems,
 ];
+
+$toolNameMap = [];
+$toolDescriptionMap = [];
+foreach ($tools as $category) {
+    foreach ($category['tools'] as $tool) {
+        $toolNameMap[$tool['id']] = $tool['name'];
+        $toolDescriptionMap[$tool['id']] = $tool['desc'] ?? '';
+    }
+}
+
+$defaultTitle = 'Any2Convert | Free All-in-One PDF & Document Converter Suite';
+$defaultDescription = 'Free online PDF tools: Convert images to PDF, merge, compress, protect PDFs. Also includes OCR, JSON to CSV, QR codes. Local-first processing keeps many files on your device.';
+
+$seoTitle = $defaultTitle;
+$seoDescription = $defaultDescription;
+if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
+    $seoTitle = $toolNameMap[$initialToolId] . ' | Any2Convert';
+    $toolDesc = trim($toolDescriptionMap[$initialToolId]);
+    $seoDescription = $toolDesc !== ''
+        ? $toolDesc . ' on Any2Convert.'
+        : $toolNameMap[$initialToolId] . ' tool on Any2Convert.';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any2Convert | Free All-in-One PDF & Document Converter Suite</title>
+    <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
-    <meta name="description" content="Free online PDF tools: Convert images to PDF, merge, compress, protect PDFs. Also includes OCR, JSON to CSV, QR codes. Local-first processing keeps many files on your device.">
+    <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
+    <meta name="twitter:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
+    <meta name="twitter:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
     <meta name="theme-color" content="#3B82F6">
 
     <script>
