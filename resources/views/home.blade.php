@@ -274,7 +274,7 @@ foreach ($tools as $category) {
 }
 
 $defaultTitle = 'Any2Convert | Free All-in-One PDF & Document Converter Suite';
-$defaultDescription = 'Free online PDF tools: Convert images to PDF, merge, compress, protect PDFs. Also includes OCR, JSON to CSV, QR codes. Local-first processing keeps many files on your device.';
+$defaultDescription = 'Free online PDF, document, image, and utility tools. Process files locally on your device with privacy-focused conversions.';
 
 $seoTitle = $defaultTitle;
 $seoDescription = $defaultDescription;
@@ -286,8 +286,8 @@ if ($isToolPage) {
     $seoTitle = $currentToolName . ' Online Free Tool | Any2Convert';
     $toolDesc = $currentToolDescription;
     $seoDescription = $toolDesc !== ''
-        ? rtrim($toolDesc, ". \t\n\r\0\x0B") . '. Use this free online tool in your browser with privacy-focused processing, fast results, and no unnecessary software installation.'
-        : $currentToolName . ' is a free online tool from Any2Convert for browser-based file, text, or utility work with privacy-focused processing.';
+        ? rtrim($toolDesc, ". \t\n\r\0\x0B") . '. Free, fast, and privacy-focused online tool.'
+        : $currentToolName . ' is a free, fast, and privacy-focused online tool.';
 }
 ?>
 <!DOCTYPE html>
