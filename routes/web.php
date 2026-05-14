@@ -52,14 +52,19 @@ Route::view('/register', 'page', [
     'content' => '<p>Register for a free Any2Convert account to unlock saved settings and additional document management workflows.</p>'
 ]);
 
-Route::get('/highlights', [HomeController::class, 'highlight'])->name('highlights');
+Route::get('/highlights', [HomeController::class, 'legacyHighlight'])->name('highlights.legacy');
+Route::get('/highlights/{topic}', [HomeController::class, 'highlight'])
+    ->where('topic', '[A-Za-z0-9-]+')
+    ->name('highlights');
 Route::get('/blog', [HomeController::class, 'blogIndex'])->name('blog.index');
 Route::get('/blog/{slug}', [HomeController::class, 'blogArticle'])
     ->where('slug', 'qr-guide|security-benefits')
     ->name('blog.article');
 
 Route::get('/highlights.php', function (Request $request) {
-    $target = '/highlights' . ($request->getQueryString() ? '?' . $request->getQueryString() : '');
+    $target = $request->query('topic')
+        ? '/highlights/' . rawurlencode($request->query('topic'))
+        : '/highlights';
     return redirect($target, 301);
 });
 
@@ -72,7 +77,9 @@ Route::get('/blog/index.php', fn() => redirect('/blog', 301));
 Route::get('/blog/qr-guide.php', fn() => redirect('/blog/qr-guide', 301));
 Route::get('/blog/security-benefits.php', fn() => redirect('/blog/security-benefits', 301));
 Route::get('/blog/highlights.php', function (Request $request) {
-    $target = '/highlights' . ($request->getQueryString() ? '?' . $request->getQueryString() : '');
+    $target = $request->query('topic')
+        ? '/highlights/' . rawurlencode($request->query('topic'))
+        : '/highlights';
     return redirect($target, 301);
 });
 
@@ -89,7 +96,9 @@ Route::get('/public/blog/index.php', fn() => redirect('/blog', 301));
 Route::get('/public/blog/qr-guide.php', fn() => redirect('/blog/qr-guide', 301));
 Route::get('/public/blog/security-benefits.php', fn() => redirect('/blog/security-benefits', 301));
 Route::get('/public/highlights.php', function (Request $request) {
-    $target = '/highlights' . ($request->getQueryString() ? '?' . $request->getQueryString() : '');
+    $target = $request->query('topic')
+        ? '/highlights/' . rawurlencode($request->query('topic'))
+        : '/highlights';
     return redirect($target, 301);
 });
 

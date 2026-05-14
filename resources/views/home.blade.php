@@ -289,7 +289,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="{{ url()->full() }}">
+    <link rel="canonical" href="{{ url()->current() }}">
     <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
     <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
@@ -1174,7 +1174,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
 
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
             <?php foreach ($trustHighlights as $highlight): ?>
-            <a href="/highlights?topic=<?= urlencode($highlight['slug']) ?>" class="stat-item">
+            <a href="/highlights/<?= rawurlencode($highlight['slug']) ?>" class="stat-item">
                 <?= $highlight['icon'] ?>
                 <?= htmlspecialchars($highlight['label']) ?>
             </a>
@@ -1367,7 +1367,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
             ];
             foreach($features as $f):
                 $featureSlug = $f['slug'] ?? 'works-on-any-device'; ?>
-            <a href="/highlights?topic=<?= urlencode($featureSlug) ?>" class="detail-card" style="padding:24px;">
+            <a href="/highlights/<?= rawurlencode($featureSlug) ?>" class="detail-card" style="padding:24px;">
                 <div style="width:40px;height:40px;border-radius:10px;background:<?= $f['bg'] ?>;color:<?= $f['color'] ?>;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
                     <?= $f['icon'] ?>
                 </div>
@@ -1951,4 +1951,3 @@ document.addEventListener('keydown', e => {
 
 </body>
 </html>
-

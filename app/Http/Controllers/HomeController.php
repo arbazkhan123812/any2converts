@@ -23,7 +23,16 @@ class HomeController extends Controller
         ]);
     }
 
-    public function highlight(Request $request): View
+    public function legacyHighlight(Request $request)
+    {
+        $topic = $request->query('topic');
+
+        abort_unless(is_string($topic) && $topic !== '', 404);
+
+        return redirect('/highlights/' . rawurlencode($topic), 301);
+    }
+
+    public function highlight(string $topic): View
     {
         $topics = [
             'instant-processing' => [
@@ -60,8 +69,7 @@ class HomeController extends Controller
             ],
         ];
 
-        $topic = $request->query('topic');
-        abort_unless($topic && isset($topics[$topic]), 404);
+        abort_unless(isset($topics[$topic]), 404);
 
         $item = $topics[$topic];
 
