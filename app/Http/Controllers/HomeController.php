@@ -34,6 +34,10 @@ class HomeController extends Controller
                 'label' => 'Files Never Leave Your Device',
                 'desc' => 'Many tools process files directly in your browser so sensitive files stay private and do not get uploaded unnecessarily.',
             ],
+            'no-file-uploads' => [
+                'label' => 'No File Uploads',
+                'desc' => 'Some Any2Convert tools handle files entirely in your browser, so private content stays local while conversion runs.',
+            ],
             'free-forever' => [
                 'label' => 'Free Forever',
                 'desc' => 'Any2Convert remains free to use without unexpected paywalls, so you can complete conversions without subscription barriers.',
