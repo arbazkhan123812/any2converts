@@ -14,6 +14,7 @@
         .page-shell { max-width:900px; margin:0 auto; padding:36px 20px; }
         .page-card { background:#fff; border:1px solid rgba(15,23,42,0.08); border-radius:24px; padding:32px; box-shadow:0 24px 60px rgba(15,23,42,0.08); }
         .page-title { margin:0 0 16px; font-size:2rem; line-height:1.1; }
+        .page-subtitle { margin:0 0 20px; font-size:1.1rem; line-height:1.5; font-weight:600; color:#334155; }
         .page-content p { margin:0 0 18px; line-height:1.8; color:#475569; }
         .page-footer { margin-top:24px; font-size:0.92rem; color:#64748b; }
     </style>
@@ -32,6 +33,7 @@
 
         <article class="page-card">
             <h1 class="page-title">{{ $headline ?? $title }}</h1>
+            <h2 class="page-subtitle">{{ $description ?? 'Free online tools from Any2Convert.' }}</h2>
             <div class="page-content">{!! $content ?? '<p>Welcome to Any2Convert.</p>' !!}</div>
             <div class="page-footer">
                 <p>Return to the <a href="/">Any2Convert homepage</a> anytime.</p>
