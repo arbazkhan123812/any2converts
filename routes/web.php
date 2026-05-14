@@ -11,42 +11,42 @@ Route::post('/tools/pdf-service', [ToolController::class, 'unavailable'])->name(
 Route::post('/tools/ai-image', [ToolController::class, 'unavailable'])->name('tools.ai-image');
 
 Route::view('/about', 'page', [
-    'title' => 'About Any2Convert',
+    'title' => 'About Any2Convert Free Online Tools',
     'description' => 'Learn more about Any2Convert, the free online PDF and document conversion toolkit.',
     'headline' => 'About Any2Convert',
     'content' => '<p>Any2Convert provides free online PDF, document, image, and utility tools with a privacy-first approach. Many tools process files locally in the browser while others offer managed conversions without unnecessary tracking.</p>'
 ]);
 
 Route::view('/contact', 'page', [
-    'title' => 'Contact Any2Convert',
+    'title' => 'Contact Any2Convert Support and Feedback',
     'description' => 'Reach out to Any2Convert for support, feedback, or partnership inquiries.',
     'headline' => 'Contact Any2Convert',
     'content' => '<p>Need help or have feedback? Contact Any2Convert to share ideas, report an issue, or ask about new tool suggestions.</p>'
 ]);
 
 Route::view('/privacy', 'page', [
-    'title' => 'Privacy Policy - Any2Convert',
+    'title' => 'Privacy Policy for Any2Convert Online Tools',
     'description' => 'Read the privacy policy for Any2Convert and how we handle user data and file processing.',
     'headline' => 'Privacy Policy',
     'content' => '<p>Any2Convert is designed to minimize data collection and keep many tasks local to your device. We do not store files longer than necessary for server-based conversions.</p>'
 ]);
 
 Route::view('/terms', 'page', [
-    'title' => 'Terms of Service - Any2Convert',
+    'title' => 'Terms of Service for Any2Convert Online Tools',
     'description' => 'Read the terms of service for Any2Convert before using the site and tools.',
     'headline' => 'Terms of Service',
     'content' => '<p>By using Any2Convert, you agree to our terms governing access, permitted use, and tool availability. This site is provided as a free service.</p>'
 ]);
 
 Route::view('/login', 'page', [
-    'title' => 'Login - Any2Convert',
+    'title' => 'Login to Any2Convert Online Tool Account',
     'description' => 'Sign in to Any2Convert to access saved features and account-based tools.',
     'headline' => 'Login',
     'content' => '<p>Login functionality is available for account-based features. If you need help signing in, please contact support.</p>'
 ]);
 
 Route::view('/register', 'page', [
-    'title' => 'Register - Any2Convert',
+    'title' => 'Register for Any2Convert Online Tools',
     'description' => 'Create a free Any2Convert account to save preferences and access additional features.',
     'headline' => 'Register',
     'content' => '<p>Register for a free Any2Convert account to unlock saved settings and additional document management workflows.</p>'

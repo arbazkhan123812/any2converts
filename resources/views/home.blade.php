@@ -279,7 +279,7 @@ $defaultDescription = 'Free online PDF tools: Convert images to PDF, merge, comp
 $seoTitle = $defaultTitle;
 $seoDescription = $defaultDescription;
 if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
-    $seoTitle = $toolNameMap[$initialToolId] . ' | Any2Convert';
+    $seoTitle = $toolNameMap[$initialToolId] . ' Online Free Tool | Any2Convert';
     $toolDesc = trim($toolDescriptionMap[$initialToolId]);
     $seoDescription = $toolDesc !== ''
         ? $toolDesc . ' on Any2Convert.'
