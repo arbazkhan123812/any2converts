@@ -31,7 +31,7 @@
         </header>
 
         <article class="page-card">
-            <h2 class="page-title">{{ $headline ?? $title }}</h2>
+            <h1 class="page-title">{{ $headline ?? $title }}</h1>
             <div class="page-content">{!! $content ?? '<p>Welcome to Any2Convert.</p>' !!}</div>
             <div class="page-footer">
                 <p>Return to the <a href="/">Any2Convert homepage</a> anytime.</p>
