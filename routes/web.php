@@ -12,44 +12,44 @@ Route::post('/tools/ai-image', [ToolController::class, 'unavailable'])->name('to
 
 Route::view('/about', 'page', [
     'title' => 'About Any2Convert Free Online Tools',
-    'description' => 'Learn more about Any2Convert, the free online PDF and document conversion toolkit.',
+    'description' => 'Learn more about Any2Convert. We offer free and easy online tools for your files.',
     'headline' => 'About Any2Convert',
-    'content' => '<p>Any2Convert provides free online PDF, document, image, and utility tools with a privacy-first approach. Many tools process files locally in the browser while others offer managed conversions without unnecessary tracking.</p>'
+    'content' => '<p>Any2Convert gives you free online tools for PDFs, documents, and images. We care about your privacy. Many of our tools work right in your browser. This means your files stay on your device.</p>'
 ]);
 
 Route::view('/contact', 'page', [
     'title' => 'Contact Any2Convert Support and Feedback',
-    'description' => 'Reach out to Any2Convert for support, feedback, or partnership inquiries.',
+    'description' => 'Contact us if you need help. We love to hear your feedback and new ideas.',
     'headline' => 'Contact Any2Convert',
-    'content' => '<p>Need help or have feedback? Contact Any2Convert to share ideas, report an issue, or ask about new tool suggestions.</p>'
+    'content' => '<p>Do you need help or have ideas to share? Please contact us. You can report bugs, ask questions, or suggest new tools. We love to hear from you.</p>'
 ]);
 
 Route::view('/privacy', 'page', [
     'title' => 'Privacy Policy for Any2Convert Online Tools',
-    'description' => 'Read the privacy policy for Any2Convert and how we handle user data and file processing.',
+    'description' => 'Read our privacy policy. Learn how we protect your files and keep your data safe.',
     'headline' => 'Privacy Policy',
-    'content' => '<p>Any2Convert is designed to minimize data collection and keep many tasks local to your device. We do not store files longer than necessary for server-based conversions.</p>'
+    'content' => '<p>We built Any2Convert to keep your data safe. We collect very little info. Many tools run only on your own device. If we must process a file on our server, we delete it right away.</p>'
 ]);
 
 Route::view('/terms', 'page', [
     'title' => 'Terms of Service for Any2Convert Online Tools',
-    'description' => 'Read the terms of service for Any2Convert before using the site and tools.',
+    'description' => 'Read our rules. See the terms for using our free site and tools.',
     'headline' => 'Terms of Service',
-    'content' => '<p>By using Any2Convert, you agree to our terms governing access, permitted use, and tool availability. This site is provided as a free service.</p>'
+    'content' => '<p>By using this site, you agree to our rules. You can use our tools for free. We try to keep all tools online, but we offer them as-is. Please use them fairly.</p>'
 ]);
 
 Route::view('/login', 'page', [
     'title' => 'Login to Any2Convert Online Tool Account',
-    'description' => 'Sign in to Any2Convert to access saved features and account-based tools.',
+    'description' => 'Sign in to your account. Use your saved tools and custom features.',
     'headline' => 'Login',
-    'content' => '<p>Login functionality is available for account-based features. If you need help signing in, please contact support.</p>'
+    'content' => '<p>Sign in to use your account features. A free account lets you save your settings. If you cannot sign in, please email our support team for help.</p>'
 ]);
 
 Route::view('/register', 'page', [
     'title' => 'Register for Any2Convert Online Tools',
-    'description' => 'Create a free Any2Convert account to save preferences and access additional features.',
+    'description' => 'Make a free account. Save your choices and use more of our tools.',
     'headline' => 'Register',
-    'content' => '<p>Register for a free Any2Convert account to unlock saved settings and additional document management workflows.</p>'
+    'content' => '<p>Sign up for a free account today. An account lets you save your choices. It also helps you work faster with your files. Joining is quick and easy.</p>'
 ]);
 
 Route::get('/highlights', [HomeController::class, 'legacyHighlight'])->name('highlights.legacy');

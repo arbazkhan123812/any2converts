@@ -37,35 +37,35 @@ class HomeController extends Controller
         $topics = [
             'instant-processing' => [
                 'label' => 'Instant Processing',
-                'desc' => 'Get results fast with tools that run locally in the browser or use managed conversions with minimal wait time.',
+                'desc' => 'Get results fast. Many tools run right in your browser. Other tasks use fast servers so you do not wait long.',
             ],
             'files-never-leave-your-device' => [
                 'label' => 'Files Never Leave Your Device',
-                'desc' => 'Many tools process files directly in your browser so sensitive files stay private and do not get uploaded unnecessarily.',
+                'desc' => 'Keep your files safe. Many tools run right on your device. Your private files are not sent to our servers.',
             ],
             'no-file-uploads' => [
                 'label' => 'No File Uploads',
-                'desc' => 'Some Any2Convert tools handle files entirely in your browser, so private content stays local while conversion runs.',
+                'desc' => 'You do not need to upload files. Many tools work right inside your browser. This keeps your private items safe.',
             ],
             'free-forever' => [
                 'label' => 'Free Forever',
-                'desc' => 'Any2Convert remains free to use without unexpected paywalls, so you can complete conversions without subscription barriers.',
+                'desc' => 'Our site is free to use. There are no hidden fees. We do not ask you to pay to use our core tools.',
             ],
             'works-in-browser' => [
                 'label' => 'Works in Browser',
-                'desc' => 'Open Any2Convert in any modern browser and use tools immediately, without installing software or browser extensions.',
+                'desc' => 'Just open the web page and start working. You do not need to install any apps. It works on all web browsers.',
             ],
             'works-on-any-device' => [
                 'label' => 'Works on Any Device',
-                'desc' => 'Use Any2Convert on desktop, tablet, or mobile without installing anything. The tools adapt seamlessly to your browser.',
+                'desc' => 'Use our tools on your phone, tablet, or computer. You do not need an app. The site works well on any screen.',
             ],
             'always-free-no-watermarks' => [
                 'label' => 'Always Free, No Watermarks',
-                'desc' => 'Any2Convert is free to use with no forced watermarks, no hidden fees, and no paywalls on supported file tasks.',
+                'desc' => 'Use our tools for free. We do not put ugly marks on your files. There are no sneaky costs to worry about.',
             ],
             'instant-results' => [
                 'label' => 'Instant Results',
-                'desc' => 'Many conversions complete instantly in the browser, so you can keep working without waiting on uploads or downloads.',
+                'desc' => 'Get your files right away. Many tasks finish the moment you click. You can keep working instead of waiting.',
             ],
         ];
 
@@ -85,9 +85,9 @@ class HomeController extends Controller
     {
         return view('page', [
             'title' => 'Any2Convert Blog for File Conversion Tips',
-            'description' => 'Read the latest guides, best practices, and privacy tips from Any2Convert.',
+            'description' => 'Read our tips and guides. Learn how to change files and keep your data safe.',
             'headline' => 'Any2Convert Blog',
-            'content' => '<p>Explore guides and articles about file conversion, privacy, and using Any2Convert more effectively.</p>' .
+            'content' => '<p>Read our tips and guides. Learn how to change files and keep your data safe.</p>' .
                 '<ul>' .
                 '<li><a href="/blog/security-benefits">Why Image to PDF is More Secure</a></li>' .
                 '<li><a href="/blog/qr-guide">Business QR Code Best Practices</a></li>' .
@@ -100,13 +100,13 @@ class HomeController extends Controller
         $articles = [
             'security-benefits' => [
                 'title' => 'Why Image to PDF is More Secure',
-                'desc' => 'Learn how converting images to PDFs can preserve privacy and protect your documents from unauthorized access.',
-                'content' => '<p>Converting images to PDF can help centralize document security and make it easier to apply protections such as passwords and restricted editing permissions.</p>',
+                'desc' => 'Learn how a PDF keeps your photos safe. Find out how to lock files to stop others from seeing them.',
+                'content' => '<p>Putting photos in a PDF is smart. It keeps them safe in one file. You can easily add a password. You can also stop people from changing your file.</p>',
             ],
             'qr-guide' => [
                 'title' => 'Business QR Code Best Practices',
-                'desc' => 'Discover how to create scannable QR codes for your business with better reliability and user experience.',
-                'content' => '<p>Good QR codes are high contrast, use a simple design, and avoid placing them on busy backgrounds. Test across phones before publishing.</p>',
+                'desc' => 'Find out how to make good QR codes. Learn to make codes that scan fast and work well for your customers.',
+                'content' => '<p>A good QR code is clear and dark. Keep the design very simple. Do not put it on messy backgrounds. Always scan it with your phone before you print it.</p>',
             ],
         ];
 
