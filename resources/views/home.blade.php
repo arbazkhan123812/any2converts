@@ -1214,6 +1214,16 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
         No tools matched that search. Try a broader keyword or switch back to All.
     </div>
 
+    <!-- Tool page heading -->
+    <?php if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])): ?>
+    <section style="margin-bottom:48px;text-align:center;">
+        <h2 class="section-heading" style="margin-bottom:8px;"><?= htmlspecialchars($toolNameMap[$initialToolId], ENT_QUOTES) ?></h2>
+        <p style="font-size:0.95rem;color:var(--text-secondary);max-width:620px;margin:0 auto;line-height:1.6;">
+            <?= htmlspecialchars($toolDescriptionMap[$initialToolId], ENT_QUOTES) ?>
+        </p>
+    </section>
+    <?php endif; ?>
+
     <?php
     $iconSvgs = [
         // PDF
