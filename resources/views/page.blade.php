@@ -17,7 +17,7 @@
         .page-subtitle { margin:0 0 20px; font-size:1.1rem; line-height:1.5; font-weight:600; color:#334155; }
         .page-content p { margin:0 0 18px; line-height:1.8; color:#475569; }
         .page-seo { margin-top:24px; border-top:1px solid rgba(15,23,42,0.08); padding-top:22px; }
-        .page-seo h2 { margin:0 0 12px; font-size:1.25rem; line-height:1.25; color:#111118; }
+        .page-seo h3 { margin:0 0 12px; font-size:1.25rem; line-height:1.25; color:#111118; }
         .page-seo p { margin:0 0 14px; line-height:1.8; color:#475569; }
         .page-footer { margin-top:24px; font-size:0.92rem; color:#64748b; }
     </style>
@@ -39,10 +39,12 @@
             <h2 class="page-subtitle">{{ $description ?? 'Free online tools from Any2Convert.' }}</h2>
             <div class="page-content">{!! $content ?? '<p>Welcome to Any2Convert.</p>' !!}</div>
             <section class="page-seo">
-                <h2>What this page covers</h2>
+                <h3>What this page covers</h3>
                 <p>{{ $description ?? 'This Any2Convert page explains the available feature, policy, guide, or account option in plain language.' }}</p>
                 <p>Any2Convert is a free online toolkit for PDF, document, image, calculator, converter, writing, business, and utility workflows. The site is designed to be fast to open, easy to use on desktop or mobile, and helpful when you need a practical browser-based tool without installing extra software.</p>
                 <p>Where possible, Any2Convert favors local-first processing so common tasks can run in your browser. This keeps many files and inputs on your own device, reduces waiting on uploads, and gives you a simple place to complete everyday file and productivity tasks.</p>
+                <p>Use this page as a quick reference for how Any2Convert approaches free access, privacy-aware workflows, browser compatibility, and practical file handling. The goal is to keep each page understandable for visitors while giving search engines enough context to identify the purpose of the page.</p>
+                <p>For related work, return to the homepage to browse PDF tools, document converters, image utilities, calculators, writing helpers, developer utilities, and everyday productivity tools. Each tool page includes a focused description, expected use cases, and notes about how the browser-based workflow fits into the wider Any2Convert toolkit.</p>
             </section>
             <div class="page-footer">
                 <p>Return to the <a href="/">Any2Convert homepage</a> anytime.</p>

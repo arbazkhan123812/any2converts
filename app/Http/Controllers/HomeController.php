@@ -74,7 +74,7 @@ class HomeController extends Controller
         $item = $topics[$topic];
 
         return view('page', [
-            'title' => $item['label'] . ' Online Tools Highlight | Any2Convert',
+            'title' => $item['label'] . ' | Any2Convert Feature',
             'description' => $item['desc'],
             'headline' => $item['label'],
             'content' => '<p>' . $item['desc'] . '</p>',

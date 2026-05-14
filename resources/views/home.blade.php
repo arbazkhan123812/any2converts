@@ -278,12 +278,16 @@ $defaultDescription = 'Free online PDF tools: Convert images to PDF, merge, comp
 
 $seoTitle = $defaultTitle;
 $seoDescription = $defaultDescription;
-if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
-    $seoTitle = $toolNameMap[$initialToolId] . ' Online Free Tool | Any2Convert';
-    $toolDesc = trim($toolDescriptionMap[$initialToolId]);
+$isToolPage = !empty($initialToolId) && isset($toolNameMap[$initialToolId]);
+$currentToolName = $isToolPage ? $toolNameMap[$initialToolId] : '';
+$currentToolDescription = $isToolPage ? trim($toolDescriptionMap[$initialToolId] ?? '') : '';
+$currentToolCategory = $isToolPage ? ($toolCategoryMap[$initialToolId] ?? 'Online Tools') : '';
+if ($isToolPage) {
+    $seoTitle = $currentToolName . ' Online Free Tool | Any2Convert';
+    $toolDesc = $currentToolDescription;
     $seoDescription = $toolDesc !== ''
-        ? $toolDesc . ' on Any2Convert.'
-        : $toolNameMap[$initialToolId] . ' tool on Any2Convert.';
+        ? rtrim($toolDesc, ". \t\n\r\0\x0B") . '. Use this free online tool in your browser with privacy-focused processing, fast results, and no unnecessary software installation.'
+        : $currentToolName . ' is a free online tool from Any2Convert for browser-based file, text, or utility work with privacy-focused processing.';
 }
 ?>
 <!DOCTYPE html>
@@ -1099,9 +1103,12 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
         <div class="flex items-center justify-between h-15 py-3">
 
             <!-- Logo -->
-            <a href="{{ route('home') }}" style="text-decoration:none" class="flex items-center gap-2">
+            <a href="{{ route('home') }}" style="text-decoration:none" class="flex items-center gap-2" aria-label="Any2Convert home">
                 <div style="width:30px;height:30px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                        <img src="{{ asset('any2convertlogo.png') }}" alt="Any2Convert logo">
+                </div>
+                <span style="font-weight:700;color:var(--text-primary);font-size:0.95rem;">Any2Convert</span>
+            </a>
 
             <!-- Right side -->
             <div class="flex items-center gap-2">
@@ -1166,12 +1173,21 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
         </div>
 
         <h1 class="hero-title">
+            <?php if ($isToolPage): ?>
+            <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?><br>
+            <em>Free online tool.</em>
+            <?php else: ?>
             Convert. Compress.<br>
             <em>Protect your files.</em>
+            <?php endif; ?>
         </h1>
 
         <p class="hero-sub" style="margin:20px auto 36px;">
+            <?php if ($isToolPage): ?>
+            <?= htmlspecialchars($currentToolDescription !== '' ? $currentToolDescription : 'Use this focused browser-based tool on Any2Convert.', ENT_QUOTES) ?>
+            <?php else: ?>
             80+ professional-grade tools for PDF, documents, images, and more. Free forever, no account required.
+            <?php endif; ?>
         </p>
 
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
@@ -1217,16 +1233,11 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
     </div>
 
     <!-- Tool page heading -->
-    <?php if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])): ?>
-    <?php
-        $currentToolName = $toolNameMap[$initialToolId];
-        $currentToolDescription = trim($toolDescriptionMap[$initialToolId] ?? '');
-        $currentToolCategory = $toolCategoryMap[$initialToolId] ?? 'Online Tools';
-    ?>
+    <?php if ($isToolPage): ?>
     <section style="margin-bottom:32px;text-align:center;">
-        <h2 class="section-heading" style="margin-bottom:8px;"><?= htmlspecialchars($toolNameMap[$initialToolId], ENT_QUOTES) ?></h2>
+        <h2 class="section-heading" style="margin-bottom:8px;">Free online <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?> guide</h2>
         <p style="font-size:0.95rem;color:var(--text-secondary);max-width:620px;margin:0 auto;line-height:1.6;">
-            <?= htmlspecialchars($toolDescriptionMap[$initialToolId], ENT_QUOTES) ?>
+            <?= htmlspecialchars($currentToolDescription, ENT_QUOTES) ?>
         </p>
     </section>
     <section style="margin:0 auto 56px;max-width:920px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
