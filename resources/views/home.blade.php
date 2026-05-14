@@ -264,10 +264,12 @@ $itemListSchema = [
 
 $toolNameMap = [];
 $toolDescriptionMap = [];
+$toolCategoryMap = [];
 foreach ($tools as $category) {
     foreach ($category['tools'] as $tool) {
         $toolNameMap[$tool['id']] = $tool['name'];
         $toolDescriptionMap[$tool['id']] = $tool['desc'] ?? '';
+        $toolCategoryMap[$tool['id']] = $category['title'];
     }
 }
 
@@ -1216,11 +1218,36 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
 
     <!-- Tool page heading -->
     <?php if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])): ?>
-    <section style="margin-bottom:48px;text-align:center;">
+    <?php
+        $currentToolName = $toolNameMap[$initialToolId];
+        $currentToolDescription = trim($toolDescriptionMap[$initialToolId] ?? '');
+        $currentToolCategory = $toolCategoryMap[$initialToolId] ?? 'Online Tools';
+    ?>
+    <section style="margin-bottom:32px;text-align:center;">
         <h2 class="section-heading" style="margin-bottom:8px;"><?= htmlspecialchars($toolNameMap[$initialToolId], ENT_QUOTES) ?></h2>
         <p style="font-size:0.95rem;color:var(--text-secondary);max-width:620px;margin:0 auto;line-height:1.6;">
             <?= htmlspecialchars($toolDescriptionMap[$initialToolId], ENT_QUOTES) ?>
         </p>
+    </section>
+    <section style="margin:0 auto 56px;max-width:920px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+        <article class="detail-card" style="padding:24px;">
+            <h3 style="margin:0 0 10px;font-size:1.05rem;color:var(--text-primary);">About this <?= htmlspecialchars($currentToolCategory, ENT_QUOTES) ?> tool</h3>
+            <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
+                <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?> is built for quick browser-based work on Any2Convert. <?= htmlspecialchars($currentToolDescription, ENT_QUOTES) ?> Use it when you need a focused utility without installing desktop software, creating a complex workflow, or switching between multiple apps for a simple file or data task.
+            </p>
+        </article>
+        <article class="detail-card" style="padding:24px;">
+            <h3 style="margin:0 0 10px;font-size:1.05rem;color:var(--text-primary);">How it works</h3>
+            <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
+                Open the tool, add the file or text requested by the form, choose the available options, and generate your result. The interface is designed for everyday conversions, edits, checks, and calculations, so you can complete the task from the same page and download or copy the finished output when the tool provides it.
+            </p>
+        </article>
+        <article class="detail-card" style="padding:24px;">
+            <h3 style="margin:0 0 10px;font-size:1.05rem;color:var(--text-primary);">Privacy and file handling</h3>
+            <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
+                Any2Convert keeps many tasks local in your browser whenever the feature supports it. That means common PDF, image, text, calculator, and converter actions can often run on your own device, reducing unnecessary uploads and helping you work faster with private documents, drafts, screenshots, and utility data.
+            </p>
+        </article>
     </section>
     <?php endif; ?>
 
