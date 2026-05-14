@@ -34,6 +34,14 @@ class HomeController extends Controller
                 'label' => 'Files Never Leave Your Device',
                 'desc' => 'Many tools process files directly in your browser so sensitive files stay private and do not get uploaded unnecessarily.',
             ],
+            'free-forever' => [
+                'label' => 'Free Forever',
+                'desc' => 'Any2Convert remains free to use without unexpected paywalls, so you can complete conversions without subscription barriers.',
+            ],
+            'works-in-browser' => [
+                'label' => 'Works in Browser',
+                'desc' => 'Open Any2Convert in any modern browser and use tools immediately, without installing software or browser extensions.',
+            ],
             'works-on-any-device' => [
                 'label' => 'Works on Any Device',
                 'desc' => 'Use Any2Convert on desktop, tablet, or mobile without installing anything. The tools adapt seamlessly to your browser.',
