@@ -1283,7 +1283,10 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
         'gaming' => ['bg'=>'rgba(236,72,153,0.12)', 'color'=>'#F472B6', 'label-bg'=>'rgba(236,72,153,0.1)','label-color'=>'#F472B6'],
         'fun' => ['bg'=>'rgba(217,70,239,0.12)', 'color'=>'#E879F9', 'label-bg'=>'rgba(217,70,239,0.1)','label-color'=>'#E879F9'],
     ];
+    ?>
 
+    <?php
+    if (empty($initialToolId)):
     foreach ($tools as $catKey => $category):
         $cc = $catColors[$catKey];
     ?>
@@ -1332,9 +1335,13 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
         </div>
 
     </section>
-    <?php endforeach; ?>
+    <?php
+    endforeach;
+    endif;
+    ?>
 
     <!-- ── Why section ── -->
+    <?php if (empty($initialToolId)): ?>
     <section style="margin-bottom:64px;">
         <div style="text-align:center;margin-bottom:40px;">
             <div class="section-label" style="justify-content:center;">Why Any2Convert</div>
@@ -1363,8 +1370,10 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
             <?php endforeach; ?>
         </div>
     </section>
+    <?php endif; ?>
 
     <!-- ── Popular tools ── -->
+    <?php if (empty($initialToolId)): ?>
     <section style="margin-bottom:64px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
             <h2 class="section-heading">Popular tools</h2>
@@ -1388,8 +1397,10 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
             <?php endforeach; ?>
         </div>
     </section>
+    <?php endif; ?>
 
     <!-- ── Blog preview ── -->
+    <?php if (empty($initialToolId)): ?>
     <section>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
             <h2 class="section-heading">Guides & Tips</h2>
@@ -1408,7 +1419,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
                 <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">Learn how PDF encryption protects your sensitive documents from unauthorized access.</div>
                 <div style="margin-top:16px;font-size:0.75rem;color:var(--accent);display:flex;align-items:center;gap:4px;font-weight:500;">
                     Read article
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2 12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </div>
             </a>
 
@@ -1426,6 +1437,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
 
         </div>
     </section>
+    <?php endif; ?>
 
 </main>
 
