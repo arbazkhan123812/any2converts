@@ -1386,7 +1386,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
     <?php if (empty($initialToolId)): ?>
     <section style="margin-bottom:64px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
-            <h2 class="section-heading">Popular tools</h2>
+            <h3 class="section-heading">Popular tools</h3>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
             <?php
@@ -1413,7 +1413,7 @@ if (!empty($initialToolId) && isset($toolNameMap[$initialToolId])) {
     <?php if (empty($initialToolId)): ?>
     <section>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
-            <h2 class="section-heading">Guides & Tips</h2>
+            <h3 class="section-heading">Guides & Tips</h3>
             <a href="/blog" style="text-decoration:none;font-size:0.82rem;color:var(--accent);display:flex;align-items:center;gap:4px;">
                 View all
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
