@@ -8532,7 +8532,7 @@ function getPdfToWordPureJS() {
         <div id="wordProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docx@8.2.3/build/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.2.3/build/docx.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
         document.getElementById("pdfToWordInput").addEventListener("change", function() {
