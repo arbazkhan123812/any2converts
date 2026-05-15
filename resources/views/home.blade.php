@@ -282,12 +282,125 @@ $isToolPage = !empty($initialToolId) && isset($toolNameMap[$initialToolId]);
 $currentToolName = $isToolPage ? $toolNameMap[$initialToolId] : '';
 $currentToolDescription = $isToolPage ? trim($toolDescriptionMap[$initialToolId] ?? '') : '';
 $currentToolCategory = $isToolPage ? ($toolCategoryMap[$initialToolId] ?? 'Online Tools') : '';
+$toolPageContent = [];
+$toolPageKeywords = [];
 if ($isToolPage) {
     $seoTitle = $currentToolName . ' Online Free Tool | Any2Convert';
     $toolDesc = $currentToolDescription;
     $seoDescription = $toolDesc !== ''
         ? rtrim($toolDesc, ". \t\n\r\0\x0B") . '. Free, fast, and privacy-focused online tool.'
         : $currentToolName . ' is a free, fast, and privacy-focused online tool.';
+
+    $toolSlug = strtolower(str_replace(' ', '-', $currentToolName));
+    $searchPhrase = 'free online ' . strtolower($currentToolName) . ' tool';
+    $useCasePhrase = 'complete this task quickly without extra software';
+    $outputPhrase = 'download the finished file or copy the result';
+
+    if (str_starts_with($initialToolId, 'pdf_to_')) {
+        $target = str_replace('pdf_to_', '', $initialToolId);
+        $searchPhrase = 'online PDF to ' . str_replace('_', ' ', $target) . ' converter';
+        $useCasePhrase = 'convert PDF into ' . str_replace('_', ' ', $target) . ' online';
+        $outputPhrase = 'receive a converted ' . str_replace('_', ' ', $target) . ' file from your PDF';
+    } elseif (str_ends_with($initialToolId, '_to_pdf')) {
+        $source = str_replace('_to_pdf', '', $initialToolId);
+        $searchPhrase = 'online ' . str_replace('_', ' ', $source) . ' to PDF converter';
+        $useCasePhrase = 'turn ' . str_replace('_', ' ', $source) . ' into PDF in seconds';
+        $outputPhrase = 'get a clean PDF from your ' . str_replace('_', ' ', $source) . ' content';
+    } elseif ($initialToolId === 'merge_pdf') {
+        $searchPhrase = 'merge PDF files online';
+        $useCasePhrase = 'combine multiple PDF files into one document';
+        $outputPhrase = 'download a single merged PDF';
+    } elseif ($initialToolId === 'compress_pdf') {
+        $searchPhrase = 'compress PDF online';
+        $useCasePhrase = 'reduce PDF file size for easier sharing';
+        $outputPhrase = 'save a smaller PDF copy';
+    } elseif ($initialToolId === 'protect_pdf') {
+        $searchPhrase = 'password protect PDF online';
+        $useCasePhrase = 'secure a PDF with a password';
+        $outputPhrase = 'save an encrypted PDF document';
+    } elseif ($initialToolId === 'qr_generator') {
+        $searchPhrase = 'free QR code generator online';
+        $useCasePhrase = 'create QR codes for links, menus, and contacts';
+        $outputPhrase = 'download a ready-to-use QR code image';
+    } elseif ($initialToolId === 'password_gen') {
+        $searchPhrase = 'secure password generator online';
+        $useCasePhrase = 'create strong random passwords for accounts';
+        $outputPhrase = 'copy a secure password instantly';
+    } elseif ($initialToolId === 'image_compressor') {
+        $searchPhrase = 'online image compressor';
+        $useCasePhrase = 'reduce photo file sizes without losing quality';
+        $outputPhrase = 'download a smaller image file';
+    } elseif ($initialToolId === 'resize_image') {
+        $searchPhrase = 'resize image online';
+        $useCasePhrase = 'change photo dimensions for email, social media, or printing';
+        $outputPhrase = 'download a resized image with exact width and height';
+    } elseif ($initialToolId === 'image_to_svg') {
+        $searchPhrase = 'image to SVG converter online';
+        $useCasePhrase = 'trace artwork and convert bitmap images into vector SVG';
+        $outputPhrase = 'download a sharp SVG vector file';
+    } elseif ($initialToolId === 'image_to_dxf') {
+        $searchPhrase = 'image to DXF converter online';
+        $useCasePhrase = 'convert artwork into CAD-ready DXF format';
+        $outputPhrase = 'download a DXF file for CAD software';
+    } elseif ($initialToolId === 'background-remover' || $initialToolId === 'bg_remover') {
+        $searchPhrase = 'remove image background online';
+        $useCasePhrase = 'create transparent PNGs from photos and logos';
+        $outputPhrase = 'download a transparent image';
+    } elseif ($initialToolId === 'ocr_tool' || $initialToolId === 'ocr_pdf') {
+        $searchPhrase = 'OCR tool online';
+        $useCasePhrase = 'extract text from scanned pages and images';
+        $outputPhrase = 'copy or download the extracted text';
+    } elseif ($initialToolId === 'csv_to_json') {
+        $searchPhrase = 'CSV to JSON converter online';
+        $useCasePhrase = 'convert spreadsheet data into JSON format';
+        $outputPhrase = 'download a clean JSON file';
+    } elseif ($initialToolId === 'json_to_csv') {
+        $searchPhrase = 'JSON to CSV converter online';
+        $useCasePhrase = 'turn structured JSON data into spreadsheet-ready CSV';
+        $outputPhrase = 'download a CSV file for Excel or Google Sheets';
+    } elseif ($initialToolId === 'word_counter') {
+        $searchPhrase = 'online word counter tool';
+        $useCasePhrase = 'count words, characters, and paragraphs quickly';
+        $outputPhrase = 'copy the word count result';
+    } elseif ($initialToolId === 'grammar_checker') {
+        $searchPhrase = 'online grammar checker';
+        $useCasePhrase = 'correct spelling, punctuation, and sentence structure';
+        $outputPhrase = 'copy improved text with better grammar';
+    } elseif ($initialToolId === 'paraphrase_tool') {
+        $searchPhrase = 'online paraphrase tool';
+        $useCasePhrase = 'rewrite text into clearer alternative phrasing';
+        $outputPhrase = 'copy the rewritten text';
+    } elseif ($initialToolId === 'jwt_decoder') {
+        $searchPhrase = 'JWT decoder online';
+        $useCasePhrase = 'inspect JSON Web Tokens safely in the browser';
+        $outputPhrase = 'copy the token payload and header';
+    } elseif ($initialToolId === 'invoice_generator') {
+        $searchPhrase = 'invoice generator online';
+        $useCasePhrase = 'build printable invoices with totals and tax';
+        $outputPhrase = 'download or print the invoice';
+    } elseif ($initialToolId === 'loan_calculator') {
+        $searchPhrase = 'loan calculator online';
+        $useCasePhrase = 'estimate monthly payments, interest, and total cost';
+        $outputPhrase = 'see loan payment details instantly';
+    }
+
+    if (empty($toolPageKeywords)) {
+        $toolPageKeywords = [
+            $searchPhrase,
+            'free online ' . strtolower($currentToolName),
+            'best browser-based ' . strtolower($currentToolName),
+            'use ' . strtolower($currentToolName) . ' without installing software',
+        ];
+    }
+
+    $toolPageContent = [
+        'headline' => 'Detailed guidance for ' . $currentToolName,
+        'paragraphs' => [
+            $currentToolName . ' on Any2Convert is a free online tool that helps you ' . lcfirst($currentToolDescription) . '. It is built for browser-first workflows so you can complete the task without installing extra software or opening multiple apps.',
+            'Use this page when you need to ' . $useCasePhrase . '. The tool interface is focused on the job, with just the right options to turn your selected file, image, or data into the output you need.',
+            'This page is useful for people searching for ' . $searchPhrase . ' and other related queries. It is designed to answer the key questions around using this tool, while still delivering the fast online tools any2convert.com is known for.',
+        ],
+    ];
 }
 ?>
 <!DOCTYPE html>
@@ -1259,6 +1372,37 @@ if ($isToolPage) {
                 Any2Convert keeps many tasks local in your browser whenever the feature supports it. That means common PDF, image, text, calculator, and converter actions can often run on your own device, reducing unnecessary uploads and helping you work faster with private documents, drafts, screenshots, and utility data.
             </p>
         </article>
+    </section>
+
+    <section style="margin-bottom:56px;max-width:920px;margin-left:auto;margin-right:auto;">
+        <div style="margin-bottom:28px;">
+            <h2 class="section-heading">More about <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?></h2>
+            <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.75;">
+                <?= htmlspecialchars($toolPageContent['paragraphs'][0] ?? '', ENT_QUOTES) ?>
+            </p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr;gap:18px;">
+            <div style="padding:24px;border:1px solid rgba(15,23,42,0.08);border-radius:24px;background:var(--bg-surface);">
+                <h3 style="margin:0 0 10px;font-size:1rem;color:var(--text-primary);">How to use this tool</h3>
+                <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
+                    <?= htmlspecialchars($toolPageContent['paragraphs'][1] ?? '', ENT_QUOTES) ?>
+                </p>
+            </div>
+            <div style="padding:24px;border:1px solid rgba(15,23,42,0.08);border-radius:24px;background:var(--bg-surface);">
+                <h3 style="margin:0 0 10px;font-size:1rem;color:var(--text-primary);">When to use it</h3>
+                <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
+                    <?= htmlspecialchars($toolPageContent['paragraphs'][2] ?? '', ENT_QUOTES) ?>
+                </p>
+            </div>
+            <div style="padding:24px;border:1px solid rgba(15,23,42,0.08);border-radius:24px;background:var(--bg-surface);">
+                <h3 style="margin:0 0 10px;font-size:1rem;color:var(--text-primary);">Common search phrases for this page</h3>
+                <ul style="margin:0;padding-left:18px;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
+                    <?php foreach ($toolPageKeywords as $keyword): ?>
+                        <li><?= htmlspecialchars($keyword, ENT_QUOTES) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
     </section>
     <?php endif; ?>
 
