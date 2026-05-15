@@ -37,35 +37,35 @@ class HomeController extends Controller
         $topics = [
             'instant-processing' => [
                 'label' => 'Instant Processing',
-                'desc' => 'Get results fast. Many tools run right in your browser. Other tasks use fast servers so you do not wait long.',
+                'desc' => 'Get fast results with instant processing.',
             ],
             'files-never-leave-your-device' => [
                 'label' => 'Files Never Leave Your Device',
-                'desc' => 'Keep your files safe. Many tools run right on your device. Your private files are not sent to our servers.',
+                'desc' => 'Files stay on your device for privacy.',
             ],
             'no-file-uploads' => [
                 'label' => 'No File Uploads',
-                'desc' => 'You do not need to upload files. Many tools work right inside your browser. This keeps your private items safe.',
+                'desc' => 'No file uploads needed for privacy.',
             ],
             'free-forever' => [
                 'label' => 'Free Forever',
-                'desc' => 'Our site is free to use. There are no hidden fees. We do not ask you to pay to use our core tools.',
+                'desc' => 'Free forever with no hidden fees.',
             ],
             'works-in-browser' => [
                 'label' => 'Works in Browser',
-                'desc' => 'Just open the web page and start working. You do not need to install any apps. It works on all web browsers.',
+                'desc' => 'Works directly in your web browser.',
             ],
             'works-on-any-device' => [
                 'label' => 'Works on Any Device',
-                'desc' => 'Use our tools on your phone, tablet, or computer. You do not need an app. The site works well on any screen.',
+                'desc' => 'Works on any device without apps.',
             ],
             'always-free-no-watermarks' => [
                 'label' => 'Always Free, No Watermarks',
-                'desc' => 'Use our tools for free. We do not put ugly marks on your files. There are no sneaky costs to worry about.',
+                'desc' => 'Always free with no watermarks.',
             ],
             'instant-results' => [
                 'label' => 'Instant Results',
-                'desc' => 'Get your files right away. Many tasks finish the moment you click. You can keep working instead of waiting.',
+                'desc' => 'Get instant results quickly.',
             ],
         ];
 
@@ -85,7 +85,7 @@ class HomeController extends Controller
     {
         return view('page', [
             'title' => 'Any2Convert Blog for File Conversion Tips',
-            'description' => 'Read our tips and guides. Learn how to change files and keep your data safe.',
+            'description' => 'Read tips and guides for file conversion.',
             'headline' => 'Any2Convert Blog',
             'content' => '<p>Read our tips and guides. Learn how to change files and keep your data safe.</p>' .
                 '<ul>' .
@@ -100,12 +100,12 @@ class HomeController extends Controller
         $articles = [
             'security-benefits' => [
                 'title' => 'Why Image to PDF is More Secure',
-                'desc' => 'Learn how a PDF keeps your photos safe. Find out how to lock files to stop others from seeing them.',
+                'desc' => 'Learn PDF security benefits for photos.',
                 'content' => '<p>Putting photos in a PDF is smart. It keeps them safe in one file. You can easily add a password. You can also stop people from changing your file.</p>',
             ],
             'qr-guide' => [
                 'title' => 'Business QR Code Best Practices',
-                'desc' => 'Find out how to make good QR codes. Learn to make codes that scan fast and work well for your customers.',
+                'desc' => 'Best practices for business QR codes.',
                 'content' => '<p>A good QR code is clear and dark. Keep the design very simple. Do not put it on messy backgrounds. Always scan it with your phone before you print it.</p>',
             ],
         ];
