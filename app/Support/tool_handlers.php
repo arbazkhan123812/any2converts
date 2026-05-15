@@ -4238,6 +4238,7 @@ function getPdfToExcelHTML() {
         <div id="tableResult" class="mt-4 space-y-4"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
@@ -4549,32 +4550,26 @@ function getPdfToExcelHTML() {
                     URL.revokeObjectURL(url);
                     resultDiv.innerHTML = "<div class=\"bg-green-100 dark:bg-green-900/30 p-4 rounded-xl text-center\">Text extraction complete! TXT file downloaded.</div>";
                 } else if (method === "lines") {
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet(allData.length ? allData : [[""]]);
+                    XLSX.utils.book_append_sheet(wb, ws, "Lines");
+                    XLSX.writeFile(wb, filename + "_lines.xlsx");
+                    resultDiv.innerHTML = "<div class=\"bg-green-100 dark:bg-green-900/30 p-4 rounded-xl text-center\">Line extraction complete! Excel workbook downloaded.</div>";
                     csvContent = allData.map(function(row) {
                         return csvEscape(row[0] || "");
                     }).join("\n");
-                    const blob = new Blob([csvContent], { type: "text/csv" });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = filename + "_lines.csv";
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    resultDiv.innerHTML = "<div class=\"bg-green-100 dark:bg-green-900/30 p-4 rounded-xl text-center\">Line extraction complete! CSV file downloaded.</div>";
                 } else {
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.aoa_to_sheet(allData.length ? allData : [["No compatible table extracted"]]);
+                    XLSX.utils.book_append_sheet(wb, ws, "Table");
+                    XLSX.writeFile(wb, filename + "_table.xlsx");
+                    resultDiv.innerHTML = "<div class=\"bg-green-100 dark:bg-green-900/30 p-4 rounded-xl text-center\">Table extraction complete! Excel workbook downloaded.</div>";
                     const csvRows = allData.map(function(row) {
                         return row.map(function(cell) {
                             return csvEscape(cell);
                         }).join(",");
                     });
                     csvContent = csvRows.join("\n");
-                    const blob = new Blob([csvContent], { type: "text/csv" });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = filename + "_table.csv";
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    resultDiv.innerHTML = "<div class=\"bg-green-100 dark:bg-green-900/30 p-4 rounded-xl text-center\">Table extraction complete! CSV file downloaded. Open in Excel for proper formatting.</div>";
                 }
                 
                 if (csvContent) {
