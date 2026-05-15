@@ -4276,12 +4276,13 @@ function getPdfToExcelHTML() {
         function clusterTextRows(items) {
             const positioned = items
                 .map(function(item) {
+                    const itemHeight = Math.abs(item.height || item.transform[0] || 10);
                     return {
                         text: normalizeExcelText(item.str),
                         x: item.transform[4] || 0,
-                        y: item.transform[5] || 0,
+                        y: (item.transform[5] || 0) + itemHeight * 0.5,
                         width: item.width || 0,
-                        height: Math.abs(item.height || item.transform[0] || 10)
+                        height: itemHeight
                     };
                 })
                 .filter(function(item) {
@@ -4295,7 +4296,7 @@ function getPdfToExcelHTML() {
             const rows = [];
 
             positioned.forEach(function(item) {
-                const tolerance = Math.max(2.5, item.height * 0.45);
+                const tolerance = Math.max(2.2, item.height * 0.32);
                 let row = null;
 
                 for (let i = 0; i < rows.length; i++) {
@@ -4397,6 +4398,10 @@ function getPdfToExcelHTML() {
             const anchors = [];
 
             rows.forEach(function(row) {
+                if (row.items.length === 1 && row.items[0].text.length > 20) {
+                    return;
+                }
+
                 row.items.forEach(function(item) {
                     let matched = false;
 
