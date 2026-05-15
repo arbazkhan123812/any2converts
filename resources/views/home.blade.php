@@ -412,6 +412,8 @@ if ($isToolPage) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="alternate" href="{{ url()->current() }}" hreflang="en">
+    <link rel="alternate" href="{{ url()->current() }}" hreflang="x-default">
     <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
     <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
