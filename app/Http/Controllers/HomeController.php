@@ -37,7 +37,7 @@ class HomeController extends Controller
         $topics = [
             'instant-processing' => [
                 'label' => 'Instant Processing',
-                'desc' => 'Get fast results with instant processing.',
+                'desc' => 'At Any2Convert, we understand that your time is valuable. That\'s why we\'ve engineered our tools to provide instant processing for all your file conversion and utility needs. Our platform is optimized for speed, ensuring that you can get your tasks done quickly and efficiently, without any unnecessary delays. We believe that you shouldn\'t have to wait to get the results you need, and our commitment to instant processing is a testament to that belief.',
             ],
             'files-never-leave-your-device' => [
                 'label' => 'Files Never Leave Your Device',
