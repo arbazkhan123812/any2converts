@@ -1105,7 +1105,7 @@ if ($isToolPage) {
             <!-- Logo -->
             <a href="{{ route('home') }}" style="text-decoration:none" class="flex items-center gap-2" aria-label="Any2Convert home">
                 <div style="width:30px;height:30px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                       <img src="{{ asset('any2convertlogo.png') }}" alt="Any2Convert logo" width="30" height="30">
+                       <img src="{{ asset('any2trans.webp') }}" alt="Any2Convert logo" width="30" height="30">
                 </div>
                 <span style="font-weight:700;color:var(--text-primary);font-size:0.95rem;">Any2Convert</span>
             </a>
