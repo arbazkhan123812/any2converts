@@ -76,6 +76,7 @@ class HomeController extends Controller
         return view('page', [
             'title' => $item['label'] . ' | Any2Convert Feature',
             'description' => $item['desc'],
+            'subtitle' => $item['label'],
             'headline' => $item['label'],
             'content' => '<p>' . $item['desc'] . '</p>',
         ]);
@@ -86,6 +87,7 @@ class HomeController extends Controller
         return view('page', [
             'title' => 'Any2Convert Blog for File Conversion Tips',
             'description' => 'Read tips and guides for file conversion.',
+            'subtitle' => 'Any2Convert Blog',
             'headline' => 'Any2Convert Blog',
             'content' => '<p>Read our tips and guides. Learn how to change files and keep your data safe.</p>' .
                 '<ul>' .
@@ -117,6 +119,7 @@ class HomeController extends Controller
         return view('page', [
             'title' => $article['title'] . ' Guide | Any2Convert',
             'description' => $article['desc'],
+            'subtitle' => $article['title'],
             'headline' => $article['title'],
             'content' => '<p>' . $article['content'] . '</p>',
         ]);

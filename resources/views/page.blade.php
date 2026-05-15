@@ -36,7 +36,7 @@
 
         <article class="page-card">
             <h1 class="page-title">{{ $headline ?? $title }}</h1>
-            <h2 class="page-subtitle">{{ $description ?? 'Free online tools from Any2Convert.' }}</h2>
+            <h2 class="page-subtitle">{{ $subtitle ?? $description ?? 'Free online tools from Any2Convert.' }}</h2>
             <div class="page-content">{!! $content ?? '<p>Welcome to Any2Convert.</p>' !!}</div>
             <section class="page-seo">
                 <h3>What this page covers</h3>
