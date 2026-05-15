@@ -3593,7 +3593,7 @@ function getImageToPdfHTML() {
         
         <div style="">
             <h2 class="text-3xl font-black text-slate-900 dark:text-white">Image to PDF Converter - Convert Image to PDF Online Free</h2>
-            <p>This tool allows you to convert your images (JPG, PNG, etc.) into a single PDF file. You can upload multiple images and they will be combined into one PDF. This is useful for creating photo albums, portfolios, or for archiving images in a single document.</p>
+            <p>Use our free image to pdf converter to add image to pdf without uploading files. Best tool to convert an image to pdf for free download.</p>
         </div>
 
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" 
@@ -8532,7 +8532,7 @@ function getPdfToWordPureJS() {
         <div id="wordProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docx@8.2.3/build/docx.js"></script>
+    <script src="https://unpkg.com/docx@8.2.3/build/index.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
         document.getElementById("pdfToWordInput").addEventListener("change", function() {
