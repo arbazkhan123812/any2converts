@@ -6,6 +6,7 @@
     <link rel="canonical" href="{{ url()->current() }}">
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description ?? '' }}">
+    <meta name="keywords" content="{{ $keywords ?? '' }}">
     <link rel="icon" type="image/png" href="/mylogo.png">
     <style>
         html { font-family: 'DM Sans', sans-serif; background:#f8f8fc; color:#111118; }

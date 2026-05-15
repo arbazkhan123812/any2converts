@@ -275,9 +275,11 @@ foreach ($tools as $category) {
 
 $defaultTitle = 'Any2Convert | Free All-in-One PDF & Document Converter Suite';
 $defaultDescription = 'Free online PDF, document, image, and utility tools. Process files locally on your device with privacy-focused conversions.';
+$defaultKeywords = 'free online tools, file converter, PDF tools, image tools, calculators, converters, generators, utilities';
 
 $seoTitle = $defaultTitle;
 $seoDescription = $defaultDescription;
+$seoKeywords = $defaultKeywords;
 $isToolPage = !empty($initialToolId) && isset($toolNameMap[$initialToolId]);
 $currentToolName = $isToolPage ? $toolNameMap[$initialToolId] : '';
 $currentToolDescription = $isToolPage ? trim($toolDescriptionMap[$initialToolId] ?? '') : '';
@@ -401,6 +403,7 @@ if ($isToolPage) {
             'This page is useful for people searching for ' . $searchPhrase . ' and other related queries. It is designed to answer the key questions around using this tool, while still delivering the fast online tools any2convert.com is known for.',
         ],
     ];
+    $seoKeywords = implode(', ', $toolPageKeywords);
 }
 ?>
 <!DOCTYPE html>
@@ -412,6 +415,7 @@ if ($isToolPage) {
     <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
     <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
+    <meta name="keywords" content="<?= htmlspecialchars($seoKeywords ?? '', ENT_QUOTES) ?>">
     <meta property="og:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta name="twitter:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">

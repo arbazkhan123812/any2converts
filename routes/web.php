@@ -13,6 +13,7 @@ Route::post('/tools/ai-image', [ToolController::class, 'unavailable'])->name('to
 Route::view('/about', 'page', [
     'title' => 'About Any2Convert Free Online Tools',
     'description' => 'Learn more about Any2Convert and our comprehensive suite of free online tools designed for privacy, efficiency, and ease of use.',
+    'keywords' => 'about Any2Convert, free online tools, file conversion, privacy, digital tools',
     'subtitle' => 'Empowering Your Digital Workflow',
     'headline' => 'About Any2Convert',
     'content' => '
@@ -44,6 +45,7 @@ Route::view('/about', 'page', [
 Route::view('/contact', 'page', [
     'title' => 'Contact Any2Convert Support and Feedback',
     'description' => 'Contact us for help and feedback.',
+    'keywords' => 'contact Any2Convert, support, feedback, help, customer service',
     'subtitle' => 'Contact us for help.',
     'headline' => 'Contact Any2Convert',
     'content' => '<p>Do you need help or have ideas to share? Please contact us. You can report bugs, ask questions, or suggest new tools. We love to hear from you.</p>'
@@ -52,6 +54,7 @@ Route::view('/contact', 'page', [
 Route::view('/privacy', 'page', [
     'title' => 'Privacy Policy for Any2Convert Online Tools',
     'description' => 'Read our detailed privacy policy to understand how we protect your data and prioritize your privacy when you use our free online tools.',
+    'keywords' => 'privacy policy, data protection, privacy, security, terms',
     'subtitle' => 'Your Privacy, Our Priority',
     'headline' => 'Privacy Policy',
     'content' => '
@@ -87,6 +90,7 @@ Route::view('/privacy', 'page', [
 Route::view('/terms', 'page', [
     'title' => 'Terms of Service for Any2Convert Online Tools',
     'description' => 'Read our terms of service and usage rules.',
+    'keywords' => 'terms of service, usage rules, legal, terms, conditions',
     'subtitle' => 'Read our terms of service.',
     'headline' => 'Terms of Service',
     'content' => '<p>By using this site, you agree to our rules. You can use our tools for free. We try to keep all tools online, but we offer them as-is. Please use them fairly.</p>'
@@ -94,13 +98,17 @@ Route::view('/terms', 'page', [
 
 Route::view('/login', 'page', [
     'title' => 'Login to Any2Convert Online Tool Account',
-    'description' => 'Sign in to your account and access saved settings.',    'subtitle' => 'Sign in to your account.',    'headline' => 'Login',
+    'description' => 'Sign in to your account and access saved settings.',
+    'keywords' => 'login, sign in, account, authentication, user login',
+    'subtitle' => 'Sign in to your account.',
+    'headline' => 'Login',
     'content' => '<p>Sign in to use your account features. A free account lets you save your settings. If you cannot sign in, please email our support team for help.</p>'
 ]);
 
 Route::view('/register', 'page', [
     'title' => 'Register for Any2Convert Online Tools',
     'description' => 'Create a free account and save your preferences.',
+    'keywords' => 'register, sign up, account, free account, user registration',
     'subtitle' => 'Create a free account.',
     'headline' => 'Register',
     'content' => '<p>Sign up for a free account today. An account lets you save your choices. It also helps you work faster with your files. Joining is quick and easy.</p>'

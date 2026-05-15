@@ -38,34 +38,42 @@ class HomeController extends Controller
             'instant-processing' => [
                 'label' => 'Instant Processing',
                 'desc' => 'At Any2Convert, we understand that your time is valuable. That\'s why we\'ve engineered our tools to provide instant processing for all your file conversion and utility needs. Our platform is optimized for speed, ensuring that you can get your tasks done quickly and efficiently, without any unnecessary delays. We believe that you shouldn\'t have to wait to get the results you need, and our commitment to instant processing is a testament to that belief.',
+                'keywords' => 'instant processing, fast file conversion, quick tools, efficient processing, speed optimization',
             ],
             'files-never-leave-your-device' => [
                 'label' => 'Files Never Leave Your Device',
                 'desc' => 'Your privacy is our top priority at Any2Convert. We\'ve designed our platform to keep your files secure and private by processing them directly on your device whenever possible. This means that sensitive documents, personal photos, and important data never leave your computer or mobile device. Our local-first approach ensures that you have full control over your files, reducing the risk of data breaches or unauthorized access. With Any2Convert, you can work with confidence, knowing that your information stays exactly where it belongs - on your device.',
+                'keywords' => 'privacy, local processing, file security, no uploads, data protection',
             ],
             'no-file-uploads' => [
                 'label' => 'No File Uploads',
                 'desc' => 'Experience the convenience of processing files without the hassle of uploads. At Any2Convert, many of our tools work directly in your browser, eliminating the need to send your files to remote servers. This approach not only saves time but also enhances your privacy by keeping your data local. Whether you\'re converting documents, compressing images, or performing other tasks, you can complete your work instantly without waiting for uploads or downloads. Our no-upload philosophy makes file processing faster, safer, and more efficient for everyday users.',
+                'keywords' => 'no uploads, local processing, browser tools, privacy, fast processing',
             ],
             'free-forever' => [
                 'label' => 'Free Forever',
                 'desc' => 'Any2Convert is committed to providing free access to our comprehensive suite of online tools. We believe that essential file processing and conversion utilities should be available to everyone without cost barriers. Our free-forever model means you can use our platform for all your document, image, and data needs without worrying about subscriptions, hidden fees, or premium upgrades. We\'re dedicated to keeping our tools accessible and useful for individuals, small businesses, and organizations of all sizes, ensuring that quality file processing remains within reach for everyone.',
+                'keywords' => 'free tools, no cost, free forever, accessible tools, no subscriptions',
             ],
             'works-in-browser' => [
                 'label' => 'Works in Browser',
                 'desc' => 'Our browser-based tools offer unparalleled convenience and accessibility. With Any2Convert, you can perform complex file operations directly in your web browser without installing any software or applications. This approach works seamlessly across all modern browsers and operating systems, giving you the freedom to work from any device with an internet connection. Whether you\'re using Chrome, Firefox, Safari, or Edge, our tools deliver consistent performance and functionality. The browser-based design also means automatic updates and compatibility, so you always have access to the latest features and improvements.',
+                'keywords' => 'browser tools, web based, no installation, cross browser, online tools',
             ],
             'works-on-any-device' => [
                 'label' => 'Works on Any Device',
                 'desc' => 'Any2Convert is designed to work flawlessly across all your devices. Our responsive web platform adapts to desktops, laptops, tablets, and smartphones, providing a consistent and optimized experience regardless of screen size or operating system. Whether you\'re working on a Windows PC, Mac, iPhone, Android device, or any other modern platform, our tools deliver the same powerful functionality and user-friendly interface. This cross-device compatibility ensures that you can continue your work seamlessly, whether you\'re at your desk, on the go, or switching between devices throughout your day.',
+                'keywords' => 'cross device, responsive, mobile friendly, desktop tools, any device',
             ],
             'always-free-no-watermarks' => [
                 'label' => 'Always Free, No Watermarks',
                 'desc' => 'We provide our tools completely free of charge and without any watermarks or branding on your processed files. At Any2Convert, we believe that your work should remain yours, unmarred by promotional marks or restrictions. Our commitment to watermark-free processing means you can use our tools for professional projects, personal documents, or any other purpose without compromise. This policy extends to all our tools and features, ensuring that you receive clean, professional results every time you use our platform.',
+                'keywords' => 'no watermarks, free tools, clean output, professional results, no branding',
             ],
             'instant-results' => [
                 'label' => 'Instant Results',
                 'desc' => 'Get immediate results with Any2Convert\'s optimized processing engine. Our tools are designed to deliver fast, reliable performance for all your file conversion and processing needs. Whether you\'re converting documents, compressing images, or performing data transformations, you can expect quick turnaround times that keep your workflow moving. The instant results approach eliminates waiting and allows you to complete tasks efficiently, making Any2Convert the ideal choice for users who value speed and productivity in their daily file processing activities.',
+                'keywords' => 'instant results, fast processing, quick conversion, efficient tools, productivity',
             ],
         ];
 
@@ -76,6 +84,7 @@ class HomeController extends Controller
         return view('page', [
             'title' => $item['label'] . ' | Any2Convert Feature',
             'description' => $item['desc'],
+            'keywords' => $item['keywords'] ?? '',
             'subtitle' => $item['label'],
             'headline' => $item['label'],
             'content' => '<p>' . $item['desc'] . '</p>',
@@ -87,6 +96,7 @@ class HomeController extends Controller
         return view('page', [
             'title' => 'Any2Convert Blog for File Conversion Tips',
             'description' => 'Discover expert tips, guides, and insights on file conversion, document processing, and digital tools. Learn how to optimize your workflow with our comprehensive blog articles.',
+            'keywords' => 'file conversion blog, PDF tips, document processing, digital tools, conversion guides',
             'subtitle' => 'Any2Convert Blog',
             'headline' => 'Any2Convert Blog',
             'content' => '<p>Explore our comprehensive collection of articles and guides designed to help you master file conversion and digital document management. Whether you\'re a beginner learning the basics or an experienced user seeking advanced techniques, our blog provides valuable insights and practical advice.</p>
@@ -109,11 +119,13 @@ class HomeController extends Controller
             'security-benefits' => [
                 'title' => 'Why Image to PDF is More Secure',
                 'desc' => 'Learn PDF security benefits for photos.',
+                'keywords' => 'PDF security, image to PDF, file protection, document security, password protection',
                 'content' => '<p>Putting photos in a PDF is smart. It keeps them safe in one file. You can easily add a password. You can also stop people from changing your file.</p>',
             ],
             'qr-guide' => [
                 'title' => 'Business QR Code Best Practices',
                 'desc' => 'Best practices for business QR codes.',
+                'keywords' => 'QR code, business QR codes, QR code design, best practices, marketing tools',
                 'content' => '<p>A good QR code is clear and dark. Keep the design very simple. Do not put it on messy backgrounds. Always scan it with your phone before you print it.</p>',
             ],
         ];
@@ -125,6 +137,7 @@ class HomeController extends Controller
         return view('page', [
             'title' => $article['title'] . ' Guide | Any2Convert',
             'description' => $article['desc'],
+            'keywords' => $article['keywords'] ?? '',
             'subtitle' => $article['title'],
             'headline' => $article['title'],
             'content' => '<p>' . $article['content'] . '</p>',
