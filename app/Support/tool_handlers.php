@@ -8532,7 +8532,6 @@ function getPdfToWordPureJS() {
         <div id="wordProgress" class="text-sm text-gray-500 text-center hidden"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docx@8.2.3/build/index.umd.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
         document.getElementById("pdfToWordInput").addEventListener("change", function() {
@@ -8547,36 +8546,76 @@ function getPdfToWordPureJS() {
             if (!file) return alert("Select PDF file");
             const progress = document.getElementById("wordProgress");
             progress.classList.remove("hidden", "text-red-500");
-            progress.innerHTML = "Extracting text and generating Word Docx... Please wait.";
+            progress.innerHTML = "Extracting text and generating Word document... Please wait.";
             
             try {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                let textContent = [];
+                let textPages = [];
+                let renderedPages = [];
                 
                 for (let i = 1; i <= pdf.numPages; i++) {
                     progress.innerHTML = "Reading page " + i + " of " + pdf.numPages + "...";
                     const page = await pdf.getPage(i);
                     const text = await page.getTextContent();
-                    const pageText = text.items.map((s) => s.str).join(" ");
-                    textContent.push(new docx.Paragraph({ children: [new docx.TextRun(pageText)] }));
-                    if (i < pdf.numPages) textContent.push(new docx.Paragraph({ text: "", pageBreakBefore: true }));
+                    const pageText = text.items.map((s) => s.str || "").join(" ");
+                    textPages.push(pageText.trim());
+                    
+                    const viewport = page.getViewport({ scale: 2 });
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = Math.ceil(viewport.width);
+                    canvas.height = Math.ceil(viewport.height);
+                    ctx.fillStyle = "#FFFFFF";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                    renderedPages.push({
+                        dataUrl: canvas.toDataURL("image/png"),
+                        widthPx: canvas.width,
+                        heightPx: canvas.height
+                    });
                 }
                 
-                progress.innerHTML = "Compiling true MS Word document... almost done!";
-                const doc = new docx.Document({ sections: [{ properties: {}, children: textContent }] });
-                const blob = await docx.Packer.toBlob(doc);
-                
+                progress.innerHTML = "Building Word document...";
+                const baseName = file.name.toLowerCase().endsWith(".pdf") ? file.name.slice(0, -4) : file.name;
+                const htmlDoc = makeHtmlDoc(baseName || "converted", renderedPages);
+                const blob = new Blob([htmlDoc], { type: "application/msword" });
                 const a = document.createElement("a");
                 a.href = URL.createObjectURL(blob);
-                a.download = file.name.replace(".pdf", ".docx");
+                a.download = (baseName || "converted") + ".doc";
+                document.body.appendChild(a);
                 a.click();
-                progress.innerHTML = "Conversion Complete! Genuine .docx file Generated.";
+                a.remove();
+                URL.revokeObjectURL(a.href);
+                progress.innerHTML = "Conversion Complete! Word file downloaded.";
             } catch(e) {
                 progress.innerHTML = "Error: " + e.message;
                 progress.classList.add("text-red-500");
             }
         });
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function makeHtmlDoc(title, renderedPages) {
+            const parts = [];
+            parts.push("<!DOCTYPE html>");
+            parts.push("<html><head><meta charset=\"UTF-8\"><title>" + escapeHtml(title) + "</title>");
+            parts.push("<style>@page { margin: 0.5in; } body { margin: 0; font-family: Arial, sans-serif; background: #ffffff; } img { border: 0; }</style>");
+            parts.push("</head><body>");
+
+            renderedPages.forEach((page, index) => {
+                parts.push("<div style=\"" + (index < renderedPages.length - 1 ? "page-break-after: always; " : "") + "margin: 0 0 12px 0; text-align: center;\">");
+                parts.push("<img src=\"" + page.dataUrl + "\" style=\"max-width: 100%; width: " + page.widthPx + "px; height: " + page.heightPx + "px; display: block; margin: 0 auto;\" />");
+                parts.push("</div>");
+            });
+
+            parts.push("</body></html>");
+            return parts.join("");
+        }
     </script>';
 }
 
