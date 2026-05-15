@@ -114,6 +114,9 @@ Route::view('/register', 'page', [
     'content' => '<p>Sign up for a free account today. An account lets you save your choices. It also helps you work faster with your files. Joining is quick and easy.</p>'
 ]);
 
+Route::get('/pdf-to-word', [HomeController::class, 'tool'])->name('tools.show.pdf-to-word');
+Route::get('/pdf-to-word/', fn() => redirect('/pdf-to-word', 301));
+
 Route::get('/highlights', [HomeController::class, 'legacyHighlight'])->name('highlights.legacy');
 Route::get('/highlights/{topic}', [HomeController::class, 'highlight'])
     ->where('topic', '[A-Za-z0-9-]+')

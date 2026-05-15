@@ -147,7 +147,14 @@ class HomeController extends Controller
     private function toolIdFromSlug(string $slug): ?string
     {
         $slugs = require app_path('Support/tool_slugs.php');
+        $slugLookup = array_flip($slugs);
 
-        return array_search($slug, $slugs, true) ?: null;
+        $normalizedSlug = strtolower(rtrim($slug, '/'));
+        if (isset($slugLookup[$normalizedSlug])) {
+            return $slugLookup[$normalizedSlug];
+        }
+
+        $alternateSlug = str_replace(['_', ' '], '-', $normalizedSlug);
+        return $slugLookup[$alternateSlug] ?? null;
     }
 }
