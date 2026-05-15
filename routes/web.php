@@ -115,7 +115,7 @@ Route::view('/register', 'page', [
 ]);
 
 Route::get('/pdf-to-word', [HomeController::class, 'tool'])->name('tools.show.pdf-to-word');
-Route::get('/pdf-to-word/', fn() => redirect('/pdf-to-word', 301));
+Route::get('/pdf-to-word/', [HomeController::class, 'tool']);
 
 Route::get('/highlights', [HomeController::class, 'legacyHighlight'])->name('highlights.legacy');
 Route::get('/highlights/{topic}', [HomeController::class, 'highlight'])
