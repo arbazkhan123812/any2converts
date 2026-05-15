@@ -393,6 +393,19 @@ if ($isToolPage) {
             'best browser-based ' . strtolower($currentToolName),
             'use ' . strtolower($currentToolName) . ' without installing software',
         ];
+
+        if ($initialToolId === 'pdf_to_word') {
+            $toolPageKeywords = array_merge($toolPageKeywords, [
+                'free online pdf to word converter',
+                'convert pdf to editable word docx online',
+                'best pdf to word converter online free',
+                'pdf to word docx converter with formatting',
+                'convert scanned pdf to editable word document',
+                'online pdf to word tool without software download',
+                'fast high quality pdf to word conversion',
+                'pdf to word document converter for resumes and contracts',
+            ]);
+        }
     }
 
     $toolPageContent = [
