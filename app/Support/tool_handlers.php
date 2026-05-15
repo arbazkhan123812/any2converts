@@ -8654,8 +8654,7 @@ function getPdfToPptPureJS() {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 
-                // FIXED pptx initialization constructor
-                let pptx = new pptxgen();
+                const pptx = new PptxGenJS();
                 
                 for (let i = 1; i <= pdf.numPages; i++) {
                     progress.innerHTML = "Rendering vector slide " + i + " of " + pdf.numPages + "...";
