@@ -3593,7 +3593,7 @@ function getImageToPdfHTML() {
         
         <div style="">
             <h2 class="text-3xl font-black text-slate-900 dark:text-white">Image to PDF Converter - Convert Image to PDF Online Free</h2>
-            <p>Use our free image to pdf converter to add image to pdf without uploading files. Best tool to convert an image to pdf for free download.</p>
+            <p>This tool allows you to convert your images (JPG, PNG, etc.) into a single PDF file. You can upload multiple images and they will be combined into one PDF. This is useful for creating photo albums, portfolios, or for archiving images in a single document.</p>
         </div>
 
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" 
@@ -6066,7 +6066,7 @@ function getImageToDxfHTML() {
             reader.onload = function(e) {
                 imgToDxfPreview.src = e.target.result;
                 imgToDxfPreviewWrap.classList.remove("hidden");
-                imgToDxfMeta.innerText = file.name + " • " + Math.round(file.size / 1024) + " KB";
+                imgToDxfMeta.innerText = file.name + " ï¿½ " + Math.round(file.size / 1024) + " KB";
                 document.getElementById("imgToDxfDownload").classList.add("hidden");
                 imgToDxfStatus.innerText = "Ready to trace. Lower threshold keeps more dark pixels; higher threshold keeps more of the image.";
             };
@@ -6260,7 +6260,7 @@ function getImageToSvgHTML() {
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById("imgToSvgPreview").src = e.target.result;
-                document.getElementById("imgToSvgMeta").innerText = file.name + " • " + Math.round(file.size / 1024) + " KB";
+                document.getElementById("imgToSvgMeta").innerText = file.name + " ï¿½ " + Math.round(file.size / 1024) + " KB";
                 document.getElementById("imgToSvgPreviewWrap").classList.remove("hidden");
                 document.getElementById("imgToSvgDownload").classList.add("hidden");
                 document.getElementById("imgToSvgStatus").innerText = "Ready to trace into SVG.";
@@ -6397,7 +6397,7 @@ function getResizeImageHTML() {
                     resizeWidth.value = img.width;
                     resizeHeight.value = img.height;
                     document.getElementById("resizeOriginalImg").src = e.target.result;
-                    document.getElementById("resizeOriginalMeta").innerText = img.width + " x " + img.height + " • " + Math.round(file.size / 1024) + " KB";
+                    document.getElementById("resizeOriginalMeta").innerText = img.width + " x " + img.height + " ï¿½ " + Math.round(file.size / 1024) + " KB";
                     document.getElementById("resizePreviewWrap").classList.remove("hidden");
                     document.getElementById("resizeResultImg").classList.add("hidden");
                     document.getElementById("resizeDownloadBtn").classList.add("hidden");
@@ -6444,7 +6444,7 @@ function getResizeImageHTML() {
                         const preview = document.getElementById("resizeResultImg");
                         preview.src = url;
                         preview.classList.remove("hidden");
-                        document.getElementById("resizeResultMeta").innerText = width + " x " + height + " • " + Math.round(blob.size / 1024) + " KB";
+                        document.getElementById("resizeResultMeta").innerText = width + " x " + height + " ï¿½ " + Math.round(blob.size / 1024) + " KB";
                         document.getElementById("resizeDownloadBtn").classList.remove("hidden");
                         document.getElementById("resizeStatus").innerText = "Resized image ready.";
                     }, format, quality);
@@ -7267,7 +7267,7 @@ function getImageConverterHTML() {
                     const img = new Image();
                     img.onload = function() {
                         originalImg.src = e.target.result;
-                        originalMeta.textContent = img.width + " x " + img.height + " • " + Math.round(file.size / 1024) + " KB";
+                        originalMeta.textContent = img.width + " x " + img.height + " ï¿½ " + Math.round(file.size / 1024) + " KB";
                         previewWrap.classList.remove("hidden");
                         status.textContent = "Image loaded. Choose a format and click Convert Image.";
                     };
@@ -7304,7 +7304,7 @@ function getImageConverterHTML() {
                             resultImg.src = resultUrl;
                             resultImg.classList.remove("hidden");
                             downloadBtn.classList.remove("hidden");
-                            resultMeta.textContent = img.width + " x " + img.height + " • " + Math.round(blob.size / 1024) + " KB";
+                            resultMeta.textContent = img.width + " x " + img.height + " ï¿½ " + Math.round(blob.size / 1024) + " KB";
                             status.textContent = "Converted image ready.";
                         }, format, quality);
                     };
@@ -7974,7 +7974,7 @@ function getVideoToAudioHTML() {
                 preview.src = previewUrl;
                 preview.classList.remove("hidden");
                 metaWrap.classList.remove("hidden");
-                  fileMeta.textContent = file.name + " • " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
+                  fileMeta.textContent = file.name + " ï¿½ " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
                   setStatus("Video loaded. Choose a format and click Convert to Audio.");
               });
 
@@ -8223,7 +8223,7 @@ function getVideoCompressorHTML() {
                 preview.src = previewUrl;
                 preview.classList.remove("hidden");
                 metaWrap.classList.remove("hidden");
-                fileMeta.textContent = file.name + " • " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
+                fileMeta.textContent = file.name + " ï¿½ " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
                 setStatus("Video loaded. Choose a compression level and click Compress Video.");
             });
 
@@ -8287,7 +8287,7 @@ function getVideoCompressorHTML() {
                     const originalMb = Math.round(file.size / 1024 / 1024 * 100) / 100;
                     const compressedMb = Math.round(outputBlob.size / 1024 / 1024 * 100) / 100;
                     const saved = file.size > 0 ? Math.max(0, Math.round((1 - (outputBlob.size / file.size)) * 100)) : 0;
-                    resultMeta.textContent = "Original: " + originalMb + " MB • Compressed: " + compressedMb + " MB • Saved: " + saved + "%";
+                    resultMeta.textContent = "Original: " + originalMb + " MB ï¿½ Compressed: " + compressedMb + " MB ï¿½ Saved: " + saved + "%";
                     setStatus("Video compressed successfully.");
                     setProgress(100, "Compression complete.");
 
@@ -8443,7 +8443,7 @@ function getOcrToolHTML() {
                 ocrPreviewCard.classList.remove("hidden");
             };
             reader.readAsDataURL(file);
-            ocrFileMeta.textContent = file.name + " • " + formatBytes(file.size);
+            ocrFileMeta.textContent = file.name + " ï¿½ " + formatBytes(file.size);
             setOcrImageStatus("Image ready. Run online OCR to extract text from the selected file.");
         });
 
@@ -9111,7 +9111,7 @@ function getRemovePagesHTML() {
 
             const mark = document.createElement("div");
             mark.className = "absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center font-black text-lg transition";
-            mark.textContent = "×";
+            mark.textContent = "ï¿½";
 
             const body = document.createElement("div");
             body.className = "p-4";
@@ -10130,9 +10130,9 @@ function getRotatePdfHTML() {
             <div id="rotatePdfStatus" class="hidden text-sm text-gray-500 text-center"></div>
             <div id="rotatePdfToolbar" class="hidden flex flex-wrap gap-3">
                 <select id="rotatePdfAngle" class="px-4 py-3 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600">
-                    <option value="90">Rotate all 90° right</option>
-                    <option value="180">Rotate all 180°</option>
-                    <option value="270">Rotate all 90° left</option>
+                    <option value="90">Rotate all 90ï¿½ right</option>
+                    <option value="180">Rotate all 180ï¿½</option>
+                    <option value="270">Rotate all 90ï¿½ left</option>
                 </select>
                 <button id="rotatePdfApplyAllBtn" type="button" class="px-4 py-3 rounded-xl bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Apply to All Pages</button>
                 <button id="rotatePdfResetBtn" type="button" class="px-4 py-3 rounded-xl bg-amber-100 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200 font-semibold hover:bg-amber-200 dark:hover:bg-amber-900/50 transition">Reset Rotations</button>
@@ -10243,10 +10243,10 @@ function getRotatePdfHTML() {
             const flipBtn = document.createElement("button");
             flipBtn.type = "button";
             flipBtn.className = "px-3 py-2 rounded-lg bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100 text-xs font-semibold";
-            flipBtn.textContent = "Rotate 180°";
+            flipBtn.textContent = "Rotate 180ï¿½";
 
             function refreshCard() {
-                angleBadge.textContent = "Current rotation: " + item.rotation + "°";
+                angleBadge.textContent = "Current rotation: " + item.rotation + "ï¿½";
                 renderRotateThumbnail(item, canvas);
             }
 
@@ -10320,7 +10320,7 @@ function getRotatePdfHTML() {
                 item.rotation = normalizeRotation(item.rotation + angle);
             });
             renderRotatePdfGrid();
-            setRotatePdfStatus("Applied " + angle + "° rotation to all pages.");
+            setRotatePdfStatus("Applied " + angle + "ï¿½ rotation to all pages.");
         });
 
         rotatePdfResetBtn.addEventListener("click", function() {

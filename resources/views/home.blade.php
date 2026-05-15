@@ -55,7 +55,7 @@ $tools = [
         'title' => 'PDF Tools',
         'icon' => '📄',
         'tools' => [
-            ['id' => 'img_to_pdf', 'name' => 'Image to PDF', 'icon' => 'img_to_pdf', 'desc' => 'Convert JPG, PNG images to PDF documents'],
+            ['id' => 'img_to_pdf', 'name' => 'Image to PDF', 'icon' => 'img_to_pdf', 'desc' => 'Convert JPG, PNG images to PDF documents', 'long_desc' => 'This tool allows you to convert your images (JPG, PNG, etc.) into a single PDF file. You can upload multiple images and they will be combined into one PDF. This is useful for creating photo albums, portfolios, or for archiving images in a single document.'],
             ['id' => 'split_pdf', 'name' => 'Split PDF', 'icon' => 'merge_pdf', 'desc' => 'Split one PDF into separate ranges'],
             ['id' => 'pdf_to_img', 'name' => 'PDF to Image', 'icon' => 'pdf_to_img', 'desc' => 'Extract images from PDF documents'],
             ['id' => 'pdf_to_word', 'name' => 'PDF to Word', 'icon' => 'pdf_to_word', 'desc' => 'Convert PDF to editable DOCX'],
