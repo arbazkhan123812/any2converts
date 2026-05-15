@@ -33,21 +33,21 @@ Route::view('/privacy', 'page', [
 
 Route::view('/terms', 'page', [
     'title' => 'Terms of Service for Any2Convert Online Tools',
-    'description' => 'Read our rules. See the terms for using our free site and tools.',
+    'description' => 'Read our terms of service. Learn the rules for using our free online tools and website.',
     'headline' => 'Terms of Service',
     'content' => '<p>By using this site, you agree to our rules. You can use our tools for free. We try to keep all tools online, but we offer them as-is. Please use them fairly.</p>'
 ]);
 
 Route::view('/login', 'page', [
     'title' => 'Login to Any2Convert Online Tool Account',
-    'description' => 'Sign in to your account. Use your saved tools and custom features.',
+    'description' => 'Sign in to your Any2Convert account. Access your saved settings and personalized features.',
     'headline' => 'Login',
     'content' => '<p>Sign in to use your account features. A free account lets you save your settings. If you cannot sign in, please email our support team for help.</p>'
 ]);
 
 Route::view('/register', 'page', [
     'title' => 'Register for Any2Convert Online Tools',
-    'description' => 'Make a free account. Save your choices and use more of our tools.',
+    'description' => 'Create a free Any2Convert account. Save your preferences and access advanced tool features.',
     'headline' => 'Register',
     'content' => '<p>Sign up for a free account today. An account lets you save your choices. It also helps you work faster with your files. Joining is quick and easy.</p>'
 ]);
