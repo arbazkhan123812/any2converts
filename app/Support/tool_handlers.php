@@ -4715,9 +4715,9 @@ function getCompressPdfHTML() {
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 const level = document.getElementById("compressLevel").value;
                 const settings = {
-                    low: { scale: 1.45, quality: 0.88 },
-                    medium: { scale: 1.15, quality: 0.72 },
-                    high: { scale: 0.9, quality: 0.52 }
+                    low: { scale: 1.0, quality: 0.88 },
+                    medium: { scale: 0.9, quality: 0.72 },
+                    high: { scale: 0.75, quality: 0.55 }
                 };
                 const config = settings[level] || settings.medium;
                 const { jsPDF } = window.jspdf;
@@ -4776,9 +4776,18 @@ function getCompressPdfHTML() {
                 const compressedSize = blob.size / 1024;
                 const saved = Math.max(0, originalSize - compressedSize);
                 const percentSaved = originalSize > 0 ? (saved / originalSize) * 100 : 0;
-                alert(
-                    "Compression complete!\\nOriginal: " + originalSize.toFixed(2) + " KB\\nCompressed: " + compressedSize.toFixed(2) + " KB\\nSaved: " + saved.toFixed(2) + " KB (" + percentSaved.toFixed(0) + "%)"
-                );
+                if (compressedSize >= originalSize) {
+                    alert(
+                        "Compression finished, but the output file is not smaller than the original. " +
+                        "This can happen when the PDF is already optimized or contains mostly vector/text content. " +
+                        "Try a higher compression level or use the Optimize PDF tool.\\n\\n" +
+                        "Original: " + originalSize.toFixed(2) + " KB\\nCompressed: " + compressedSize.toFixed(2) + " KB"
+                    );
+                } else {
+                    alert(
+                        "Compression complete!\\nOriginal: " + originalSize.toFixed(2) + " KB\\nCompressed: " + compressedSize.toFixed(2) + " KB\\nSaved: " + saved.toFixed(2) + " KB (" + percentSaved.toFixed(0) + "%)"
+                    );
+                }
             } catch(e) {
                 alert("Error compressing PDF: " + e.message);
             }
@@ -12122,3 +12131,4 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
 }
 
 ?>
+
