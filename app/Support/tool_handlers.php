@@ -4715,9 +4715,12 @@ function getCompressPdfHTML() {
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 const level = document.getElementById("compressLevel").value;
                 const settings = {
-                    low: { scale: 1.0, quality: 0.88 },
-                    medium: { scale: 0.9, quality: 0.72 },
-                    high: { scale: 0.75, quality: 0.55 }
+                    // Favor visual quality while still reducing size.
+                    // Low: minimal change, best quality. Medium: modest downscale and good quality.
+                    // High: stronger downscale but keep decent JPEG quality to avoid heavy artifacts.
+                    low: { scale: 1.0, quality: 0.95 },
+                    medium: { scale: 0.95, quality: 0.88 },
+                    high: { scale: 0.9, quality: 0.80 }
                 };
                 const config = settings[level] || settings.medium;
                 const { jsPDF } = window.jspdf;
@@ -4753,8 +4756,25 @@ function getCompressPdfHTML() {
                         doc.addPage(pageFormat, orientation);
                     }
 
-                    const imageData = canvas.toDataURL("image/jpeg", config.quality);
-                    doc.addImage(imageData, "JPEG", 0, 0, pageFormat[0], pageFormat[1], undefined, "FAST");
+                    // If the rendered canvas is very large, downscale it before encoding
+                    // — this reduces output PDF size much more effectively than lowering JPEG quality alone.
+                    const MAX_DIM = 2000; // max pixel dimension for width or height
+                    let imageData;
+                    if (canvas.width > MAX_DIM || canvas.height > MAX_DIM) {
+                        const ratio = Math.min(MAX_DIM / canvas.width, MAX_DIM / canvas.height);
+                        const tmp = document.createElement("canvas");
+                        tmp.width = Math.round(canvas.width * ratio);
+                        tmp.height = Math.round(canvas.height * ratio);
+                        const tmpCtx = tmp.getContext("2d");
+                        tmpCtx.fillStyle = "#FFFFFF";
+                        tmpCtx.fillRect(0, 0, tmp.width, tmp.height);
+                        tmpCtx.drawImage(canvas, 0, 0, tmp.width, tmp.height);
+                        imageData = tmp.toDataURL("image/jpeg", config.quality);
+                        doc.addImage(imageData, "JPEG", 0, 0, pageFormat[0] * ratio, pageFormat[1] * ratio, undefined, "FAST");
+                    } else {
+                        imageData = canvas.toDataURL("image/jpeg", config.quality);
+                        doc.addImage(imageData, "JPEG", 0, 0, pageFormat[0], pageFormat[1], undefined, "FAST");
+                    }
                 }
 
                 if (!doc) {
