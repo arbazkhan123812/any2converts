@@ -4715,12 +4715,9 @@ function getCompressPdfHTML() {
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 const level = document.getElementById("compressLevel").value;
                 const settings = {
-                    // Favor visual quality while still reducing size.
-                    // Low: minimal change, best quality. Medium: modest downscale and good quality.
-                    // High: stronger downscale but keep decent JPEG quality to avoid heavy artifacts.
-                    low: { scale: 1.0, quality: 0.95 },
-                    medium: { scale: 0.95, quality: 0.88 },
-                    high: { scale: 0.9, quality: 0.80 }
+                    low: { renderScale: 1.0, quality: 0.88, maxDimension: 1600 },
+                    medium: { renderScale: 0.82, quality: 0.72, maxDimension: 1250 },
+                    high: { renderScale: 0.65, quality: 0.58, maxDimension: 950 }
                 };
                 const config = settings[level] || settings.medium;
                 const { jsPDF } = window.jspdf;
@@ -4729,7 +4726,8 @@ function getCompressPdfHTML() {
                 for (let i = 1; i <= pdf.numPages; i++) {
                     progress.textContent = "Compressing page " + i + " of " + pdf.numPages + "...";
                     const page = await pdf.getPage(i);
-                    const viewport = page.getViewport({ scale: config.scale });
+                    const pageViewport = page.getViewport({ scale: 1 });
+                    const viewport = page.getViewport({ scale: config.renderScale });
                     const canvas = document.createElement("canvas");
                     const context = canvas.getContext("2d", { alpha: false });
                     canvas.width = Math.ceil(viewport.width);
@@ -4742,8 +4740,8 @@ function getCompressPdfHTML() {
                         viewport: viewport
                     }).promise;
 
-                    const orientation = viewport.width > viewport.height ? "landscape" : "portrait";
-                    const pageFormat = [Math.ceil(viewport.width), Math.ceil(viewport.height)];
+                    const orientation = pageViewport.width > pageViewport.height ? "landscape" : "portrait";
+                    const pageFormat = [Math.ceil(pageViewport.width), Math.ceil(pageViewport.height)];
 
                     if (!doc) {
                         doc = new jsPDF({
@@ -4758,10 +4756,9 @@ function getCompressPdfHTML() {
 
                     // If the rendered canvas is very large, downscale it before encoding
                     // — this reduces output PDF size much more effectively than lowering JPEG quality alone.
-                    const MAX_DIM = 2000; // max pixel dimension for width or height
-                    let imageData;
-                    if (canvas.width > MAX_DIM || canvas.height > MAX_DIM) {
-                        const ratio = Math.min(MAX_DIM / canvas.width, MAX_DIM / canvas.height);
+                    let imageCanvas = canvas;
+                    if (canvas.width > config.maxDimension || canvas.height > config.maxDimension) {
+                        const ratio = Math.min(config.maxDimension / canvas.width, config.maxDimension / canvas.height);
                         const tmp = document.createElement("canvas");
                         tmp.width = Math.round(canvas.width * ratio);
                         tmp.height = Math.round(canvas.height * ratio);
@@ -4769,12 +4766,11 @@ function getCompressPdfHTML() {
                         tmpCtx.fillStyle = "#FFFFFF";
                         tmpCtx.fillRect(0, 0, tmp.width, tmp.height);
                         tmpCtx.drawImage(canvas, 0, 0, tmp.width, tmp.height);
-                        imageData = tmp.toDataURL("image/jpeg", config.quality);
-                        doc.addImage(imageData, "JPEG", 0, 0, pageFormat[0] * ratio, pageFormat[1] * ratio, undefined, "FAST");
-                    } else {
-                        imageData = canvas.toDataURL("image/jpeg", config.quality);
-                        doc.addImage(imageData, "JPEG", 0, 0, pageFormat[0], pageFormat[1], undefined, "FAST");
+                        imageCanvas = tmp;
                     }
+
+                    const imageData = imageCanvas.toDataURL("image/jpeg", config.quality);
+                    doc.addImage(imageData, "JPEG", 0, 0, pageFormat[0], pageFormat[1], undefined, "FAST");
                 }
 
                 if (!doc) {
@@ -4784,26 +4780,27 @@ function getCompressPdfHTML() {
                 progress.textContent = "Preparing compressed PDF...";
                 const pdfBytes = doc.output("arraybuffer");
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                const baseName = file.name.replace(/\.pdf$/i, "") || "compressed";
-                a.download = baseName + "-compressed.pdf";
-                a.click();
-                URL.revokeObjectURL(url);
-                
                 const originalSize = file.size / 1024;
                 const compressedSize = blob.size / 1024;
                 const saved = Math.max(0, originalSize - compressedSize);
                 const percentSaved = originalSize > 0 ? (saved / originalSize) * 100 : 0;
                 if (compressedSize >= originalSize) {
+                    progress.textContent = "No smaller version could be made from this PDF.";
                     alert(
-                        "Compression finished, but the output file is not smaller than the original. " +
+                        "This PDF is already optimized or mostly text/vector content, so rebuilding it would make it larger. " +
+                        "No larger file was downloaded. " +
                         "This can happen when the PDF is already optimized or contains mostly vector/text content. " +
-                        "Try a higher compression level or use the Optimize PDF tool.\\n\\n" +
+                        "Try High compression for scanned/image PDFs.\\n\\n" +
                         "Original: " + originalSize.toFixed(2) + " KB\\nCompressed: " + compressedSize.toFixed(2) + " KB"
                     );
                 } else {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    const baseName = file.name.replace(/\.pdf$/i, "") || "compressed";
+                    a.download = baseName + "-compressed.pdf";
+                    a.click();
+                    URL.revokeObjectURL(url);
                     alert(
                         "Compression complete!\\nOriginal: " + originalSize.toFixed(2) + " KB\\nCompressed: " + compressedSize.toFixed(2) + " KB\\nSaved: " + saved.toFixed(2) + " KB (" + percentSaved.toFixed(0) + "%)"
                     );
@@ -12151,4 +12148,3 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
 }
 
 ?>
-
