@@ -6256,21 +6256,107 @@ function getImageToSvgHTML() {
             return mask;
         }
 
-        function buildSvgFromMask(mask, width, height) {
-            let paths = "";
-            for (let y = 0; y < height; y++) {
-                let x = 0;
-                while (x < width) {
-                    if (!mask[y * width + x]) {
-                        x++;
-                        continue;
+        function cleanSvgMask(mask, width, height) {
+            const cleaned = new Uint8Array(mask);
+
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const i = y * width + x;
+                    let neighbors = 0;
+                    for (let yy = -1; yy <= 1; yy++) {
+                        for (let xx = -1; xx <= 1; xx++) {
+                            if (xx === 0 && yy === 0) continue;
+                            neighbors += mask[(y + yy) * width + (x + xx)];
+                        }
                     }
-                    let runStart = x;
-                    while (x < width && mask[y * width + x]) x++;
-                    paths += "<rect x=\\"" + runStart + "\\" y=\\"" + y + "\\" width=\\"" + (x - runStart) + "\\" height=\\"1\\" />";
+                    if (mask[i] && neighbors <= 1) cleaned[i] = 0;
+                    if (!mask[i] && neighbors >= 7) cleaned[i] = 1;
                 }
             }
-            return "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 " + width + " " + height + "\\" fill=\\"#000\\" shape-rendering=\\"crispEdges\\">" + paths + "</svg>";
+
+            return cleaned;
+        }
+
+        function svgPointKey(x, y) {
+            return x + "," + y;
+        }
+
+        function buildSvgFromMask(mask, width, height) {
+            const edges = new Map();
+
+            function filled(x, y) {
+                if (x < 0 || y < 0 || x >= width || y >= height) return 0;
+                return mask[y * width + x];
+            }
+
+            function addEdge(x1, y1, x2, y2) {
+                const key = svgPointKey(x1, y1);
+                if (!edges.has(key)) edges.set(key, []);
+                edges.get(key).push([x2, y2]);
+            }
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (!filled(x, y)) continue;
+                    if (!filled(x, y - 1)) addEdge(x, y, x + 1, y);
+                    if (!filled(x + 1, y)) addEdge(x + 1, y, x + 1, y + 1);
+                    if (!filled(x, y + 1)) addEdge(x + 1, y + 1, x, y + 1);
+                    if (!filled(x - 1, y)) addEdge(x, y + 1, x, y);
+                }
+            }
+
+            const paths = [];
+
+            while (edges.size) {
+                const startKey = edges.keys().next().value;
+                const start = startKey.split(",").map(Number);
+                let current = start;
+                const points = [start];
+                let guard = 0;
+
+                while (guard++ < width * height * 8) {
+                    const key = svgPointKey(current[0], current[1]);
+                    const nextPoints = edges.get(key);
+                    if (!nextPoints || !nextPoints.length) break;
+
+                    const next = nextPoints.pop();
+                    if (!nextPoints.length) edges.delete(key);
+                    points.push(next);
+                    current = next;
+
+                    if (current[0] === start[0] && current[1] === start[1]) break;
+                }
+
+                if (points.length < 4) continue;
+
+                const simplified = [points[0]];
+                for (let i = 1; i < points.length - 1; i++) {
+                    const prev = simplified[simplified.length - 1];
+                    const point = points[i];
+                    const next = points[i + 1];
+                    const sameVertical = prev[0] === point[0] && point[0] === next[0];
+                    const sameHorizontal = prev[1] === point[1] && point[1] === next[1];
+                    if (!sameVertical && !sameHorizontal) simplified.push(point);
+                }
+                simplified.push(points[points.length - 1]);
+
+                let d = "M" + simplified[0][0] + " " + simplified[0][1];
+                for (let i = 1; i < simplified.length; i++) {
+                    const previous = simplified[i - 1];
+                    const point = simplified[i];
+                    if (point[0] === previous[0]) {
+                        d += "V" + point[1];
+                    } else if (point[1] === previous[1]) {
+                        d += "H" + point[0];
+                    } else {
+                        d += "L" + point[0] + " " + point[1];
+                    }
+                }
+                paths.push(d + "Z");
+            }
+
+            const pathData = paths.join(" ");
+            return "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 " + width + " " + height + "\\" fill=\\"#111827\\" fill-rule=\\"evenodd\\"><path d=\\"" + pathData + "\\"/></svg>";
         }
 
         document.getElementById("imgToSvgThreshold").addEventListener("input", function() {
@@ -6316,14 +6402,14 @@ function getImageToSvgHTML() {
                     const ctx = canvas.getContext("2d", { willReadFrequently: true });
                     ctx.drawImage(img, 0, 0, width, height);
                     const imageData = ctx.getImageData(0, 0, width, height);
-                    const mask = buildSvgMask(imageData.data, width, height, threshold, invert);
+                    const mask = cleanSvgMask(buildSvgMask(imageData.data, width, height, threshold, invert), width, height);
                     if (!mask.some(Boolean)) {
                         status.innerText = "No strong shapes found. Try changing the threshold.";
                         return;
                     }
                     imgToSvgContent = buildSvgFromMask(mask, width, height);
                     document.getElementById("imgToSvgDownload").classList.remove("hidden");
-                    status.innerText = "SVG ready for download.";
+                    status.innerText = "SVG ready for download. Generated clean vector paths from a " + width + " x " + height + " trace.";
                 };
                 img.src = e.target.result;
             };
