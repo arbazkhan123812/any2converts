@@ -6319,72 +6319,6 @@ function getImageToSvgHTML() {
             return cleaned;
         }
 
-        function removeSvgEdgeShadows(mask, width, height) {
-            const cleaned = new Uint8Array(mask);
-            const seen = new Uint8Array(width * height);
-            const totalPixels = width * height;
-
-            function shouldStart(index) {
-                return cleaned[index] && !seen[index];
-            }
-
-            for (let y = 0; y < height; y++) {
-                for (let x = 0; x < width; x++) {
-                    const startIndex = y * width + x;
-                    if (!shouldStart(startIndex)) continue;
-
-                    const stack = [startIndex];
-                    const component = [];
-                    seen[startIndex] = 1;
-
-                    let minX = x;
-                    let maxX = x;
-                    let touchesTop = y === 0;
-                    let touchesBottom = y === height - 1;
-                    let touchesLeft = x === 0;
-                    let touchesRight = x === width - 1;
-
-                    while (stack.length) {
-                        const index = stack.pop();
-                        component.push(index);
-
-                        const px = index % width;
-                        const py = Math.floor(index / width);
-                        if (px < minX) minX = px;
-                        if (px > maxX) maxX = px;
-                        if (py === 0) touchesTop = true;
-                        if (py === height - 1) touchesBottom = true;
-                        if (px === 0) touchesLeft = true;
-                        if (px === width - 1) touchesRight = true;
-
-                        const neighbors = [];
-                        if (px > 0) neighbors.push(index - 1);
-                        if (px < width - 1) neighbors.push(index + 1);
-                        if (py > 0) neighbors.push(index - width);
-                        if (py < height - 1) neighbors.push(index + width);
-
-                        neighbors.forEach(function(nextIndex) {
-                            if (!cleaned[nextIndex] || seen[nextIndex]) return;
-                            seen[nextIndex] = 1;
-                            stack.push(nextIndex);
-                        });
-                    }
-
-                    const touchesSideOrTop = touchesTop || touchesLeft || touchesRight;
-                    const bottomBandShadow = touchesBottom && (maxX - minX + 1) > width * 0.65;
-                    const largeShadow = component.length > totalPixels * 0.012;
-
-                    if ((touchesSideOrTop && largeShadow) || bottomBandShadow) {
-                        component.forEach(function(index) {
-                            cleaned[index] = 0;
-                        });
-                    }
-                }
-            }
-
-            return cleaned;
-        }
-
         function svgPointKey(x, y) {
             return x + "," + y;
         }
@@ -6509,8 +6443,8 @@ function getImageToSvgHTML() {
                     const ctx = canvas.getContext("2d", { willReadFrequently: true });
                     ctx.drawImage(img, 0, 0, width, height);
                     const imageData = ctx.getImageData(0, 0, width, height);
-                    const threshold = Math.max(25, Math.floor(getAutoSvgThreshold(imageData.data, width, height) * 0.82));
-                    const mask = cleanSvgMask(removeSvgEdgeShadows(buildSvgMask(imageData.data, width, height, threshold, invert), width, height), width, height);
+                    const threshold = getAutoSvgThreshold(imageData.data, width, height);
+                    const mask = cleanSvgMask(buildSvgMask(imageData.data, width, height, threshold, invert), width, height);
                     if (!mask.some(Boolean)) {
                         status.innerText = "Could not find enough contrast to trace this image.";
                         return;
