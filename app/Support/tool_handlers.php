@@ -6212,14 +6212,14 @@ function getImageToSvgHTML() {
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'imgToSvgInput\').click()">
             <input type="file" id="imgToSvgInput" class="hidden" accept="image/*">
             <div class="text-5xl mb-3">SVG</div>
-            <p class="font-medium">Upload an image to trace into SVG</p>
-            <p class="text-sm text-gray-500 mt-2">Best for logos, silhouettes, signatures, stamps, and line art</p>
+            <p class="font-medium">Upload an image to convert into SVG</p>
+            <p class="text-sm text-gray-500 mt-2">Keeps the original image quality, colors, and transparency</p>
         </div>
         <div id="imgToSvgPreviewWrap" class="hidden text-center">
             <img id="imgToSvgPreview" class="mx-auto max-h-72 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60">
             <p id="imgToSvgMeta" class="text-xs text-gray-500 mt-2"></p>
         </div>
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="hidden">
             <div>
                 <label class="block text-sm font-medium mb-1">Threshold: <span id="imgToSvgThresholdValue">160</span></label>
                 <input type="range" id="imgToSvgThreshold" min="0" max="255" value="160" class="w-full">
@@ -6229,12 +6229,12 @@ function getImageToSvgHTML() {
                 <input type="range" id="imgToSvgSize" min="64" max="320" value="180" class="w-full">
             </div>
         </div>
-        <label class="flex items-center gap-2 text-sm">
+        <label class="hidden">
             <input type="checkbox" id="imgToSvgInvert">
             Invert tracing
         </label>
         <div class="grid sm:grid-cols-2 gap-3">
-            <button id="imgToSvgBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Generate SVG</button>
+            <button id="imgToSvgBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Convert to SVG</button>
             <button id="imgToSvgDownload" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition hidden">Download SVG</button>
         </div>
         <p id="imgToSvgStatus" class="text-sm text-gray-500 text-center"></p>
@@ -6372,10 +6372,10 @@ function getImageToSvgHTML() {
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById("imgToSvgPreview").src = e.target.result;
-                document.getElementById("imgToSvgMeta").innerText = file.name + " � " + Math.round(file.size / 1024) + " KB";
+                document.getElementById("imgToSvgMeta").innerText = file.name + " - " + Math.round(file.size / 1024) + " KB";
                 document.getElementById("imgToSvgPreviewWrap").classList.remove("hidden");
                 document.getElementById("imgToSvgDownload").classList.add("hidden");
-                document.getElementById("imgToSvgStatus").innerText = "Ready to trace into SVG.";
+                document.getElementById("imgToSvgStatus").innerText = "Ready to convert.";
             };
             reader.readAsDataURL(file);
         });
@@ -6415,6 +6415,59 @@ function getImageToSvgHTML() {
             };
             reader.readAsDataURL(file);
         });
+
+        (function useLosslessImageSvgExport() {
+            const oldButton = document.getElementById("imgToSvgBtn");
+            const newButton = oldButton.cloneNode(true);
+            oldButton.replaceWith(newButton);
+
+            function escapeSvgAttr(value) {
+                return String(value)
+                    .replace(/&/g, "&amp;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+            }
+
+            function buildLosslessSvg(dataUrl, width, height, label) {
+                const safeDataUrl = escapeSvgAttr(dataUrl);
+                return "<svg xmlns=\\"http://www.w3.org/2000/svg\\" xmlns:xlink=\\"http://www.w3.org/1999/xlink\\" width=\\"" + width + "\\" height=\\"" + height + "\\" viewBox=\\"0 0 " + width + " " + height + "\\" role=\\"img\\">" +
+                    "<title>" + escapeSvgAttr(label) + "</title>" +
+                    "<image width=\\"" + width + "\\" height=\\"" + height + "\\" href=\\"" + safeDataUrl + "\\" xlink:href=\\"" + safeDataUrl + "\\" preserveAspectRatio=\\"none\\"/>" +
+                    "</svg>";
+            }
+
+            newButton.addEventListener("click", function() {
+                const file = imgToSvgInput.files[0];
+                if (!file) return alert("Please select an image first");
+
+                const status = document.getElementById("imgToSvgStatus");
+                status.innerText = "Converting to SVG...";
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    const img = new Image();
+                    img.onload = function() {
+                        const width = img.naturalWidth || img.width;
+                        const height = img.naturalHeight || img.height;
+                        if (!width || !height) {
+                            status.innerText = "Could not read image size.";
+                            return;
+                        }
+
+                        imgToSvgContent = buildLosslessSvg(dataUrl, width, height, file.name || "image");
+                        document.getElementById("imgToSvgDownload").classList.remove("hidden");
+                        status.innerText = "SVG ready. Original quality preserved at " + width + " x " + height + " px.";
+                    };
+                    img.onerror = function() {
+                        status.innerText = "Could not load this image.";
+                    };
+                    img.src = dataUrl;
+                };
+                reader.readAsDataURL(file);
+            });
+        })();
 
         document.getElementById("imgToSvgDownload").addEventListener("click", function() {
             if (!imgToSvgContent) return;
