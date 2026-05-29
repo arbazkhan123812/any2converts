@@ -6213,7 +6213,7 @@ function getImageToSvgHTML() {
             <input type="file" id="imgToSvgInput" class="hidden" accept="image/*">
             <div class="text-5xl mb-3">SVG</div>
             <p class="font-medium">Upload an image to convert into SVG</p>
-            <p class="text-sm text-gray-500 mt-2">Keeps the original image quality, colors, and transparency</p>
+            <p class="text-sm text-gray-500 mt-2">Creates black-and-white SVG path artwork from the image</p>
         </div>
         <div id="imgToSvgPreviewWrap" class="hidden text-center">
             <img id="imgToSvgPreview" class="mx-auto max-h-72 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60">
@@ -6242,6 +6242,48 @@ function getImageToSvgHTML() {
     <script>
         let imgToSvgContent = "";
         const imgToSvgInput = document.getElementById("imgToSvgInput");
+
+        function getAutoSvgThreshold(data, width, height) {
+            const histogram = new Array(256).fill(0);
+            let total = 0;
+            let sum = 0;
+
+            for (let i = 0; i < width * height; i++) {
+                const idx = i * 4;
+                if (data[idx + 3] < 20) continue;
+                const brightness = Math.round((0.299 * data[idx]) + (0.587 * data[idx + 1]) + (0.114 * data[idx + 2]));
+                histogram[brightness]++;
+                total++;
+                sum += brightness;
+            }
+
+            if (!total) return 160;
+
+            let backgroundWeight = 0;
+            let backgroundSum = 0;
+            let bestVariance = -1;
+            let bestThreshold = 160;
+
+            for (let level = 0; level < 256; level++) {
+                backgroundWeight += histogram[level];
+                if (!backgroundWeight) continue;
+
+                const foregroundWeight = total - backgroundWeight;
+                if (!foregroundWeight) break;
+
+                backgroundSum += level * histogram[level];
+                const backgroundMean = backgroundSum / backgroundWeight;
+                const foregroundMean = (sum - backgroundSum) / foregroundWeight;
+                const variance = backgroundWeight * foregroundWeight * Math.pow(backgroundMean - foregroundMean, 2);
+
+                if (variance > bestVariance) {
+                    bestVariance = variance;
+                    bestThreshold = level;
+                }
+            }
+
+            return Math.max(35, Math.min(220, bestThreshold));
+        }
 
         function buildSvgMask(data, width, height, threshold, invert) {
             const mask = new Uint8Array(width * height);
@@ -6356,7 +6398,7 @@ function getImageToSvgHTML() {
             }
 
             const pathData = paths.join(" ");
-            return "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 " + width + " " + height + "\\" fill=\\"#111827\\" fill-rule=\\"evenodd\\"><path d=\\"" + pathData + "\\"/></svg>";
+            return "<?xml version=\\"1.0\\" standalone=\\"no\\"?>\\n<svg version=\\"1.0\\" xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"" + width + "\\" height=\\"" + height + "\\" viewBox=\\"0 0 " + width + " " + height + "\\" preserveAspectRatio=\\"xMidYMid meet\\">\\n<path fill=\\"#000000\\" stroke=\\"none\\" fill-rule=\\"evenodd\\" d=\\"" + pathData + "\\"/>\\n</svg>";
         }
 
         document.getElementById("imgToSvgThreshold").addEventListener("input", function() {
@@ -6383,11 +6425,10 @@ function getImageToSvgHTML() {
         document.getElementById("imgToSvgBtn").addEventListener("click", function() {
             const file = imgToSvgInput.files[0];
             if (!file) return alert("Please select an image first");
-            const threshold = parseInt(document.getElementById("imgToSvgThreshold").value, 10);
-            const maxSize = parseInt(document.getElementById("imgToSvgSize").value, 10);
-            const invert = document.getElementById("imgToSvgInvert").checked;
+            const maxSize = 900;
+            const invert = false;
             const status = document.getElementById("imgToSvgStatus");
-            status.innerText = "Generating SVG...";
+            status.innerText = "Tracing SVG paths...";
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -6402,73 +6443,20 @@ function getImageToSvgHTML() {
                     const ctx = canvas.getContext("2d", { willReadFrequently: true });
                     ctx.drawImage(img, 0, 0, width, height);
                     const imageData = ctx.getImageData(0, 0, width, height);
+                    const threshold = getAutoSvgThreshold(imageData.data, width, height);
                     const mask = cleanSvgMask(buildSvgMask(imageData.data, width, height, threshold, invert), width, height);
                     if (!mask.some(Boolean)) {
-                        status.innerText = "No strong shapes found. Try changing the threshold.";
+                        status.innerText = "Could not find enough contrast to trace this image.";
                         return;
                     }
                     imgToSvgContent = buildSvgFromMask(mask, width, height);
                     document.getElementById("imgToSvgDownload").classList.remove("hidden");
-                    status.innerText = "SVG ready for download. Generated clean vector paths from a " + width + " x " + height + " trace.";
+                    status.innerText = "SVG ready. Generated black vector paths at " + width + " x " + height + " px.";
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         });
-
-        (function useLosslessImageSvgExport() {
-            const oldButton = document.getElementById("imgToSvgBtn");
-            const newButton = oldButton.cloneNode(true);
-            oldButton.replaceWith(newButton);
-
-            function escapeSvgAttr(value) {
-                return String(value)
-                    .replace(/&/g, "&amp;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;");
-            }
-
-            function buildLosslessSvg(dataUrl, width, height, label) {
-                const safeDataUrl = escapeSvgAttr(dataUrl);
-                return "<svg xmlns=\\"http://www.w3.org/2000/svg\\" xmlns:xlink=\\"http://www.w3.org/1999/xlink\\" width=\\"" + width + "\\" height=\\"" + height + "\\" viewBox=\\"0 0 " + width + " " + height + "\\" role=\\"img\\">" +
-                    "<title>" + escapeSvgAttr(label) + "</title>" +
-                    "<image width=\\"" + width + "\\" height=\\"" + height + "\\" href=\\"" + safeDataUrl + "\\" xlink:href=\\"" + safeDataUrl + "\\" preserveAspectRatio=\\"none\\"/>" +
-                    "</svg>";
-            }
-
-            newButton.addEventListener("click", function() {
-                const file = imgToSvgInput.files[0];
-                if (!file) return alert("Please select an image first");
-
-                const status = document.getElementById("imgToSvgStatus");
-                status.innerText = "Converting to SVG...";
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const dataUrl = e.target.result;
-                    const img = new Image();
-                    img.onload = function() {
-                        const width = img.naturalWidth || img.width;
-                        const height = img.naturalHeight || img.height;
-                        if (!width || !height) {
-                            status.innerText = "Could not read image size.";
-                            return;
-                        }
-
-                        imgToSvgContent = buildLosslessSvg(dataUrl, width, height, file.name || "image");
-                        document.getElementById("imgToSvgDownload").classList.remove("hidden");
-                        status.innerText = "SVG ready. Original quality preserved at " + width + " x " + height + " px.";
-                    };
-                    img.onerror = function() {
-                        status.innerText = "Could not load this image.";
-                    };
-                    img.src = dataUrl;
-                };
-                reader.readAsDataURL(file);
-            });
-        })();
-
         document.getElementById("imgToSvgDownload").addEventListener("click", function() {
             if (!imgToSvgContent) return;
             const file = imgToSvgInput.files[0];
