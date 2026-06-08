@@ -2740,8 +2740,7 @@ function getClipToGifHTML() {
                 setStatus("Loading GIF conversion engine...");
                 await ffmpeg.load({
                     coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                    classWorkerURL: await toBlobURL("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript")
+                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm")
                 });
                 ffmpegLoaded = true;
                 setStatus("GIF converter ready.");
@@ -8114,8 +8113,7 @@ function getVideoToAudioHTML() {
                     if (toBlobURLFn) {
                         await ffmpeg.load({
                             coreURL: await toBlobURLFn(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                            wasmURL: await toBlobURLFn(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                            classWorkerURL: await toBlobURLFn("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript")
+                            wasmURL: await toBlobURLFn(baseURL + "/ffmpeg-core.wasm", "application/wasm")
                         });
                     } else {
                         await ffmpeg.load();
@@ -8376,8 +8374,7 @@ function getVideoCompressorHTML() {
                 setProgress(8, "Loading video compression engine...");
                 await ffmpeg.load({
                     coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                    classWorkerURL: await toBlobURL("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript")
+                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm")
                 });
                 ffmpegLoaded = true;
                 setStatus("Compressor ready.");
