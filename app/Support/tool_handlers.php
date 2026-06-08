@@ -2713,8 +2713,8 @@ function getClipToGifHTML() {
             </div>
         </div>
     </div>
-    <script src="assets/vendor/ffmpeg/ffmpeg.js"></script>
-    <script src="assets/vendor/ffmpeg/util.js"></script>
+    <script src="/assets/vendor/ffmpeg/ffmpeg.js"></script>
+    <script src="/assets/vendor/ffmpeg/util.js"></script>
     <script>
         (() => {
             const input = document.getElementById("clipGifInput");
@@ -8009,8 +8009,8 @@ function getVideoToAudioHTML() {
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/60 p-4 text-sm text-gray-600 dark:text-gray-300">Use this free video to MP3 converter online to extract audio from video files quickly. It is useful if you want to turn video to MP3 for podcasts, voice notes, reels, or short clips.</div>
         <p id="videoToAudioStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
-    <script src="assets/vendor/ffmpeg/ffmpeg.js"></script>
-    <script src="assets/vendor/ffmpeg/util.js"></script>
+    <script src="/assets/vendor/ffmpeg/ffmpeg.js"></script>
+    <script src="/assets/vendor/ffmpeg/util.js"></script>
     <script>
         (function() {
             const input = document.getElementById("videoToAudioInput");
@@ -8263,8 +8263,8 @@ function getVideoCompressorHTML() {
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/60 p-4 text-sm text-gray-600 dark:text-gray-300">This video compressor reduces file size by re-encoding the uploaded video into a smaller MP4 format in your browser.</div>
         <p id="videoCompressorStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
-    <script src="assets/vendor/ffmpeg/ffmpeg.js"></script>
-    <script src="assets/vendor/ffmpeg/util.js"></script>
+    <script src="/assets/vendor/ffmpeg/ffmpeg.js"></script>
+    <script src="/assets/vendor/ffmpeg/util.js"></script>
     <script>
         (function() {
             const input = document.getElementById("videoCompressorInput");
@@ -12275,3 +12275,4 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
 }
 
 ?>
+
