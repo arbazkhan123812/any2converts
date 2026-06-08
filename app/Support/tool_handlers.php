@@ -8069,32 +8069,62 @@ function getVideoToAudioHTML() {
 
             async function ensureFFmpegLoaded() {
                 if (ffmpegLoaded) return ffmpeg;
-                  const { FFmpeg } = FFmpegWASM;
-                  const { toBlobURL } = FFmpegUtil;
-                  ffmpeg = new FFmpeg();
-                  ffmpeg.on("log", function(event) {
-                      if (event && event.message) {
-                          setStatus("Processing: " + event.message);
-                      }
-                  });
-                  ffmpeg.on("progress", function(event) {
-                      if (event && typeof event.progress === "number" && isFinite(event.progress)) {
-                          setProgress(event.progress * 100, "Extracting audio...");
-                      }
-                  });
 
-                  const baseURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
-                  setStatus("Loading video conversion engine...");
-                  setProgress(8, "Loading video conversion engine...");
-                  await ffmpeg.load({
-                      coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                      wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm")
-                  });
-                  ffmpegLoaded = true;
-                  setStatus("Converter ready.");
-                  setProgress(15, "Converter ready.");
-                  return ffmpeg;
-              }
+                const util = (typeof window !== "undefined" ? window.FFmpegUtil : null) || (typeof FFmpegUtil !== "undefined" ? FFmpegUtil : null);
+                const wasm = (typeof window !== "undefined" ? window.FFmpegWASM : null) || (typeof FFmpegWASM !== "undefined" ? FFmpegWASM : null);
+                fetchFileFn = util && typeof util.fetchFile === "function" ? util.fetchFile : null;
+                toBlobURLFn = util && typeof util.toBlobURL === "function" ? util.toBlobURL : null;
+
+                const createFFmpegFn = (typeof window !== "undefined" && window.FFmpeg && typeof window.FFmpeg.createFFmpeg === "function")
+                    ? window.FFmpeg.createFFmpeg
+                    : (wasm && typeof wasm.FFmpeg === "function" ? wasm.FFmpeg : null);
+
+                if (!createFFmpegFn) {
+                    setStatus("FFmpeg library is not available.");
+                    throw new Error("FFmpeg library is not available");
+                }
+
+                try {
+                    ffmpeg = new createFFmpegFn();
+                } catch (error) {
+                    ffmpeg = createFFmpegFn({ log: true });
+                }
+
+                if (ffmpeg && typeof ffmpeg.on === "function") {
+                    ffmpeg.on("log", function(event) {
+                        if (event && event.message) {
+                            setStatus("Processing: " + event.message);
+                        }
+                    });
+                    ffmpeg.on("progress", function(event) {
+                        if (event && typeof event.progress === "number" && isFinite(event.progress)) {
+                            setProgress(event.progress * 100, "Extracting audio...");
+                        }
+                    });
+                }
+
+                const baseURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
+                setStatus("Loading video conversion engine...");
+                setProgress(8, "Loading video conversion engine...");
+
+                if (typeof ffmpeg.load === "function") {
+                    if (toBlobURLFn) {
+                        await ffmpeg.load({
+                            coreURL: await toBlobURLFn(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                            wasmURL: await toBlobURLFn(baseURL + "/ffmpeg-core.wasm", "application/wasm")
+                        });
+                    } else {
+                        await ffmpeg.load();
+                    }
+                } else {
+                    throw new Error("FFmpeg loader not available");
+                }
+
+                ffmpegLoaded = true;
+                setStatus("Converter ready.");
+                setProgress(15, "Converter ready.");
+                return ffmpeg;
+            }
 
             function getOutputSettings(format, bitrate) {
                 switch (format) {
@@ -8151,19 +8181,21 @@ function getVideoToAudioHTML() {
 
                   try {
                       const engine = await ensureFFmpegLoaded();
-                    const { fetchFile } = FFmpegUtil;
-                    const extMatch = file.name.match(/\.([^.]+)$/);
-                    const inputExt = extMatch ? extMatch[1].toLowerCase() : "mp4";
-                    const safeInputName = "input." + inputExt;
-                    const baseName = file.name.replace(/\.[^.]+$/, "") || "audio";
-                    const format = formatSelect.value;
+                      const effectiveFetchFile = fetchFileFn || (typeof window !== "undefined" && window.FFmpegUtil && typeof window.FFmpegUtil.fetchFile === "function" ? window.FFmpegUtil.fetchFile : null);
+                      const fileData = effectiveFetchFile ? await effectiveFetchFile(file) : await file.arrayBuffer();
+                      const fileBytes = fileData instanceof Uint8Array ? fileData : new Uint8Array(fileData);
+                      const extMatch = file.name.match(/\.([^.]+)$/);
+                      const inputExt = extMatch ? extMatch[1].toLowerCase() : "mp4";
+                      const safeInputName = "input." + inputExt;
+                      const baseName = file.name.replace(/\.[^.]+$/, "") || "audio";
+                      const format = formatSelect.value;
                       const bitrate = bitrateSelect.value;
                       const settings = getOutputSettings(format, bitrate);
                       const outputFileName = "output." + settings.extension;
 
                       setStatus("Preparing video file...");
                       setProgress(20, "Preparing video file...");
-                      await engine.writeFile(safeInputName, await fetchFile(file));
+                      await engine.writeFile(safeInputName, fileBytes);
 
                       setStatus("Extracting audio...");
                       setProgress(28, "Extracting audio...");
@@ -8172,8 +8204,8 @@ function getVideoToAudioHTML() {
                       const data = await engine.readFile(outputFileName);
                       const bytes = data instanceof Uint8Array ? data : new Uint8Array(data.buffer || data);
                       outputBlob = new Blob([bytes], { type: settings.mime });
-                    outputName = baseName + "." + settings.extension;
-                    audioUrl = URL.createObjectURL(outputBlob);
+                      outputName = baseName + "." + settings.extension;
+                      audioUrl = URL.createObjectURL(outputBlob);
                       player.src = audioUrl;
                       player.classList.remove("hidden");
                       downloadBtn.classList.remove("hidden");
