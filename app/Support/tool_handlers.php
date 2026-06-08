@@ -8032,10 +8032,8 @@ function getVideoToAudioHTML() {
               let ffmpegLoaded = false;
               let outputBlob = null;
               let outputName = "";
-              let previewUrl = "";
-              let audioUrl = "";
-              let fetchFileFn = null;
-              let toBlobURLFn = null;
+            let previewUrl = "";
+            let audioUrl = "";
 
               function setStatus(message) {
                   status.textContent = message;
