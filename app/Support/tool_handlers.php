@@ -8009,8 +8009,8 @@ function getVideoToAudioHTML() {
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/60 p-4 text-sm text-gray-600 dark:text-gray-300">Use this free video to MP3 converter online to extract audio from video files quickly. It is useful if you want to turn video to MP3 for podcasts, voice notes, reels, or short clips.</div>
         <p id="videoToAudioStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
-    <script src="/assets/vendor/ffmpeg/ffmpeg.js"></script>
-    <script src="/assets/vendor/ffmpeg/util.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.1/dist/ffmpeg.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/umd/index.js"></script>
     <script>
         (function() {
             const input = document.getElementById("videoToAudioInput");
