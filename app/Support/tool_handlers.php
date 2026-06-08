@@ -2738,22 +2738,11 @@ function getClipToGifHTML() {
                 ffmpeg.on("log", function(event) { if (event && event.message) setStatus("Processing: " + event.message); });
                 const baseURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
                 setStatus("Loading GIF conversion engine...");
-                const workerBlobURL = await toBlobURL("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript");
-                const OriginalWorker = window.Worker;
-                window.Worker = function(url, options) {
-                    let u = url instanceof URL ? url.href : url;
-                    if (typeof u === "string" && u.includes("814.ffmpeg.js")) return new OriginalWorker(workerBlobURL, options);
-                    return new OriginalWorker(url, options);
-                };
-                try {
-                    await ffmpeg.load({
-                        coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                        wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                        classWorkerURL: workerBlobURL
-                    });
-                } finally {
-                    window.Worker = OriginalWorker;
-                }
+                await ffmpeg.load({
+                    coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
+                    classWorkerURL: await toBlobURL("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript")
+                });
                 ffmpegLoaded = true;
                 setStatus("GIF converter ready.");
                 return ffmpeg;
@@ -8123,22 +8112,11 @@ function getVideoToAudioHTML() {
 
                 if (typeof ffmpeg.load === "function") {
                     if (toBlobURLFn) {
-                        const workerBlobURL = await toBlobURLFn("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript");
-                        const OriginalWorker = window.Worker;
-                        window.Worker = function(url, options) {
-                            let u = url instanceof URL ? url.href : url;
-                            if (typeof u === "string" && u.includes("814.ffmpeg.js")) return new OriginalWorker(workerBlobURL, options);
-                            return new OriginalWorker(url, options);
-                        };
-                        try {
-                            await ffmpeg.load({
-                                coreURL: await toBlobURLFn(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                                wasmURL: await toBlobURLFn(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                                classWorkerURL: workerBlobURL
-                            });
-                        } finally {
-                            window.Worker = OriginalWorker;
-                        }
+                        await ffmpeg.load({
+                            coreURL: await toBlobURLFn(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                            wasmURL: await toBlobURLFn(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
+                            classWorkerURL: await toBlobURLFn("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript")
+                        });
                     } else {
                         await ffmpeg.load();
                     }
@@ -8396,22 +8374,11 @@ function getVideoCompressorHTML() {
                 const baseURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
                 setStatus("Loading video compression engine...");
                 setProgress(8, "Loading video compression engine...");
-                const workerBlobURL = await toBlobURL("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript");
-                const OriginalWorker = window.Worker;
-                window.Worker = function(url, options) {
-                    let u = url instanceof URL ? url.href : url;
-                    if (typeof u === "string" && u.includes("814.ffmpeg.js")) return new OriginalWorker(workerBlobURL, options);
-                    return new OriginalWorker(url, options);
-                };
-                try {
-                    await ffmpeg.load({
-                        coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                        wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                        classWorkerURL: workerBlobURL
-                    });
-                } finally {
-                    window.Worker = OriginalWorker;
-                }
+                await ffmpeg.load({
+                    coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
+                    classWorkerURL: await toBlobURL("https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/814.ffmpeg.js", "text/javascript")
+                });
                 ffmpegLoaded = true;
                 setStatus("Compressor ready.");
                 setProgress(14, "Compressor ready.");
