@@ -8400,7 +8400,7 @@ function getVideoCompressorHTML() {
                     setProgress(24, "Compressing video...");
                     await engine.exec([
                         "-i", safeInputName,
-                        "-vf", "scale='min(" + settings.scale.split(":")[0] + ",iw)':-2",
+                        "-vf", "scale=\'min(" + settings.scale.split(":")[0] + ",iw)\':-2",
                         "-c:v", "libx264",
                         "-preset", "veryfast",
                         "-crf", settings.crf,
