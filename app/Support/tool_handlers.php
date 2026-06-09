@@ -8080,11 +8080,26 @@ function getVideoToAudioHTML() {
                 const ffmpegURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd";
                 setStatus("Loading video conversion engine...");
                 setProgress(8, "Loading video conversion engine...");
-                await ffmpeg.load({
-                    coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                    classWorkerURL: await toBlobURL(ffmpegURL + "/814.ffmpeg.js", "text/javascript")
-                });
+                
+                // Hack to bypass @ffmpeg/ffmpeg UMD bug which forces {type: "module"} on classWorkerURL
+                const OriginalWorker = window.Worker;
+                window.Worker = function(url, options) {
+                    if (options && options.type === "module" && url.toString().startsWith("blob:")) {
+                        return new OriginalWorker(url);
+                    }
+                    return new OriginalWorker(url, options);
+                };
+
+                try {
+                    await ffmpeg.load({
+                        coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                        wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
+                        classWorkerURL: await toBlobURL(ffmpegURL + "/814.ffmpeg.js", "text/javascript")
+                    });
+                } finally {
+                    window.Worker = OriginalWorker;
+                }
+
                 ffmpegLoaded = true;
                 setStatus("Converter ready.");
                 setProgress(15, "Converter ready.");
@@ -8174,7 +8189,8 @@ function getVideoToAudioHTML() {
                     try { await engine.deleteFile(outputFileName); } catch (e) {}
                 } catch (error) {
                     console.error("Video to audio conversion failed:", error);
-                    setStatus("Conversion failed: " + (error && error.message ? error.message : "Unknown error"));
+                    const msg = error && error.message ? error.message : (typeof error === "string" ? error : "Unknown error");
+                    setStatus("Conversion failed: " + msg);
                     setProgress(0, "Conversion failed.");
                 } finally {
                     runBtn.disabled = false;
@@ -8328,11 +8344,26 @@ function getVideoCompressorHTML() {
                 const ffmpegURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd";
                 setStatus("Loading video compression engine...");
                 setProgress(8, "Loading video compression engine...");
-                await ffmpeg.load({
-                    coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
-                    classWorkerURL: await toBlobURL(ffmpegURL + "/814.ffmpeg.js", "text/javascript")
-                });
+
+                // Hack to bypass @ffmpeg/ffmpeg UMD bug which forces {type: "module"} on classWorkerURL
+                const OriginalWorker = window.Worker;
+                window.Worker = function(url, options) {
+                    if (options && options.type === "module" && url.toString().startsWith("blob:")) {
+                        return new OriginalWorker(url);
+                    }
+                    return new OriginalWorker(url, options);
+                };
+
+                try {
+                    await ffmpeg.load({
+                        coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                        wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm"),
+                        classWorkerURL: await toBlobURL(ffmpegURL + "/814.ffmpeg.js", "text/javascript")
+                    });
+                } finally {
+                    window.Worker = OriginalWorker;
+                }
+
                 ffmpegLoaded = true;
                 setStatus("Compressor ready.");
                 setProgress(14, "Compressor ready.");
@@ -8435,7 +8466,8 @@ function getVideoCompressorHTML() {
                     try { await engine.deleteFile(outputFileName); } catch (e) {}
                 } catch (error) {
                     console.error("Video compression failed:", error);
-                    setStatus("Compression failed: " + (error && error.message ? error.message : "Unknown error"));
+                    const msg = error && error.message ? error.message : (typeof error === "string" ? error : "Unknown error");
+                    setStatus("Compression failed: " + msg);
                     setProgress(0, "Compression failed.");
                 } finally {
                     runBtn.disabled = false;
