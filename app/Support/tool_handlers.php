@@ -8019,107 +8019,63 @@ function getVideoToAudioHTML() {
             const runBtn = document.getElementById("videoToAudioRunBtn");
             const downloadBtn = document.getElementById("videoToAudioDownloadBtn");
             const status = document.getElementById("videoToAudioStatus");
-              const metaWrap = document.getElementById("videoToAudioMetaWrap");
-              const fileMeta = document.getElementById("videoToAudioFileMeta");
-              const preview = document.getElementById("videoToAudioPreview");
-              const player = document.getElementById("videoToAudioPlayer");
-              const progressWrap = document.getElementById("videoToAudioProgressWrap");
-              const progressLabel = document.getElementById("videoToAudioProgressLabel");
-              const progressPercent = document.getElementById("videoToAudioProgressPercent");
-              const progressBar = document.getElementById("videoToAudioProgressBar");
+            const metaWrap = document.getElementById("videoToAudioMetaWrap");
+            const fileMeta = document.getElementById("videoToAudioFileMeta");
+            const preview = document.getElementById("videoToAudioPreview");
+            const player = document.getElementById("videoToAudioPlayer");
+            const progressWrap = document.getElementById("videoToAudioProgressWrap");
+            const progressLabel = document.getElementById("videoToAudioProgressLabel");
+            const progressPercent = document.getElementById("videoToAudioProgressPercent");
+            const progressBar = document.getElementById("videoToAudioProgressBar");
 
-              let ffmpeg = null;
-              let ffmpegLoaded = false;
-              let outputBlob = null;
-              let outputName = "";
+            let ffmpeg = null;
+            let ffmpegLoaded = false;
+            let outputBlob = null;
+            let outputName = "";
             let previewUrl = "";
             let audioUrl = "";
 
-              function setStatus(message) {
-                  status.textContent = message;
-              }
-
-              function setProgress(percent, message) {
-                  const safePercent = Math.max(0, Math.min(100, Math.round(percent || 0)));
-                  progressWrap.classList.remove("hidden");
-                  progressBar.style.width = safePercent + "%";
-                  progressPercent.textContent = safePercent + "%";
-                  if (message) {
-                      progressLabel.textContent = message;
-                  }
-              }
-
-              function resetProgress() {
-                  progressBar.style.width = "0%";
-                  progressPercent.textContent = "0%";
-                  progressLabel.textContent = "Preparing conversion...";
-                  progressWrap.classList.add("hidden");
-              }
-
-              function revokeUrls() {
-                  if (previewUrl) {
-                      URL.revokeObjectURL(previewUrl);
-                    previewUrl = "";
-                }
-                if (audioUrl) {
-                    URL.revokeObjectURL(audioUrl);
-                    audioUrl = "";
-                }
+            function setStatus(message) { status.textContent = message; }
+            function setProgress(percent, message) {
+                const safePercent = Math.max(0, Math.min(100, Math.round(percent || 0)));
+                progressWrap.classList.remove("hidden");
+                progressBar.style.width = safePercent + "%";
+                progressPercent.textContent = safePercent + "%";
+                if (message) progressLabel.textContent = message;
+            }
+            function resetProgress() {
+                progressBar.style.width = "0%";
+                progressPercent.textContent = "0%";
+                progressLabel.textContent = "Preparing conversion...";
+                progressWrap.classList.add("hidden");
+            }
+            function revokeUrls() {
+                if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = ""; }
+                if (audioUrl) { URL.revokeObjectURL(audioUrl); audioUrl = ""; }
             }
 
             async function ensureFFmpegLoaded() {
                 if (ffmpegLoaded) return ffmpeg;
-
-                const util = (typeof window !== "undefined" ? window.FFmpegUtil : null) || (typeof FFmpegUtil !== "undefined" ? FFmpegUtil : null);
-                const wasm = (typeof window !== "undefined" ? window.FFmpegWASM : null) || (typeof FFmpegWASM !== "undefined" ? FFmpegWASM : null);
-                fetchFileFn = util && typeof util.fetchFile === "function" ? util.fetchFile : null;
-                toBlobURLFn = util && typeof util.toBlobURL === "function" ? util.toBlobURL : null;
-
-                const createFFmpegFn = (typeof window !== "undefined" && window.FFmpeg && typeof window.FFmpeg.createFFmpeg === "function")
-                    ? window.FFmpeg.createFFmpeg
-                    : (wasm && typeof wasm.FFmpeg === "function" ? wasm.FFmpeg : null);
-
-                if (!createFFmpegFn) {
-                    setStatus("FFmpeg library is not available.");
-                    throw new Error("FFmpeg library is not available");
-                }
-
-                try {
-                    ffmpeg = new createFFmpegFn();
-                } catch (error) {
-                    ffmpeg = createFFmpegFn({ log: true });
-                }
-
-                if (ffmpeg && typeof ffmpeg.on === "function") {
-                    ffmpeg.on("log", function(event) {
-                        if (event && event.message) {
-                            setStatus("Processing: " + event.message);
-                        }
-                    });
-                    ffmpeg.on("progress", function(event) {
-                        if (event && typeof event.progress === "number" && isFinite(event.progress)) {
-                            setProgress(event.progress * 100, "Extracting audio...");
-                        }
-                    });
-                }
-
+                const { FFmpeg } = FFmpegWASM;
+                const { toBlobURL } = FFmpegUtil;
+                ffmpeg = new FFmpeg();
+                ffmpeg.on("log", function(event) {
+                    if (event && event.message) {
+                        setStatus("Processing: " + event.message);
+                    }
+                });
+                ffmpeg.on("progress", function(event) {
+                    if (event && typeof event.progress === "number" && isFinite(event.progress)) {
+                        setProgress(event.progress * 100, "Extracting audio...");
+                    }
+                });
                 const baseURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd";
                 setStatus("Loading video conversion engine...");
                 setProgress(8, "Loading video conversion engine...");
-
-                if (typeof ffmpeg.load === "function") {
-                    if (toBlobURLFn) {
-                        await ffmpeg.load({
-                            coreURL: await toBlobURLFn(baseURL + "/ffmpeg-core.js", "text/javascript"),
-                            wasmURL: await toBlobURLFn(baseURL + "/ffmpeg-core.wasm", "application/wasm")
-                        });
-                    } else {
-                        await ffmpeg.load();
-                    }
-                } else {
-                    throw new Error("FFmpeg loader not available");
-                }
-
+                await ffmpeg.load({
+                    coreURL: await toBlobURL(baseURL + "/ffmpeg-core.js", "text/javascript"),
+                    wasmURL: await toBlobURL(baseURL + "/ffmpeg-core.wasm", "application/wasm")
+                });
                 ffmpegLoaded = true;
                 setStatus("Converter ready.");
                 setProgress(15, "Converter ready.");
@@ -8128,17 +8084,12 @@ function getVideoToAudioHTML() {
 
             function getOutputSettings(format, bitrate) {
                 switch (format) {
-                    case "wav":
-                        return { extension: "wav", mime: "audio/wav", args: ["-vn", "-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2"] };
-                    case "aac":
-                        return { extension: "aac", mime: "audio/aac", args: ["-vn", "-c:a", "aac", "-b:a", bitrate] };
-                    case "ogg":
-                        return { extension: "ogg", mime: "audio/ogg", args: ["-vn", "-c:a", "libvorbis", "-b:a", bitrate] };
-                    case "flac":
-                        return { extension: "flac", mime: "audio/flac", args: ["-vn", "-c:a", "flac"] };
+                    case "wav": return { extension: "wav", mime: "audio/wav", args: ["-vn", "-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2"] };
+                    case "aac": return { extension: "aac", mime: "audio/aac", args: ["-vn", "-c:a", "aac", "-b:a", bitrate] };
+                    case "ogg": return { extension: "ogg", mime: "audio/ogg", args: ["-vn", "-c:a", "libvorbis", "-b:a", bitrate] };
+                    case "flac": return { extension: "flac", mime: "audio/flac", args: ["-vn", "-c:a", "flac"] };
                     case "mp3":
-                    default:
-                        return { extension: "mp3", mime: "audio/mpeg", args: ["-vn", "-c:a", "libmp3lame", "-b:a", bitrate] };
+                    default: return { extension: "mp3", mime: "audio/mpeg", args: ["-vn", "-c:a", "libmp3lame", "-b:a", bitrate] };
                 }
             }
 
@@ -8147,83 +8098,82 @@ function getVideoToAudioHTML() {
                 outputBlob = null;
                 outputName = "";
                 downloadBtn.classList.add("hidden");
-                  player.classList.add("hidden");
-                  player.removeAttribute("src");
-                  revokeUrls();
-                  resetProgress();
-                  if (!file) return;
+                player.classList.add("hidden");
+                player.removeAttribute("src");
+                revokeUrls();
+                resetProgress();
+                if (!file) return;
 
                 previewUrl = URL.createObjectURL(file);
                 preview.src = previewUrl;
                 preview.classList.remove("hidden");
                 metaWrap.classList.remove("hidden");
-                  fileMeta.textContent = file.name + " � " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
-                  setStatus("Video loaded. Choose a format and click Convert to Audio.");
-              });
+                fileMeta.textContent = file.name + " • " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
+                setStatus("Video loaded. Choose a format and click Convert to Audio.");
+            });
 
             runBtn.addEventListener("click", async function() {
                 const file = input.files[0];
-                  if (!file) return alert("Please select a video first");
+                if (!file) return alert("Please select a video first");
 
-                  runBtn.disabled = true;
-                  runBtn.classList.add("opacity-50", "cursor-not-allowed");
-                  runBtn.textContent = "Converting...";
-                  downloadBtn.classList.add("hidden");
-                  player.classList.add("hidden");
-                  player.removeAttribute("src");
-                  outputBlob = null;
-                  outputName = "";
-                  resetProgress();
-                  if (audioUrl) {
-                      URL.revokeObjectURL(audioUrl);
-                      audioUrl = "";
-                  }
+                runBtn.disabled = true;
+                runBtn.classList.add("opacity-50", "cursor-not-allowed");
+                runBtn.textContent = "Converting...";
+                downloadBtn.classList.add("hidden");
+                player.classList.add("hidden");
+                player.removeAttribute("src");
+                outputBlob = null;
+                outputName = "";
+                resetProgress();
+                if (audioUrl) {
+                    URL.revokeObjectURL(audioUrl);
+                    audioUrl = "";
+                }
 
-                  try {
-                      const engine = await ensureFFmpegLoaded();
-                      const effectiveFetchFile = fetchFileFn || (typeof window !== "undefined" && window.FFmpegUtil && typeof window.FFmpegUtil.fetchFile === "function" ? window.FFmpegUtil.fetchFile : null);
-                      const fileData = effectiveFetchFile ? await effectiveFetchFile(file) : await file.arrayBuffer();
-                      const fileBytes = fileData instanceof Uint8Array ? fileData : new Uint8Array(fileData);
-                      const extMatch = file.name.match(/\.([^.]+)$/);
-                      const inputExt = extMatch ? extMatch[1].toLowerCase() : "mp4";
-                      const safeInputName = "input." + inputExt;
-                      const baseName = file.name.replace(/\.[^.]+$/, "") || "audio";
-                      const format = formatSelect.value;
-                      const bitrate = bitrateSelect.value;
-                      const settings = getOutputSettings(format, bitrate);
-                      const outputFileName = "output." + settings.extension;
+                try {
+                    const engine = await ensureFFmpegLoaded();
+                    const { fetchFile } = FFmpegUtil;
+                    const fileBytes = await fetchFile(file);
+                    const extMatch = file.name.match(/\.([^.]+)$/);
+                    const inputExt = extMatch ? extMatch[1].toLowerCase() : "mp4";
+                    const safeInputName = "input." + inputExt;
+                    const baseName = file.name.replace(/\.[^.]+$/, "") || "audio";
+                    const format = formatSelect.value;
+                    const bitrate = bitrateSelect.value;
+                    const settings = getOutputSettings(format, bitrate);
+                    const outputFileName = "output." + settings.extension;
 
-                      setStatus("Preparing video file...");
-                      setProgress(20, "Preparing video file...");
-                      await engine.writeFile(safeInputName, fileBytes);
+                    setStatus("Preparing video file...");
+                    setProgress(20, "Preparing video file...");
+                    await engine.writeFile(safeInputName, fileBytes);
 
-                      setStatus("Extracting audio...");
-                      setProgress(28, "Extracting audio...");
-                      await engine.exec(["-i", safeInputName].concat(settings.args, [outputFileName]));
+                    setStatus("Extracting audio...");
+                    setProgress(28, "Extracting audio...");
+                    await engine.exec(["-i", safeInputName].concat(settings.args, [outputFileName]));
 
-                      const data = await engine.readFile(outputFileName);
-                      const bytes = data instanceof Uint8Array ? data : new Uint8Array(data.buffer || data);
-                      outputBlob = new Blob([bytes], { type: settings.mime });
-                      outputName = baseName + "." + settings.extension;
-                      audioUrl = URL.createObjectURL(outputBlob);
-                      player.src = audioUrl;
-                      player.classList.remove("hidden");
-                      downloadBtn.classList.remove("hidden");
-                      setStatus("Audio extracted successfully.");
-                      setProgress(100, "Conversion complete.");
+                    const data = await engine.readFile(outputFileName);
+                    const bytes = data instanceof Uint8Array ? data : new Uint8Array(data.buffer || data);
+                    outputBlob = new Blob([bytes], { type: settings.mime });
+                    outputName = baseName + "." + settings.extension;
+                    audioUrl = URL.createObjectURL(outputBlob);
+                    player.src = audioUrl;
+                    player.classList.remove("hidden");
+                    downloadBtn.classList.remove("hidden");
+                    setStatus("Audio extracted successfully.");
+                    setProgress(100, "Conversion complete.");
 
-                      try { await engine.deleteFile(safeInputName); } catch (e) {}
-                      try { await engine.deleteFile(outputFileName); } catch (e) {}
-                  } catch (error) {
-                      console.error("Video to audio conversion failed:", error);
-                      setStatus("Conversion failed: " + (error && error.message ? error.message : "Unknown error"));
-                      setProgress(0, "Conversion failed.");
-                  } finally {
-                      runBtn.disabled = false;
-                      runBtn.classList.remove("opacity-50", "cursor-not-allowed");
-                      runBtn.textContent = "Convert Video to Audio";
-                  }
-              });
+                    try { await engine.deleteFile(safeInputName); } catch (e) {}
+                    try { await engine.deleteFile(outputFileName); } catch (e) {}
+                } catch (error) {
+                    console.error("Video to audio conversion failed:", error);
+                    setStatus("Conversion failed: " + (error && error.message ? error.message : "Unknown error"));
+                    setProgress(0, "Conversion failed.");
+                } finally {
+                    runBtn.disabled = false;
+                    runBtn.classList.remove("opacity-50", "cursor-not-allowed");
+                    runBtn.textContent = "Convert Video to Audio";
+                }
+            });
 
             downloadBtn.addEventListener("click", function() {
                 if (!outputBlob) return;
@@ -8235,7 +8185,7 @@ function getVideoToAudioHTML() {
                 URL.revokeObjectURL(url);
             });
         })();
-      </script>';
+    </script>';
   }
 function getVideoCompressorHTML() {
     return '
@@ -8295,8 +8245,8 @@ function getVideoCompressorHTML() {
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/60 p-4 text-sm text-gray-600 dark:text-gray-300">This video compressor reduces file size by re-encoding the uploaded video into a smaller MP4 format in your browser.</div>
         <p id="videoCompressorStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
-    <script src="/assets/vendor/ffmpeg/ffmpeg.js"></script>
-    <script src="/assets/vendor/ffmpeg/util.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/umd/index.js"></script>
     <script>
         (function() {
             const input = document.getElementById("videoCompressorInput");
