@@ -8008,7 +8008,6 @@ function getVideoToAudioHTML() {
         <audio id="videoToAudioPlayer" class="w-full hidden" controls></audio>
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/60 p-4 text-sm text-gray-600 dark:text-gray-300">Use this free video to MP3 converter online to extract audio from video files quickly. It is useful if you want to turn video to MP3 for podcasts, voice notes, reels, or short clips.</div>
         <p id="videoToAudioStatus" class="text-sm text-gray-500 text-center"></p>    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/umd/index.js"></script>
     <script>
         (function() {
             const input = document.getElementById("videoToAudioInput");
@@ -8052,10 +8051,20 @@ function getVideoToAudioHTML() {
                 if (audioUrl) { URL.revokeObjectURL(audioUrl); audioUrl = ""; }
             }
 
+            async function toBlobURL(url, mimeType) {
+                const resp = await fetch(url);
+                const buf = await resp.arrayBuffer();
+                const blob = new Blob([buf], { type: mimeType });
+                return URL.createObjectURL(blob);
+            }
+
+            async function fetchFile(file) {
+                return new Uint8Array(await file.arrayBuffer());
+            }
+
             async function ensureFFmpegLoaded() {
                 if (ffmpegLoaded) return ffmpeg;
                 const { FFmpeg } = FFmpegWASM;
-                const { toBlobURL } = FFmpegUtil;
                 ffmpeg = new FFmpeg();
                 ffmpeg.on("log", function(event) {
                     if (event && event.message) {
@@ -8130,7 +8139,6 @@ function getVideoToAudioHTML() {
 
                 try {
                     const engine = await ensureFFmpegLoaded();
-                    const { fetchFile } = FFmpegUtil;
                     const fileBytes = await fetchFile(file);
                     const extMatch = file.name.match(/\.([^.]+)$/);
                     const inputExt = extMatch ? extMatch[1].toLowerCase() : "mp4";
@@ -8244,7 +8252,6 @@ function getVideoCompressorHTML() {
         <p id="videoCompressorStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/umd/index.js"></script>
     <script>
         (function() {
             const input = document.getElementById("videoCompressorInput");
@@ -8270,10 +8277,7 @@ function getVideoCompressorHTML() {
             let previewUrl = "";
             let outputUrl = "";
 
-            function setStatus(message) {
-                status.textContent = message;
-            }
-
+            function setStatus(message) { status.textContent = message; }
             function setProgress(percent, message) {
                 const safePercent = Math.max(0, Math.min(100, Math.round(percent || 0)));
                 progressWrap.classList.remove("hidden");
@@ -8281,7 +8285,6 @@ function getVideoCompressorHTML() {
                 progressPercent.textContent = safePercent + "%";
                 if (message) progressLabel.textContent = message;
             }
-
             function resetProgress() {
                 progressBar.style.width = "0%";
                 progressPercent.textContent = "0%";
@@ -8289,21 +8292,25 @@ function getVideoCompressorHTML() {
                 progressWrap.classList.add("hidden");
             }
 
+            async function toBlobURL(url, mimeType) {
+                const resp = await fetch(url);
+                const buf = await resp.arrayBuffer();
+                const blob = new Blob([buf], { type: mimeType });
+                return URL.createObjectURL(blob);
+            }
+
+            async function fetchFile(file) {
+                return new Uint8Array(await file.arrayBuffer());
+            }
+
             function revokeUrls() {
-                if (previewUrl) {
-                    URL.revokeObjectURL(previewUrl);
-                    previewUrl = "";
-                }
-                if (outputUrl) {
-                    URL.revokeObjectURL(outputUrl);
-                    outputUrl = "";
-                }
+                if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = ""; }
+                if (outputUrl) { URL.revokeObjectURL(outputUrl); outputUrl = ""; }
             }
 
             async function ensureFFmpegLoaded() {
                 if (ffmpegLoaded) return ffmpeg;
                 const { FFmpeg } = FFmpegWASM;
-                const { toBlobURL } = FFmpegUtil;
                 ffmpeg = new FFmpeg();
                 ffmpeg.on("log", function(event) {
                     if (event && event.message) {
@@ -8330,13 +8337,10 @@ function getVideoCompressorHTML() {
 
             function getCompressionSettings(level) {
                 switch (level) {
-                    case "high":
-                        return { crf: "34", audio: "80k", scale: "960:-2" };
-                    case "low":
-                        return { crf: "26", audio: "128k", scale: "1280:-2" };
+                    case "high": return { crf: "34", audio: "80k", scale: "960:-2" };
+                    case "low": return { crf: "26", audio: "128k", scale: "1280:-2" };
                     case "medium":
-                    default:
-                        return { crf: "30", audio: "96k", scale: "1280:-2" };
+                    default: return { crf: "30", audio: "96k", scale: "1280:-2" };
                 }
             }
 
@@ -8356,7 +8360,7 @@ function getVideoCompressorHTML() {
                 preview.src = previewUrl;
                 preview.classList.remove("hidden");
                 metaWrap.classList.remove("hidden");
-                fileMeta.textContent = file.name + " � " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
+                fileMeta.textContent = file.name + " • " + Math.round(file.size / 1024 / 1024 * 100) / 100 + " MB";
                 setStatus("Video loaded. Choose a compression level and click Compress Video.");
             });
 
@@ -8381,7 +8385,6 @@ function getVideoCompressorHTML() {
 
                 try {
                     const engine = await ensureFFmpegLoaded();
-                    const { fetchFile } = FFmpegUtil;
                     const extMatch = file.name.match(/\.([^.]+)$/);
                     const inputExt = extMatch ? extMatch[1].toLowerCase() : "mp4";
                     const safeInputName = "input." + inputExt;
@@ -8397,7 +8400,7 @@ function getVideoCompressorHTML() {
                     setProgress(24, "Compressing video...");
                     await engine.exec([
                         "-i", safeInputName,
-                        "-vf", "scale=\'min(" + settings.scale.split(":")[0] + ",iw)\':-2",
+                        "-vf", "scale='min(" + settings.scale.split(":")[0] + ",iw)':-2",
                         "-c:v", "libx264",
                         "-preset", "veryfast",
                         "-crf", settings.crf,
@@ -8420,7 +8423,7 @@ function getVideoCompressorHTML() {
                     const originalMb = Math.round(file.size / 1024 / 1024 * 100) / 100;
                     const compressedMb = Math.round(outputBlob.size / 1024 / 1024 * 100) / 100;
                     const saved = file.size > 0 ? Math.max(0, Math.round((1 - (outputBlob.size / file.size)) * 100)) : 0;
-                    resultMeta.textContent = "Original: " + originalMb + " MB � Compressed: " + compressedMb + " MB � Saved: " + saved + "%";
+                    resultMeta.textContent = "Original: " + originalMb + " MB • Compressed: " + compressedMb + " MB • Saved: " + saved + "%";
                     setStatus("Video compressed successfully.");
                     setProgress(100, "Compression complete.");
 
