@@ -1697,7 +1697,10 @@ function getAtsResumeCheckerHTML() {
                 const total = Math.round(Math.min(100, keywordScore + (foundSections.length / sections.length) * 25 + (/\d/.test(resume) ? 10 : 0) + (/(built|led|managed|launched|improved|optimized|delivered|designed)/i.test(resume) ? 10 : 0)));
                 scoreEl.textContent = total; barEl.style.width = total + "%";
                 summaryEl.textContent = total >= 80 ? "Strong match. Fine-tune the missing keywords and measurable impact." : total >= 60 ? "Decent match. Add missing terms and sharpen role-specific experience." : "Low match. Rework your summary, skills, and impact bullets around the job description.";
-                keywordsEl.innerHTML = missing.length ? missing.map((word) => `<span class="px-3 py-2 rounded-full bg-rose-500/10 text-rose-500 text-sm font-semibold">${word}</span>`).join("") : '<span class="px-3 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-semibold">No major keyword gaps found</span>';
+                keywordsEl.innerHTML = missing.length ? missing.map((word) => `<span class="px-3 py-2 rounded-full bg-rose-500/10 text-rose-500 text-sm font-semibold">${word}</span>`).join("") : '<span class="px-3 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-semibold">No major keyword gaps found</span>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Ats Resume Checker online free without email, Ats Resume Checker no watermark fast for mobile, best Ats Resume Checker high quality software pc mac, Ats Resume Checker unlimited file size free 2026, how to use Ats Resume Checker easily without app install, secure Ats Resume Checker safe for business confidential files, Ats Resume Checker unblocked for school chromebook.</p>
+    </div>';
                 const tips = [foundSections.length < sections.length ? `Add missing sections: ${sections.filter((section) => !foundSections.includes(section)).join(", ")}.` : "Core resume sections are present.", missing.length ? `Work these terms naturally into your resume: ${missing.slice(0, 5).join(", ")}.` : "Keyword alignment looks strong for the top terms.", /\d/.test(resume) ? "You already use measurable numbers. Keep that impact language." : "Add numbers like revenue, response time, users, or conversion gains.", /(built|led|managed|launched|improved|optimized|delivered|designed)/i.test(resume) ? "Action verbs are present. Nice." : "Start bullets with action verbs like built, led, improved, or optimized."];
                 tipsEl.innerHTML = tips.map((tip) => `<li class="rounded-2xl bg-slate-100 dark:bg-slate-900 px-4 py-3">${tip}</li>`).join("");
                 statusEl.textContent = `Checked ${topKeywords.length} key terms and ${foundSections.length}/${sections.length} major sections.`;
@@ -1887,7 +1890,10 @@ function getBankStatementToExcelHTML() {
                     if (!match) return null;
                     return { date: match[1], description: match[2], amount: match[3], balance: match[4] };
                 }).filter(Boolean);
-                rowsWrap.innerHTML = rows.length ? rows.map((row) => `<tr class="border-t border-slate-200 dark:border-slate-800"><td class="px-4 py-3">${row.date}</td><td class="px-4 py-3">${row.description}</td><td class="px-4 py-3">${row.amount}</td><td class="px-4 py-3">${row.balance}</td></tr>`).join("") : '<tr><td colspan="4" class="px-4 py-6 text-center text-slate-500">No transaction rows detected. Try a clearer statement PDF.</td></tr>';
+                rowsWrap.innerHTML = rows.length ? rows.map((row) => `<tr class="border-t border-slate-200 dark:border-slate-800"><td class="px-4 py-3">${row.date}</td><td class="px-4 py-3">${row.description}</td><td class="px-4 py-3">${row.amount}</td><td class="px-4 py-3">${row.balance}</td></tr>`).join("") : '<tr><td colspan="4" class="px-4 py-6 text-center text-slate-500">No transaction rows detected. Try a clearer statement PDF.</td></tr>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Bank Statement To Excel online free without email, Bank Statement To Excel no watermark fast for mobile, best Bank Statement To Excel high quality software pc mac, Bank Statement To Excel unlimited file size free 2026, how to use Bank Statement To Excel easily without app install, secure Bank Statement To Excel safe for business confidential files, Bank Statement To Excel unblocked for school chromebook.</p>
+    </div>';
                 countEl.textContent = `${rows.length} rows`;
                 status.textContent = rows.length ? "Transactions extracted. Review and export to Excel." : "Could not detect rows automatically.";
             }
@@ -1932,7 +1938,10 @@ function getGrammarCheckerHTML() {
                 if (/\b(dont|cant|wont|im|ive|doesnt|isnt)\b/gi.test(text)) { text = text.replace(/\bdont\b/gi, "don't").replace(/\bcant\b/gi, "can't").replace(/\bwont\b/gi, "won't").replace(/\bim\b/gi, "I'm").replace(/\bive\b/gi, "I've").replace(/\bdoesnt\b/gi, "doesn't").replace(/\bisnt\b/gi, "isn't"); notes.push("Normalized common contractions."); }
                 if (text && !/[.!?]$/.test(text.trim())) { text = text.trim() + "."; notes.push("Added ending punctuation."); }
                 output.value = text;
-                suggestions.innerHTML = notes.length ? notes.map((note) => `<li class="rounded-2xl bg-slate-100 dark:bg-slate-900 px-4 py-3">${note}</li>`).join("") : '<li class="rounded-2xl bg-emerald-500/10 text-emerald-500 px-4 py-3">No obvious quick-fix issues found.</li>';
+                suggestions.innerHTML = notes.length ? notes.map((note) => `<li class="rounded-2xl bg-slate-100 dark:bg-slate-900 px-4 py-3">${note}</li>`).join("") : '<li class="rounded-2xl bg-emerald-500/10 text-emerald-500 px-4 py-3">No obvious quick-fix issues found.</li>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Grammar Checker online free without email, Grammar Checker no watermark fast for mobile, best Grammar Checker high quality software pc mac, Grammar Checker unlimited file size free 2026, how to use Grammar Checker easily without app install, secure Grammar Checker safe for business confidential files, Grammar Checker unblocked for school chromebook.</p>
+    </div>';
                 status.textContent = notes.length ? `${notes.length} quick grammar improvements applied.` : "Text already looks clean.";
             }
             document.getElementById("grammarCheckBtn").addEventListener("click", runCheck);
@@ -2492,7 +2501,10 @@ function getReactionTimeTestHTML() {
                         loginText: "Log in to save your reaction time to the public leaderboard."
                     }))
                     .catch(() => {
-                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>';
+                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Reaction Time Test online free without email, Reaction Time Test no watermark fast for mobile, best Reaction Time Test high quality software pc mac, Reaction Time Test unlimited file size free 2026, how to use Reaction Time Test easily without app install, secure Reaction Time Test safe for business confidential files, Reaction Time Test unblocked for school chromebook.</p>
+    </div>';
                     });
             }
             function saveScore(result) {
@@ -2588,7 +2600,10 @@ function getCpsTestHTML() {
                         loginText: "Log in to save your CPS score to the public leaderboard."
                     }))
                     .catch(() => {
-                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>';
+                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Cps Test online free without email, Cps Test no watermark fast for mobile, best Cps Test high quality software pc mac, Cps Test unlimited file size free 2026, how to use Cps Test easily without app install, secure Cps Test safe for business confidential files, Cps Test unblocked for school chromebook.</p>
+    </div>';
                     });
             }
             function saveScore(cps, totalClicks) {
@@ -2907,7 +2922,10 @@ Team G</textarea>
             function renderOverview(plan,count){overviewEl.innerHTML=`<div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Teams</p><p class="mt-2 text-2xl font-black">${count}</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Rounds</p><p class="mt-2 text-2xl font-black">${plan.rounds.length}</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Byes</p><p class="mt-2 text-2xl font-black">${Math.max(0,plan.size-count)}</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">First Match</p><p class="mt-2 text-xl font-black">${plan.schedule[0]?.time||"TBD"}</p></div>`;}
             function renderBoard(plan,count){canvas.innerHTML=""; plan.rounds.forEach((round,ri)=>{const spacing=(H+G)*Math.pow(2,ri), gap=Math.max(G,spacing-H), offset=ri===0?0:((H+G)*Math.pow(2,ri-1))/2, span=(H+gap)/2; const col=document.createElement("section"); col.className="bq-round"; col.style.paddingTop=`${offset}px`; col.style.gap=`${gap}px`; col.innerHTML=`<div class="bq-stage"><p class="text-[11px] uppercase tracking-[0.22em] text-cyan-300">Stage ${ri+1}</p><h4 class="mt-1 text-xl font-black text-white">${roundTitle(ri,plan.rounds.length)}</h4></div>`; round.forEach((match,mi)=>{const final=ri===plan.rounds.length-1; const row=(team)=>`<div class="bq-row ${team.win?"win":""} ${team.bye||String(team.name).startsWith("Winner M")?"dim":""}"><span class="bq-seed">${team.seed}</span><span class="bq-name">${team.name}</span><span class="bq-score">${team.win?"ADV":""}</span></div>`; const wrap=document.createElement("article"); wrap.className="bq-match"; wrap.style.setProperty("--span",`${span}px`); wrap.innerHTML=`<span class="bq-pill">M${match.id} - ${match.time}</span><div class="bq-box">${row(match.top)}${row(match.bottom)}</div>${final?"":'<span class="bq-h"></span>'}${final?"":mi%2===0?'<span class="bq-v down"></span>':'<span class="bq-v up"></span>'}`; col.appendChild(wrap);}); canvas.appendChild(col);}); boardTitleEl.textContent=titleEl.value.trim()||"Tournament Bracket"; boardMetaEl.textContent=`${count} teams, randomized seeds, opening matches scheduled automatically.`; boardSizeEl.textContent=String(plan.size); boardMatchesEl.textContent=String(plan.matches); }
             function renderSchedule(plan){scheduleEl.innerHTML=plan.schedule.map(m=>`<article class="bq-sched"><p class="text-[11px] uppercase tracking-[0.22em] text-cyan-300">Round ${m.round} - Match ${m.id}</p><h5 class="mt-1 text-base font-black text-white">${m.top} <span class="text-slate-500">vs</span> ${m.bottom}</h5><p class="mt-2 text-sm font-semibold text-slate-300">${m.time}</p></article>`).join(""); scheduleMetaEl.textContent=`${plan.matches} matches built from randomized seeds and your time slot length.`;}
-            function generate(){const count=Math.max(2,parseInt(teamCountEl.value,10)||2), teams=getTeams().slice(0,count); if(teams.length<2){canvas.innerHTML='<div class="bq-sched text-slate-300">Add at least two team names to generate the bracket.</div>'; scheduleEl.innerHTML=""; overviewEl.innerHTML=""; boardTitleEl.textContent="Tournament Bracket"; boardMetaEl.textContent="Add more teams to render the bracket board."; boardSizeEl.textContent="0"; boardMatchesEl.textContent="0"; renderStatus(); return;} const plan=build(teams); renderOverview(plan,teams.length); renderBoard(plan,teams.length); renderSchedule(plan); renderStatus();}
+            function generate(){const count=Math.max(2,parseInt(teamCountEl.value,10)||2), teams=getTeams().slice(0,count); if(teams.length<2){canvas.innerHTML='<div class="bq-sched text-slate-300">Add at least two team names to generate the bracket.</div>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Tournament Bracket Generator online free without email, Tournament Bracket Generator no watermark fast for mobile, best Tournament Bracket Generator high quality software pc mac, Tournament Bracket Generator unlimited file size free 2026, how to use Tournament Bracket Generator easily without app install, secure Tournament Bracket Generator safe for business confidential files, Tournament Bracket Generator unblocked for school chromebook.</p>
+    </div>'; scheduleEl.innerHTML=""; overviewEl.innerHTML=""; boardTitleEl.textContent="Tournament Bracket"; boardMetaEl.textContent="Add more teams to render the bracket board."; boardSizeEl.textContent="0"; boardMatchesEl.textContent="0"; renderStatus(); return;} const plan=build(teams); renderOverview(plan,teams.length); renderBoard(plan,teams.length); renderSchedule(plan); renderStatus();}
             byId("bracketAutofillBtn").addEventListener("click",()=>{const count=Math.max(2,parseInt(teamCountEl.value,10)||2); namesEl.value=Array.from({length:count},(_,i)=>`Team ${i+1}`).join("\n"); generate();});
             byId("bracketShuffleBtn").addEventListener("click",()=>{namesEl.value=shuffle(getTeams()).join("\n"); generate();});
             byId("bracketGenerateBtn").addEventListener("click",generate);
@@ -3123,7 +3141,10 @@ function getTypingSpeedTestHTML() {
                         loginText: "Log in to save your typing result to the public leaderboard."
                     }))
                     .catch(() => {
-                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>';
+                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Typing Speed Test online free without email, Typing Speed Test no watermark fast for mobile, best Typing Speed Test high quality software pc mac, Typing Speed Test unlimited file size free 2026, how to use Typing Speed Test easily without app install, secure Typing Speed Test safe for business confidential files, Typing Speed Test unblocked for school chromebook.</p>
+    </div>';
                     });
             }
             function saveRun(wpm, accuracy, elapsedSeconds) {
@@ -3429,7 +3450,10 @@ function getMemoryMatchGameHTML() {
                         loginText: "Log in to save your Memory Match result to the public leaderboard."
                     }))
                     .catch(() => {
-                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>';
+                        leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Memory Match Game online free without email, Memory Match Game no watermark fast for mobile, best Memory Match Game high quality software pc mac, Memory Match Game unlimited file size free 2026, how to use Memory Match Game easily without app install, secure Memory Match Game safe for business confidential files, Memory Match Game unblocked for school chromebook.</p>
+    </div>';
                     });
             }
 
@@ -3691,7 +3715,10 @@ function getImageToPdfHTML() {
             // SEO Optimized Filename
             doc.save("Any2Convert-image-to-pdf.pdf");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Image To Pdf online free without email, Image To Pdf no watermark fast for mobile, best Image To Pdf high quality software pc mac, Image To Pdf unlimited file size free 2026, how to use Image To Pdf easily without app install, secure Image To Pdf safe for business confidential files, Image To Pdf unblocked for school chromebook.</p>
+    </div>';
 }
  function getPdfToImageHTML() {
 
@@ -3821,7 +3848,10 @@ function getImageToPdfHTML() {
 
         });
 
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Image online free without email, Pdf To Image no watermark fast for mobile, best Pdf To Image high quality software pc mac, Pdf To Image unlimited file size free 2026, how to use Pdf To Image easily without app install, secure Pdf To Image safe for business confidential files, Pdf To Image unblocked for school chromebook.</p>
+    </div>';
 
 }
 function getPdfToWordHTML() {
@@ -4070,7 +4100,10 @@ function getPdfToWordHTML() {
 
             progress.classList.add("hidden");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Word online free without email, Pdf To Word no watermark fast for mobile, best Pdf To Word high quality software pc mac, Pdf To Word unlimited file size free 2026, how to use Pdf To Word easily without app install, secure Pdf To Word safe for business confidential files, Pdf To Word unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getPdfToPptHTML() {
@@ -4202,7 +4235,10 @@ function getPdfToPptHTML() {
             }
             pptProgress.classList.add("hidden");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Ppt online free without email, Pdf To Ppt no watermark fast for mobile, best Pdf To Ppt high quality software pc mac, Pdf To Ppt unlimited file size free 2026, how to use Pdf To Ppt easily without app install, secure Pdf To Ppt safe for business confidential files, Pdf To Ppt unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getPdfToExcelHTML() {
@@ -4585,7 +4621,10 @@ function getPdfToExcelHTML() {
             }
             progress.classList.add("hidden");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Excel online free without email, Pdf To Excel no watermark fast for mobile, best Pdf To Excel high quality software pc mac, Pdf To Excel unlimited file size free 2026, how to use Pdf To Excel easily without app install, secure Pdf To Excel safe for business confidential files, Pdf To Excel unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getMergePdfHTML() {
@@ -4654,7 +4693,10 @@ function getMergePdfHTML() {
             }
             progress.classList.add("hidden");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Merge Pdf online free without email, Merge Pdf no watermark fast for mobile, best Merge Pdf high quality software pc mac, Merge Pdf unlimited file size free 2026, how to use Merge Pdf easily without app install, secure Merge Pdf safe for business confidential files, Merge Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getCompressPdfHTML() {
@@ -4810,7 +4852,10 @@ function getCompressPdfHTML() {
             }
             progress.classList.add("hidden");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Compress Pdf online free without email, Compress Pdf no watermark fast for mobile, best Compress Pdf high quality software pc mac, Compress Pdf unlimited file size free 2026, how to use Compress Pdf easily without app install, secure Compress Pdf safe for business confidential files, Compress Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getProtectPdfHTML() {
@@ -4899,7 +4944,10 @@ function getProtectPdfHTML() {
             }
             progress.classList.add("hidden");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Protect Pdf online free without email, Protect Pdf no watermark fast for mobile, best Protect Pdf high quality software pc mac, Protect Pdf unlimited file size free 2026, how to use Protect Pdf easily without app install, secure Protect Pdf safe for business confidential files, Protect Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getWordToPdfHTML() {
@@ -5038,7 +5086,10 @@ function getWordToPdfHTML() {
             div.textContent = text;
             return div.innerHTML;
         }
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Word To Pdf online free without email, Word To Pdf no watermark fast for mobile, best Word To Pdf high quality software pc mac, Word To Pdf unlimited file size free 2026, how to use Word To Pdf easily without app install, secure Word To Pdf safe for business confidential files, Word To Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getExcelToPdfHTML() {
@@ -5370,7 +5421,10 @@ function getPptToPdfHTML() {
             div.textContent = text;
             return div.innerHTML;
         }
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Ppt To Pdf online free without email, Ppt To Pdf no watermark fast for mobile, best Ppt To Pdf high quality software pc mac, Ppt To Pdf unlimited file size free 2026, how to use Ppt To Pdf easily without app install, secure Ppt To Pdf safe for business confidential files, Ppt To Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 // ... (keep the rest of the functions for JSON, CSV, QR, Password, Word Counter, Image Compressor, OCR as they are working well)
@@ -5435,7 +5489,10 @@ function getJsonToCsvHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Json To Csv online free without email, Json To Csv no watermark fast for mobile, best Json To Csv high quality software pc mac, Json To Csv unlimited file size free 2026, how to use Json To Csv easily without app install, secure Json To Csv safe for business confidential files, Json To Csv unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getCsvToJsonHTML() {
@@ -5500,7 +5557,10 @@ function getCsvToJsonHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Csv To Json online free without email, Csv To Json no watermark fast for mobile, best Csv To Json high quality software pc mac, Csv To Json unlimited file size free 2026, how to use Csv To Json easily without app install, secure Csv To Json safe for business confidential files, Csv To Json unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getQrGeneratorHTML() {
@@ -5556,7 +5616,10 @@ function getQrGeneratorHTML() {
                 alert("Generate QR code first");
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Qr Generator online free without email, Qr Generator no watermark fast for mobile, best Qr Generator high quality software pc mac, Qr Generator unlimited file size free 2026, how to use Qr Generator easily without app install, secure Qr Generator safe for business confidential files, Qr Generator unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getPasswordGenHTML() {
@@ -5621,7 +5684,10 @@ function getPasswordGenHTML() {
             navigator.clipboard.writeText(currentPassword);
             alert("Password copied!");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Password Gen online free without email, Password Gen no watermark fast for mobile, best Password Gen high quality software pc mac, Password Gen unlimited file size free 2026, how to use Password Gen easily without app install, secure Password Gen safe for business confidential files, Password Gen unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getWordCounterHTML() {
@@ -5659,7 +5725,10 @@ function getWordCounterHTML() {
             textarea.value = "";
             updateCounts();
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Word Counter online free without email, Word Counter no watermark fast for mobile, best Word Counter high quality software pc mac, Word Counter unlimited file size free 2026, how to use Word Counter easily without app install, secure Word Counter safe for business confidential files, Word Counter unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getImageCompressorHTML() {
@@ -5773,7 +5842,10 @@ function getImageCompressorHTML() {
                 URL.revokeObjectURL(url);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Image Compressor online free without email, Image Compressor no watermark fast for mobile, best Image Compressor high quality software pc mac, Image Compressor unlimited file size free 2026, how to use Image Compressor easily without app install, secure Image Compressor safe for business confidential files, Image Compressor unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getBackgroundRemoverHTML() {
@@ -6029,7 +6101,10 @@ function getBackgroundRemoverHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Background Remover online free without email, Background Remover no watermark fast for mobile, best Background Remover high quality software pc mac, Background Remover unlimited file size free 2026, how to use Background Remover easily without app install, secure Background Remover safe for business confidential files, Background Remover unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getImageToDxfHTML() {
@@ -6203,7 +6278,10 @@ function getImageToDxfHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Image To Dxf online free without email, Image To Dxf no watermark fast for mobile, best Image To Dxf high quality software pc mac, Image To Dxf unlimited file size free 2026, how to use Image To Dxf easily without app install, secure Image To Dxf safe for business confidential files, Image To Dxf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getImageToSvgHTML() {
@@ -6469,7 +6547,10 @@ function getImageToSvgHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Image To Svg online free without email, Image To Svg no watermark fast for mobile, best Image To Svg high quality software pc mac, Image To Svg unlimited file size free 2026, how to use Image To Svg easily without app install, secure Image To Svg safe for business confidential files, Image To Svg unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getResizeImageHTML() {
@@ -6622,7 +6703,10 @@ function getResizeImageHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Resize Image online free without email, Resize Image no watermark fast for mobile, best Resize Image high quality software pc mac, Resize Image unlimited file size free 2026, how to use Resize Image easily without app install, secure Resize Image safe for business confidential files, Resize Image unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getCropImageHTML() {
@@ -6800,7 +6884,10 @@ function getCropImageHTML() {
             a.click();
             URL.revokeObjectURL(url);
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Crop Image online free without email, Crop Image no watermark fast for mobile, best Crop Image high quality software pc mac, Crop Image unlimited file size free 2026, how to use Crop Image easily without app install, secure Crop Image safe for business confidential files, Crop Image unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getImageEnhancerHTML() {
@@ -7047,7 +7134,10 @@ function getImageEnhancerHTML() {
                 a.click();
             });
         })();
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Image Enhancer online free without email, Image Enhancer no watermark fast for mobile, best Image Enhancer high quality software pc mac, Image Enhancer unlimited file size free 2026, how to use Image Enhancer easily without app install, secure Image Enhancer safe for business confidential files, Image Enhancer unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getAiImageGeneratorHTML() {
@@ -7345,7 +7435,10 @@ function getAiImageGeneratorHTML() {
                 }
             });
         })();
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Ai Image Generator online free without email, Ai Image Generator no watermark fast for mobile, best Ai Image Generator high quality software pc mac, Ai Image Generator unlimited file size free 2026, how to use Ai Image Generator easily without app install, secure Ai Image Generator safe for business confidential files, Ai Image Generator unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getImageConverterHTML() {
@@ -7480,7 +7573,10 @@ function getImageConverterHTML() {
                 URL.revokeObjectURL(url);
             });
         })();
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Image Converter online free without email, Image Converter no watermark fast for mobile, best Image Converter high quality software pc mac, Image Converter unlimited file size free 2026, how to use Image Converter easily without app install, secure Image Converter safe for business confidential files, Image Converter unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getHeicConverterHTML() {
@@ -7622,7 +7718,10 @@ function getHeicConverterHTML() {
                 heicConvertBtn.textContent = "Convert HEIC to JPG PNG PDF";
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Heic Converter online free without email, Heic Converter no watermark fast for mobile, best Heic Converter high quality software pc mac, Heic Converter unlimited file size free 2026, how to use Heic Converter easily without app install, secure Heic Converter safe for business confidential files, Heic Converter unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getJpgConverterHTML() {
@@ -7782,7 +7881,10 @@ function getJpgConverterHTML() {
                 jpgConvertBtn.textContent = "Convert JPG to PNG JPEG PDF";
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Jpg Converter online free without email, Jpg Converter no watermark fast for mobile, best Jpg Converter high quality software pc mac, Jpg Converter unlimited file size free 2026, how to use Jpg Converter easily without app install, secure Jpg Converter safe for business confidential files, Jpg Converter unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getWebpConverterHTML() {
@@ -7943,7 +8045,10 @@ function getWebpConverterHTML() {
                 webpConvertBtn.textContent = "Convert WEBP";
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Webp Converter online free without email, Webp Converter no watermark fast for mobile, best Webp Converter high quality software pc mac, Webp Converter unlimited file size free 2026, how to use Webp Converter easily without app install, secure Webp Converter safe for business confidential files, Webp Converter unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getVideoToAudioHTML() {
@@ -8209,7 +8314,10 @@ function getVideoToAudioHTML() {
                 URL.revokeObjectURL(url);
             });
         })();
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Video To Audio online free without email, Video To Audio no watermark fast for mobile, best Video To Audio high quality software pc mac, Video To Audio unlimited file size free 2026, how to use Video To Audio easily without app install, secure Video To Audio safe for business confidential files, Video To Audio unblocked for school chromebook.</p>
+    </div>';
   }
 function getVideoCompressorHTML() {
     return '
@@ -8486,7 +8594,10 @@ function getVideoCompressorHTML() {
                 URL.revokeObjectURL(url);
             });
         })();
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Video Compressor online free without email, Video Compressor no watermark fast for mobile, best Video Compressor high quality software pc mac, Video Compressor unlimited file size free 2026, how to use Video Compressor easily without app install, secure Video Compressor safe for business confidential files, Video Compressor unblocked for school chromebook.</p>
+    </div>';
 }
 function getOcrToolHTML() {
     return '
@@ -8685,7 +8796,10 @@ function getOcrToolHTML() {
                 setOcrImageStatus("Error processing image OCR: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Ocr Tool online free without email, Ocr Tool no watermark fast for mobile, best Ocr Tool high quality software pc mac, Ocr Tool unlimited file size free 2026, how to use Ocr Tool easily without app install, secure Ocr Tool safe for business confidential files, Ocr Tool unblocked for school chromebook.</p>
+    </div>';
 }
 
 
@@ -8788,7 +8902,10 @@ function getPdfToWordPureJS() {
             parts.push("</body></html>");
             return parts.join("");
         }
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Word online free without email, Pdf To Word no watermark fast for mobile, best Pdf To Word high quality software pc mac, Pdf To Word unlimited file size free 2026, how to use Pdf To Word easily without app install, secure Pdf To Word safe for business confidential files, Pdf To Word unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getPdfToPptPureJS() {
@@ -8853,7 +8970,10 @@ function getPdfToPptPureJS() {
                 progress.classList.add("text-red-500");
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Ppt online free without email, Pdf To Ppt no watermark fast for mobile, best Pdf To Ppt high quality software pc mac, Pdf To Ppt unlimited file size free 2026, how to use Pdf To Ppt easily without app install, secure Pdf To Ppt safe for business confidential files, Pdf To Ppt unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getPdfToExcelPureJS() {
@@ -8923,7 +9043,10 @@ function getPdfToExcelPureJS() {
                 progress.classList.add("text-red-500");
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Excel online free without email, Pdf To Excel no watermark fast for mobile, best Pdf To Excel high quality software pc mac, Pdf To Excel unlimited file size free 2026, how to use Pdf To Excel easily without app install, secure Pdf To Excel safe for business confidential files, Pdf To Excel unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getWordToPdfPureJS() {
@@ -8982,7 +9105,10 @@ function getWordToPdfPureJS() {
                 progress.classList.add("text-red-500");
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Word To Pdf online free without email, Word To Pdf no watermark fast for mobile, best Word To Pdf high quality software pc mac, Word To Pdf unlimited file size free 2026, how to use Word To Pdf easily without app install, secure Word To Pdf safe for business confidential files, Word To Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getProtectPdfPureJS() {
@@ -9068,7 +9194,10 @@ function getProtectPdfPureJS() {
                 progress.classList.add("text-red-500");
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Protect Pdf online free without email, Protect Pdf no watermark fast for mobile, best Protect Pdf high quality software pc mac, Protect Pdf unlimited file size free 2026, how to use Protect Pdf easily without app install, secure Protect Pdf safe for business confidential files, Protect Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getJsonToCsvPureJS() {
@@ -9095,7 +9224,10 @@ function getJsonToCsvPureJS() {
             const blob = new Blob([curCSV], { type: "text/csv" });
             const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "data.csv"; a.click();
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Json To Csv online free without email, Json To Csv no watermark fast for mobile, best Json To Csv high quality software pc mac, Json To Csv unlimited file size free 2026, how to use Json To Csv easily without app install, secure Json To Csv safe for business confidential files, Json To Csv unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getQrGeneratorPureJS() {
@@ -9120,7 +9252,10 @@ function getQrGeneratorPureJS() {
                 document.getElementById("qrResult").classList.remove("hidden");
             });
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Qr Generator online free without email, Qr Generator no watermark fast for mobile, best Qr Generator high quality software pc mac, Qr Generator unlimited file size free 2026, how to use Qr Generator easily without app install, secure Qr Generator safe for business confidential files, Qr Generator unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getHtmlToPdfHTML() {
@@ -9147,7 +9282,10 @@ function getHtmlToPdfHTML() {
             await html2pdf().set({ margin: 0.4, filename: "html-to-pdf.pdf", html2canvas: { scale: 2 }, jsPDF: { unit: "in", format: "a4", orientation: "portrait" } }).from(wrapper).save();
             wrapper.remove();
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Html To Pdf online free without email, Html To Pdf no watermark fast for mobile, best Html To Pdf high quality software pc mac, Html To Pdf unlimited file size free 2026, how to use Html To Pdf easily without app install, secure Html To Pdf safe for business confidential files, Html To Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getSplitPdfHTML() {
@@ -9220,7 +9358,10 @@ function getSplitPdfHTML() {
             a.click();
             status.textContent = "Done. ZIP downloaded.";
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Split Pdf online free without email, Split Pdf no watermark fast for mobile, best Split Pdf high quality software pc mac, Split Pdf unlimited file size free 2026, how to use Split Pdf easily without app install, secure Split Pdf safe for business confidential files, Split Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 function getRemovePagesHTML() {
     return '
@@ -9425,7 +9566,10 @@ function getRemovePagesHTML() {
                 setRemovePagesStatus("Could not remove pages: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Remove Pages online free without email, Remove Pages no watermark fast for mobile, best Remove Pages high quality software pc mac, Remove Pages unlimited file size free 2026, how to use Remove Pages easily without app install, secure Remove Pages safe for business confidential files, Remove Pages unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getExtractPagesHTML() {
@@ -9631,7 +9775,10 @@ function getExtractPagesHTML() {
                 setExtractPagesStatus("Could not extract pages: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Extract Pages online free without email, Extract Pages no watermark fast for mobile, best Extract Pages high quality software pc mac, Extract Pages unlimited file size free 2026, how to use Extract Pages easily without app install, secure Extract Pages safe for business confidential files, Extract Pages unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getOrganizePdfHTML() {
@@ -9932,7 +10079,10 @@ function getOrganizePdfHTML() {
                 setOrganizeStatus("Could not save this PDF: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Organize Pdf online free without email, Organize Pdf no watermark fast for mobile, best Organize Pdf high quality software pc mac, Organize Pdf unlimited file size free 2026, how to use Organize Pdf easily without app install, secure Organize Pdf safe for business confidential files, Organize Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getScanToPdfHTML() {
@@ -9963,7 +10113,10 @@ function getScanToPdfHTML() {
             }
             doc.save("scanned.pdf");
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Scan To Pdf online free without email, Scan To Pdf no watermark fast for mobile, best Scan To Pdf high quality software pc mac, Scan To Pdf unlimited file size free 2026, how to use Scan To Pdf easily without app install, secure Scan To Pdf safe for business confidential files, Scan To Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getOptimizePdfHTML() {
@@ -9985,7 +10138,10 @@ function getOptimizePdfHTML() {
             a.download = "optimized.pdf";
             a.click();
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Optimize Pdf online free without email, Optimize Pdf no watermark fast for mobile, best Optimize Pdf high quality software pc mac, Optimize Pdf unlimited file size free 2026, how to use Optimize Pdf easily without app install, secure Optimize Pdf safe for business confidential files, Optimize Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getRepairPdfHTML() {
@@ -10090,7 +10246,10 @@ function getRepairPdfHTML() {
                 status.textContent = "This PDF could not be repaired in the browser: " + e.message;
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Repair Pdf online free without email, Repair Pdf no watermark fast for mobile, best Repair Pdf high quality software pc mac, Repair Pdf unlimited file size free 2026, how to use Repair Pdf easily without app install, secure Repair Pdf safe for business confidential files, Repair Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getOcrPdfHTML() {
@@ -10320,7 +10479,10 @@ function getOcrPdfHTML() {
                 setOcrStatus("Error while running OCR: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Ocr Pdf online free without email, Ocr Pdf no watermark fast for mobile, best Ocr Pdf high quality software pc mac, Ocr Pdf unlimited file size free 2026, how to use Ocr Pdf easily without app install, secure Ocr Pdf safe for business confidential files, Ocr Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getRotatePdfHTML() {
@@ -10563,7 +10725,10 @@ function getRotatePdfHTML() {
                 setRotatePdfStatus("Could not rotate this PDF: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Rotate Pdf online free without email, Rotate Pdf no watermark fast for mobile, best Rotate Pdf high quality software pc mac, Rotate Pdf unlimited file size free 2026, how to use Rotate Pdf easily without app install, secure Rotate Pdf safe for business confidential files, Rotate Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getAddPageNumbersHTML() {
@@ -10603,7 +10768,10 @@ function getAddPageNumbersHTML() {
             a.download = "page-numbers.pdf";
             a.click();
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Add Page Numbers online free without email, Add Page Numbers no watermark fast for mobile, best Add Page Numbers high quality software pc mac, Add Page Numbers unlimited file size free 2026, how to use Add Page Numbers easily without app install, secure Add Page Numbers safe for business confidential files, Add Page Numbers unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getAddWatermarkHTML() {
@@ -10950,7 +11118,10 @@ function getAddWatermarkHTML() {
         });
 
         watermarkType.dispatchEvent(new Event("change"));
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Add Watermark online free without email, Add Watermark no watermark fast for mobile, best Add Watermark high quality software pc mac, Add Watermark unlimited file size free 2026, how to use Add Watermark easily without app install, secure Add Watermark safe for business confidential files, Add Watermark unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getUnlockPdfHTML() {
@@ -11075,7 +11246,10 @@ function getUnlockPdfHTML() {
                 setUnlockPdfStatus(message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Unlock Pdf online free without email, Unlock Pdf no watermark fast for mobile, best Unlock Pdf high quality software pc mac, Unlock Pdf unlimited file size free 2026, how to use Unlock Pdf easily without app install, secure Unlock Pdf safe for business confidential files, Unlock Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getSignPdfHTML() {
@@ -11405,7 +11579,10 @@ function getCropPdfHTML() {
                 setCropPdfStatus("Could not crop this PDF: " + error.message, true);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Crop Pdf online free without email, Crop Pdf no watermark fast for mobile, best Crop Pdf high quality software pc mac, Crop Pdf unlimited file size free 2026, how to use Crop Pdf easily without app install, secure Crop Pdf safe for business confidential files, Crop Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getComparePdfHTML() {
@@ -11538,7 +11715,10 @@ function getComparePdfHTML() {
                 alert("Could not compare PDFs: " + e.message);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Compare Pdf online free without email, Compare Pdf no watermark fast for mobile, best Compare Pdf high quality software pc mac, Compare Pdf unlimited file size free 2026, how to use Compare Pdf easily without app install, secure Compare Pdf safe for business confidential files, Compare Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getAiSummarizerHTML() {
@@ -11597,7 +11777,10 @@ function getAiSummarizerHTML() {
                 status.textContent = "Could not summarize this PDF: " + e.message;
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Ai Summarizer online free without email, Ai Summarizer no watermark fast for mobile, best Ai Summarizer high quality software pc mac, Ai Summarizer unlimited file size free 2026, how to use Ai Summarizer easily without app install, secure Ai Summarizer safe for business confidential files, Ai Summarizer unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getPdfToPdfaHTML() {
@@ -11643,7 +11826,10 @@ function getPdfToPdfaHTML() {
                 alert("Could not create PDF/A-style export: " + e.message);
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Pdf To Pdfa online free without email, Pdf To Pdfa no watermark fast for mobile, best Pdf To Pdfa high quality software pc mac, Pdf To Pdfa unlimited file size free 2026, how to use Pdf To Pdfa easily without app install, secure Pdf To Pdfa safe for business confidential files, Pdf To Pdfa unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getEditPdfHTML() {
@@ -12198,7 +12384,10 @@ function getRedactPdfHTML() {
                 status.textContent = "Could not redact this PDF: " + e.message;
             }
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Redact Pdf online free without email, Redact Pdf no watermark fast for mobile, best Redact Pdf high quality software pc mac, Redact Pdf unlimited file size free 2026, how to use Redact Pdf easily without app install, secure Redact Pdf safe for business confidential files, Redact Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 function getTranslatePdfHTML() {
@@ -12286,7 +12475,10 @@ function getTranslatePdfHTML() {
                 ? "Translation ready. The first part of the document was translated for speed."
                 : "Translation ready.";
         });
-    </script>';
+    </script>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+        <p><strong>Related Searches:</strong> convert Translate Pdf online free without email, Translate Pdf no watermark fast for mobile, best Translate Pdf high quality software pc mac, Translate Pdf unlimited file size free 2026, how to use Translate Pdf easily without app install, secure Translate Pdf safe for business confidential files, Translate Pdf unblocked for school chromebook.</p>
+    </div>';
 }
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
