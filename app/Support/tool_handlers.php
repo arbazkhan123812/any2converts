@@ -2039,12 +2039,40 @@ function getPercentageCalculatorHTML() {
                 </div>
                 <div class="rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 p-5">
                     <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Formula</p>
-                    <p class="mt-3 text-sm text-slate-600 dark:text-slate-300"><strong class="text-slate-900 dark:text-white">Value / Base ? 100</strong></p>
+                    <p class="mt-3 text-sm text-slate-600 dark:text-slate-300"><strong class="text-slate-900 dark:text-white">Value / Base * 100</strong></p>
                 </div>
             </div>
         </div>
     </div>
-    <script>(() => { const valueInput = document.getElementById("percentValue"); const baseInput = document.getElementById("percentBase"); const resultEl = document.getElementById("percentResult"); const metaEl = document.getElementById("percentMeta"); const calc = () => { const value = parseFloat(valueInput.value) || 0; const base = parseFloat(baseInput.value) || 0; const result = base === 0 ? 0 : (value / base) * 100; resultEl.textContent = `${result.toFixed(2)}%`; metaEl.textContent = `${value} is ${result.toFixed(2)}% of ${base}.`; }; document.getElementById("percentCalcBtn").addEventListener("click", calc); [valueInput, baseInput].forEach((el) => el.addEventListener("input", calc)); document.querySelectorAll("#percentPresets [data-value]").forEach((btn) => btn.addEventListener("click", () => { valueInput.value = btn.dataset.value; baseInput.value = btn.dataset.base; calc(); })); calc(); })();</script>
+    <script>
+        (() => {
+            const valueInput = document.getElementById("percentValue");
+            const baseInput = document.getElementById("percentBase");
+            const resultEl = document.getElementById("percentResult");
+            const metaEl = document.getElementById("percentMeta");
+            
+            const calc = () => {
+                const value = parseFloat(valueInput.value) || 0;
+                const base = parseFloat(baseInput.value) || 0;
+                const result = base === 0 ? 0 : (value / base) * 100;
+                resultEl.textContent = `${result.toFixed(2)}%`;
+                metaEl.textContent = `${value} is ${result.toFixed(2)}% of ${base}.`;
+            };
+            
+            document.getElementById("percentCalcBtn").addEventListener("click", calc);
+            [valueInput, baseInput].forEach((el) => el.addEventListener("input", calc));
+            
+            document.querySelectorAll("#percentPresets [data-value]").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    valueInput.value = btn.dataset.value;
+                    baseInput.value = btn.dataset.base;
+                    calc();
+                });
+            });
+            
+            calc();
+        })();
+    </script>
 HTML;
 }
 
