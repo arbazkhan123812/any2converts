@@ -2007,7 +2007,7 @@ function getPercentageCalculatorHTML() {
                     <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
                 </div>
             </div>
-            <div class="mt-6 grid sm:grid-cols-3 gap-4">
+            <div class="mt-6 grid grid-cols-2 gap-4">
                 <label class="block rounded-[28px] border border-white/60 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 p-4">
                     <span class="text-xs uppercase tracking-[0.22em] text-slate-500">Value</span>
                     <input id="percentValue" type="number" class="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-lg font-semibold text-slate-900 dark:text-white" value="25">
@@ -2016,8 +2016,8 @@ function getPercentageCalculatorHTML() {
                     <span class="text-xs uppercase tracking-[0.22em] text-slate-500">% Of</span>
                     <input id="percentBase" type="number" class="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-lg font-semibold text-slate-900 dark:text-white" value="200">
                 </label>
-                <div class="flex items-stretch">
-                    <button id="percentCalcBtn" class="w-full rounded-[28px] bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 px-5 py-4 font-semibold shadow-[0_20px_45px_rgba(245,158,11,0.28)]">Calculate Percentage</button>
+                <div class="col-span-2 flex items-stretch mt-1">
+                    <button id="percentCalcBtn" class="w-full rounded-[28px] bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 px-5 py-4 text-lg font-semibold shadow-[0_20px_45px_rgba(245,158,11,0.28)]">Calculate Percentage</button>
                 </div>
             </div>
             <div class="mt-5 flex flex-wrap gap-2" id="percentPresets">
