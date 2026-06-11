@@ -1706,7 +1706,7 @@ function getInvoiceGeneratorHTML() {
 <div style="font-family: 'Inter', system-ui, sans-serif; max-width: 800px; margin: 0 auto; color: #0f172a;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid ${theme.primary}; padding-bottom: 30px; margin-bottom: 30px;">
         <div>
-            ${logoUrl ? \`<img src="\${logoUrl}" style="max-height: 64px; margin-bottom: 16px; object-fit: contain;">\` : \`<div style="width: 54px; height: 54px; background-color: \${theme.primary}; border-radius: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px \${theme.primary}40;"><span style="color: white; font-weight: 800; font-size: 26px;">\${businessName.charAt(0).toUpperCase() || 'B'}</span></div>\`}
+            ${logoUrl ? `<img src="${logoUrl}" style="max-height: 64px; margin-bottom: 16px; object-fit: contain;">` : `<div style="width: 54px; height: 54px; background-color: ${theme.primary}; border-radius: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px ${theme.primary}40;"><span style="color: white; font-weight: 800; font-size: 26px;">${businessName.charAt(0).toUpperCase() || 'B'}</span></div>`}
             <h1 style="font-size: 28px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.5px;">${businessName}</h1>
             <p style="color: #64748b; font-size: 14px; margin-top: 6px; white-space: pre-line; line-height: 1.6;">${businessMeta}</p>
         </div>
