@@ -1621,17 +1621,31 @@ function getInvoiceGeneratorHTML() {
             const preview = document.getElementById("invoicePreview");
             const status = document.getElementById("invoiceStatus");
             const inputs = ["invoiceBusiness","invoiceClient","invoiceNumber","invoiceCurrency","invoiceIssueDate","invoiceDueDate","invoiceBusinessMeta","invoiceTax","invoiceNotes"].map((id) => document.getElementById(id));
+            
             document.getElementById("invoiceIssueDate").valueAsDate = new Date();
-            const due = new Date(); due.setDate(due.getDate() + 7); document.getElementById("invoiceDueDate").valueAsDate = due;
+            const due = new Date(); 
+            due.setDate(due.getDate() + 7); 
+            document.getElementById("invoiceDueDate").valueAsDate = due;
+            
             function addItemRow(data = {}) {
                 const row = document.createElement("div");
                 row.className = "grid md:grid-cols-[1.6fr_120px_140px_52px] gap-3";
-                row.innerHTML = `<input class="item-desc rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Design package" value="${data.desc || ""}"><input class="item-qty rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" type="number" min="1" step="1" value="${data.qty || 1}"><input class="item-price rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" type="number" min="0" step="0.01" value="${data.price || 0}"><button class="remove-item rounded-2xl bg-rose-500/12 text-rose-500 font-bold">?</button>`;
+                row.innerHTML = `
+                    <input class="item-desc rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Design package" value="${data.desc || ""}">
+                    <input class="item-qty rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" type="number" min="1" step="1" value="${data.qty || 1}">
+                    <input class="item-price rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" type="number" min="0" step="0.01" value="${data.price || 0}">
+                    <button class="remove-item rounded-2xl bg-rose-500/12 text-rose-500 font-bold">✕</button>
+                `;
                 row.querySelectorAll("input").forEach((el) => el.addEventListener("input", renderInvoice));
                 row.querySelector(".remove-item").addEventListener("click", () => { row.remove(); renderInvoice(); });
                 itemsWrap.appendChild(row);
             }
-            function money(value) { const symbol = document.getElementById("invoiceCurrency").value || "$"; return `${symbol} ${Number(value || 0).toFixed(2)}`; }
+            
+            function money(value) { 
+                const symbol = document.getElementById("invoiceCurrency").value || "$"; 
+                return `${symbol} ${Number(value || 0).toFixed(2)}`; 
+            }
+            
             function renderInvoice() {
                 const rows = Array.from(itemsWrap.children).map((row) => {
                     const desc = row.querySelector(".item-desc").value || "Service item";
@@ -1639,18 +1653,130 @@ function getInvoiceGeneratorHTML() {
                     const price = parseFloat(row.querySelector(".item-price").value) || 0;
                     return { desc, qty, price, total: qty * price };
                 });
+                
                 const subtotal = rows.reduce((sum, row) => sum + row.total, 0);
                 const taxRate = parseFloat(document.getElementById("invoiceTax").value) || 0;
                 const taxValue = subtotal * (taxRate / 100);
                 const total = subtotal + taxValue;
-                preview.innerHTML = `<div class="flex items-start justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-5"><div><p class="text-xs tracking-[0.3em] uppercase text-emerald-500 font-semibold">Invoice</p><h3 class="mt-2 text-3xl font-black">${document.getElementById("invoiceBusiness").value || "Your Business"}</h3><p class="mt-2 text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">${document.getElementById("invoiceBusinessMeta").value || "Business details will appear here."}</p></div><div class="text-right text-sm"><p><span class="text-slate-500">Invoice #</span> <strong>${document.getElementById("invoiceNumber").value || "INV-001"}</strong></p><p class="mt-2"><span class="text-slate-500">Issued</span> <strong>${document.getElementById("invoiceIssueDate").value || "--"}</strong></p><p class="mt-2"><span class="text-slate-500">Due</span> <strong>${document.getElementById("invoiceDueDate").value || "--"}</strong></p></div></div><div class="grid md:grid-cols-2 gap-4 py-5"><div><p class="text-xs tracking-[0.25em] uppercase text-slate-500">Bill To</p><p class="mt-2 text-lg font-bold">${document.getElementById("invoiceClient").value || "Client Name"}</p></div><div class="md:text-right"><p class="text-xs tracking-[0.25em] uppercase text-slate-500">Total Due</p><p class="mt-2 text-3xl font-black text-emerald-500">${money(total)}</p></div></div><div class="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800"><table class="w-full text-sm"><thead class="bg-slate-100 dark:bg-slate-800/70"><tr><th class="text-left px-4 py-3">Item</th><th class="text-left px-4 py-3">Qty</th><th class="text-left px-4 py-3">Price</th><th class="text-right px-4 py-3">Total</th></tr></thead><tbody>${rows.map((row) => `<tr class="border-t border-slate-200 dark:border-slate-800"><td class="px-4 py-3">${row.desc}</td><td class="px-4 py-3">${row.qty}</td><td class="px-4 py-3">${money(row.price)}</td><td class="px-4 py-3 text-right font-semibold">${money(row.total)}</td></tr>`).join("") || '<tr><td colspan="4" class="px-4 py-5 text-center text-slate-500">Add line items to build the invoice.</td></tr>'}</tbody></table></div><div class="mt-5 space-y-2 text-sm"><div class="flex items-center justify-between"><span class="text-slate-500">Subtotal</span><strong>${money(subtotal)}</strong></div><div class="flex items-center justify-between"><span class="text-slate-500">Tax (${taxRate.toFixed(1)}%)</span><strong>${money(taxValue)}</strong></div><div class="flex items-center justify-between text-lg"><span class="font-bold">Grand Total</span><strong class="text-emerald-500">${money(total)}</strong></div></div><div class="mt-6 rounded-3xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-4"><p class="text-xs tracking-[0.22em] uppercase text-slate-500">Notes</p><p class="mt-2 text-sm whitespace-pre-line">${document.getElementById("invoiceNotes").value || "Thanks for your business."}</p></div>`;
+                
+                const businessName = document.getElementById("invoiceBusiness").value || "Your Business";
+                const businessMeta = document.getElementById("invoiceBusinessMeta").value || "Business details will appear here.";
+                const invoiceNumber = document.getElementById("invoiceNumber").value || "INV-001";
+                const issueDate = document.getElementById("invoiceIssueDate").value || "--";
+                const dueDate = document.getElementById("invoiceDueDate").value || "--";
+                const clientName = document.getElementById("invoiceClient").value || "Client Name";
+                const notes = document.getElementById("invoiceNotes").value || "Thanks for your business.";
+                
+                const rowsHTML = rows.map((row) => `
+                    <tr class="border-t border-slate-200 dark:border-slate-800">
+                        <td class="px-4 py-3">${row.desc}</td>
+                        <td class="px-4 py-3">${row.qty}</td>
+                        <td class="px-4 py-3">${money(row.price)}</td>
+                        <td class="px-4 py-3 text-right font-semibold">${money(row.total)}</td>
+                    </tr>
+                `).join("") || '<tr><td colspan="4" class="px-4 py-5 text-center text-slate-500">Add line items to build the invoice.</td></tr>';
+                
+                preview.innerHTML = `
+                    <div class="flex items-start justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-5">
+                        <div>
+                            <p class="text-xs tracking-[0.3em] uppercase text-emerald-500 font-semibold">Invoice</p>
+                            <h3 class="mt-2 text-3xl font-black">${businessName}</h3>
+                            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">${businessMeta}</p>
+                        </div>
+                        <div class="text-right text-sm">
+                            <p><span class="text-slate-500">Invoice #</span> <strong>${invoiceNumber}</strong></p>
+                            <p class="mt-2"><span class="text-slate-500">Issued</span> <strong>${issueDate}</strong></p>
+                            <p class="mt-2"><span class="text-slate-500">Due</span> <strong>${dueDate}</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 py-5">
+                        <div>
+                            <p class="text-xs tracking-[0.25em] uppercase text-slate-500">Bill To</p>
+                            <p class="mt-2 text-lg font-bold">${clientName}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs tracking-[0.25em] uppercase text-slate-500">Total Due</p>
+                            <p class="mt-2 text-3xl font-black text-emerald-500">${money(total)}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                        <table class="w-full text-sm">
+                            <thead class="bg-slate-100 dark:bg-slate-800/70">
+                                <tr>
+                                    <th class="text-left px-4 py-3">Item</th>
+                                    <th class="text-left px-4 py-3">Qty</th>
+                                    <th class="text-left px-4 py-3">Price</th>
+                                    <th class="text-right px-4 py-3">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-5 space-y-2 text-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500">Subtotal</span>
+                            <strong>${money(subtotal)}</strong>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500">Tax (${taxRate.toFixed(1)}%)</span>
+                            <strong>${money(taxValue)}</strong>
+                        </div>
+                        <div class="flex items-center justify-between text-lg mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+                            <span class="font-bold">Grand Total</span>
+                            <strong class="text-emerald-500 text-2xl">${money(total)}</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 rounded-3xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-5">
+                        <p class="text-xs tracking-[0.22em] uppercase text-slate-500">Notes</p>
+                        <p class="mt-2 text-sm whitespace-pre-line text-slate-700 dark:text-slate-300">${notes}</p>
+                    </div>
+                `;
                 status.textContent = `Subtotal ${money(subtotal)} updated.`;
             }
+            
             document.getElementById("addInvoiceItem").addEventListener("click", () => addItemRow());
             inputs.forEach((input) => input.addEventListener("input", renderInvoice));
+            
             document.getElementById("invoicePrint").addEventListener("click", () => window.print());
-            document.getElementById("invoiceDownload").addEventListener("click", () => { const blob = new Blob([`<html><head><meta charset="UTF-8"><title>Invoice</title></head><body>${preview.innerHTML}</body></html>`], { type: "text/html" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "invoice.html"; a.click(); URL.revokeObjectURL(url); });
-            addItemRow({ desc: "Creative service", qty: 1, price: 150 }); addItemRow({ desc: "Revision support", qty: 2, price: 40 }); renderInvoice();
+            
+            document.getElementById("invoiceDownload").addEventListener("click", () => { 
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Invoice</title>
+                        <script src="https://cdn.tailwindcss.com"><\/script>
+                        <style>
+                            body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+                        </style>
+                    </head>
+                    <body class="bg-slate-50 p-8 flex justify-center">
+                        <div class="w-full max-w-3xl bg-white p-10 rounded-[32px] shadow-xl border border-slate-200">
+                            ${preview.innerHTML}
+                        </div>
+                    </body>
+                    </html>
+                `;
+                const blob = new Blob([htmlContent], { type: "text/html" }); 
+                const url = URL.createObjectURL(blob); 
+                const a = document.createElement("a"); 
+                a.href = url; 
+                a.download = "invoice.html"; 
+                a.click(); 
+                URL.revokeObjectURL(url); 
+            });
+            
+            addItemRow({ desc: "Creative service", qty: 1, price: 150 }); 
+            addItemRow({ desc: "Revision support", qty: 2, price: 40 }); 
+            renderInvoice();
         })();
     </script>
 HTML;
