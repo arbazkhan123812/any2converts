@@ -2090,7 +2090,7 @@ function getLoanCalculatorHTML() {
                     <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h10"/><path d="M7 14h5"/></svg>
                 </div>
             </div>
-            <div class="mt-6 grid md:grid-cols-3 gap-4">
+            <div class="mt-6 grid gap-4">
                 <label class="block rounded-[28px] border border-white/60 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 p-4"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Loan Amount</span><input id="loanAmount" type="number" class="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-lg font-semibold text-slate-900 dark:text-white" value="500000"></label>
                 <label class="block rounded-[28px] border border-white/60 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 p-4"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Annual Rate %</span><input id="loanRate" type="number" step="0.1" class="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-lg font-semibold text-slate-900 dark:text-white" value="14"></label>
                 <label class="block rounded-[28px] border border-white/60 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 p-4"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Months</span><input id="loanMonths" type="number" class="mt-3 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-lg font-semibold text-slate-900 dark:text-white" value="36"></label>
@@ -2120,7 +2120,45 @@ function getLoanCalculatorHTML() {
             </div>
         </div>
     </div>
-    <script>(() => { const amountEl = document.getElementById("loanAmount"); const rateEl = document.getElementById("loanRate"); const monthsEl = document.getElementById("loanMonths"); const calc = () => { const principal = parseFloat(amountEl.value) || 0; const annualRate = parseFloat(rateEl.value) || 0; const months = parseFloat(monthsEl.value) || 0; const monthlyRate = annualRate / 12 / 100; const emi = monthlyRate === 0 ? principal / Math.max(months, 1) : (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1); const total = emi * months; const interest = total - principal; document.getElementById("loanEmi").textContent = emi.toFixed(2); document.getElementById("loanTotal").textContent = total.toFixed(2); document.getElementById("loanInterest").textContent = interest.toFixed(2); }; document.getElementById("loanCalcBtn").addEventListener("click", calc); [amountEl, rateEl, monthsEl].forEach((el) => el.addEventListener("input", calc)); document.querySelectorAll("#loanPresets [data-amount]").forEach((btn) => btn.addEventListener("click", () => { amountEl.value = btn.dataset.amount; rateEl.value = btn.dataset.rate; monthsEl.value = btn.dataset.months; calc(); })); calc(); })();</script>
+    <script>
+        (() => {
+            const amountEl = document.getElementById("loanAmount");
+            const rateEl = document.getElementById("loanRate");
+            const monthsEl = document.getElementById("loanMonths");
+            
+            const calc = () => {
+                const principal = parseFloat(amountEl.value) || 0;
+                const annualRate = parseFloat(rateEl.value) || 0;
+                const months = parseFloat(monthsEl.value) || 0;
+                
+                const monthlyRate = annualRate / 12 / 100;
+                const emi = monthlyRate === 0 
+                    ? principal / Math.max(months, 1) 
+                    : (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+                
+                const total = emi * months;
+                const interest = total - principal;
+                
+                document.getElementById("loanEmi").textContent = emi.toFixed(2);
+                document.getElementById("loanTotal").textContent = total.toFixed(2);
+                document.getElementById("loanInterest").textContent = interest.toFixed(2);
+            };
+            
+            document.getElementById("loanCalcBtn").addEventListener("click", calc);
+            [amountEl, rateEl, monthsEl].forEach((el) => el.addEventListener("input", calc));
+            
+            document.querySelectorAll("#loanPresets [data-amount]").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    amountEl.value = btn.dataset.amount;
+                    rateEl.value = btn.dataset.rate;
+                    monthsEl.value = btn.dataset.months;
+                    calc();
+                });
+            });
+            
+            calc();
+        })();
+    </script>
 HTML;
 }
 
