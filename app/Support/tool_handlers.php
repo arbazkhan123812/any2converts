@@ -1588,6 +1588,18 @@ function getInvoiceGeneratorHTML() {
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Business Name</span><input id="invoiceBusiness" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Any2Convert Studio"></label>
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Client Name</span><input id="invoiceClient" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Client or company"></label>
                     <div class="grid grid-cols-2 gap-4">
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Theme Color</span>
+                            <select id="invoiceColor" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white">
+                                <option value="slate">Slate (Classic)</option>
+                                <option value="blue">Blue (Professional)</option>
+                                <option value="emerald">Emerald (Finance)</option>
+                                <option value="indigo">Indigo (Modern)</option>
+                                <option value="rose">Rose (Creative)</option>
+                            </select>
+                        </label>
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Your Logo URL</span><input id="invoiceLogo" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="https://example.com/logo.png"></label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Invoice Number</span><input id="invoiceNumber" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="INV-2026-001"></label>
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Currency</span><select id="invoiceCurrency" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"><option value="$">USD ($)</option><option value="PKR">PKR</option><option value="AED">AED</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select></label>
                     </div>
@@ -1615,7 +1627,7 @@ function getInvoiceGeneratorHTML() {
                 </div>
             </div>
             <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-slate-50/85 dark:bg-slate-950/80 shadow-xl shadow-slate-200/50 dark:shadow-black/20 p-4 md:p-5">
-                <div id="invoicePreview" class="rounded-[28px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 min-h-[760px] text-slate-900 dark:text-white"></div>
+                <div id="invoicePreview" class="rounded-[28px] bg-white border border-slate-200 p-8 min-h-[800px] text-slate-900 shadow-sm overflow-hidden"></div>
             </div>
         </div>
     </div>
@@ -1624,7 +1636,7 @@ function getInvoiceGeneratorHTML() {
             const itemsWrap = document.getElementById("invoiceItems");
             const preview = document.getElementById("invoicePreview");
             const status = document.getElementById("invoiceStatus");
-            const inputs = ["invoiceBusiness","invoiceClient","invoiceNumber","invoiceCurrency","invoiceIssueDate","invoiceDueDate","invoiceBusinessMeta","invoiceTax","invoiceNotes"].map((id) => document.getElementById(id));
+            const inputs = ["invoiceBusiness","invoiceClient","invoiceNumber","invoiceCurrency","invoiceIssueDate","invoiceDueDate","invoiceBusinessMeta","invoiceTax","invoiceNotes","invoiceColor","invoiceLogo"].map((id) => document.getElementById(id));
             
             document.getElementById("invoiceIssueDate").valueAsDate = new Date();
             const due = new Date(); 
@@ -1671,76 +1683,86 @@ function getInvoiceGeneratorHTML() {
                 const clientName = document.getElementById("invoiceClient").value || "Client Name";
                 const notes = document.getElementById("invoiceNotes").value || "Thanks for your business.";
                 
+                const themeColors = {
+                    slate: { primary: '#0f172a', light: '#f8fafc', border: '#e2e8f0', text: '#334155' },
+                    blue: { primary: '#2563eb', light: '#eff6ff', border: '#bfdbfe', text: '#1e40af' },
+                    emerald: { primary: '#059669', light: '#ecfdf5', border: '#a7f3d0', text: '#065f46' },
+                    indigo: { primary: '#4f46e5', light: '#eef2ff', border: '#c7d2fe', text: '#3730a3' },
+                    rose: { primary: '#e11d48', light: '#fff1f2', border: '#fecdd3', text: '#9f1239' }
+                };
+                const theme = themeColors[document.getElementById("invoiceColor").value || "slate"];
+                const logoUrl = document.getElementById("invoiceLogo").value;
+
                 const rowsHTML = rows.map((row) => `
-                    <tr class="border-t border-slate-200 dark:border-slate-800">
-                        <td class="px-4 py-3">${row.desc}</td>
-                        <td class="px-4 py-3">${row.qty}</td>
-                        <td class="px-4 py-3">${money(row.price)}</td>
-                        <td class="px-4 py-3 text-right font-semibold">${money(row.total)}</td>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 15px 10px; color: #0f172a;">${row.desc}</td>
+                        <td style="padding: 15px 10px; text-align: center; color: #475569;">${row.qty}</td>
+                        <td style="padding: 15px 10px; text-align: right; color: #475569;">${money(row.price)}</td>
+                        <td style="padding: 15px 10px; text-align: right; font-weight: 600; color: #0f172a;">${money(row.total)}</td>
                     </tr>
-                `).join("") || '<tr><td colspan="4" class="px-4 py-5 text-center text-slate-500">Add line items to build the invoice.</td></tr>';
+                `).join("") || '<tr><td colspan="4" style="padding: 30px 10px; text-align: center; color: #94a3b8;">Add line items to build the invoice.</td></tr>';
                 
                 preview.innerHTML = `
-                    <div class="flex items-start justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-5">
-                        <div>
-                            <p class="text-xs tracking-[0.3em] uppercase text-emerald-500 font-semibold">Invoice</p>
-                            <h3 class="mt-2 text-3xl font-black">${businessName}</h3>
-                            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">${businessMeta}</p>
-                        </div>
-                        <div class="text-right text-sm">
-                            <p><span class="text-slate-500">Invoice #</span> <strong>${invoiceNumber}</strong></p>
-                            <p class="mt-2"><span class="text-slate-500">Issued</span> <strong>${issueDate}</strong></p>
-                            <p class="mt-2"><span class="text-slate-500">Due</span> <strong>${dueDate}</strong></p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 py-5">
-                        <div>
-                            <p class="text-xs tracking-[0.25em] uppercase text-slate-500">Bill To</p>
-                            <p class="mt-2 text-lg font-bold">${clientName}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-xs tracking-[0.25em] uppercase text-slate-500">Total Due</p>
-                            <p class="mt-2 text-3xl font-black text-emerald-500">${money(total)}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                        <table class="w-full text-sm">
-                            <thead class="bg-slate-100 dark:bg-slate-800/70">
-                                <tr>
-                                    <th class="text-left px-4 py-3">Item</th>
-                                    <th class="text-left px-4 py-3">Qty</th>
-                                    <th class="text-left px-4 py-3">Price</th>
-                                    <th class="text-right px-4 py-3">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rowsHTML}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="mt-5 space-y-2 text-sm">
-                        <div class="flex items-center justify-between">
-                            <span class="text-slate-500">Subtotal</span>
-                            <strong>${money(subtotal)}</strong>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-slate-500">Tax (${taxRate.toFixed(1)}%)</span>
-                            <strong>${money(taxValue)}</strong>
-                        </div>
-                        <div class="flex items-center justify-between text-lg mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
-                            <span class="font-bold">Grand Total</span>
-                            <strong class="text-emerald-500 text-2xl">${money(total)}</strong>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-8 rounded-3xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-5">
-                        <p class="text-xs tracking-[0.22em] uppercase text-slate-500">Notes</p>
-                        <p class="mt-2 text-sm whitespace-pre-line text-slate-700 dark:text-slate-300">${notes}</p>
-                    </div>
-                `;
+<div style="font-family: 'Inter', system-ui, sans-serif; max-width: 800px; margin: 0 auto; color: #0f172a;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid ${theme.primary}; padding-bottom: 30px; margin-bottom: 30px;">
+        <div>
+            ${logoUrl ? \`<img src="\${logoUrl}" style="max-height: 64px; margin-bottom: 16px; object-fit: contain;">\` : \`<div style="width: 54px; height: 54px; background-color: \${theme.primary}; border-radius: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px \${theme.primary}40;"><span style="color: white; font-weight: 800; font-size: 26px;">\${businessName.charAt(0).toUpperCase() || 'B'}</span></div>\`}
+            <h1 style="font-size: 28px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.5px;">${businessName}</h1>
+            <p style="color: #64748b; font-size: 14px; margin-top: 6px; white-space: pre-line; line-height: 1.6;">${businessMeta}</p>
+        </div>
+        <div style="text-align: right;">
+            <h2 style="font-size: 38px; font-weight: 900; color: ${theme.primary}; margin: 0; letter-spacing: 2px;">INVOICE</h2>
+            <p style="font-size: 16px; font-weight: 700; color: #475569; margin-top: 8px;"># ${invoiceNumber}</p>
+            <div style="margin-top: 24px; display: grid; grid-template-columns: auto auto; gap: 8px 16px; text-align: right; justify-content: end; font-size: 14px;">
+                <span style="color: #64748b; font-weight: 500;">Issue Date:</span>
+                <span style="font-weight: 700; color: #0f172a;">${issueDate}</span>
+                <span style="color: #64748b; font-weight: 500;">Due Date:</span>
+                <span style="font-weight: 700; color: #0f172a;">${dueDate}</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 40px; background-color: ${theme.light}; padding: 24px; border-radius: 16px; border-left: 5px solid ${theme.primary};">
+        <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: ${theme.primary}; font-weight: 800; margin: 0 0 8px 0;">Bill To</p>
+        <p style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0;">${clientName}</p>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
+        <thead>
+            <tr style="border-bottom: 2px solid ${theme.border};">
+                <th style="text-align: left; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Item Description</th>
+                <th style="text-align: center; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; width: 80px;">Qty</th>
+                <th style="text-align: right; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; width: 140px;">Price</th>
+                <th style="text-align: right; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; width: 140px;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${rowsHTML}
+        </tbody>
+    </table>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 40px;">
+        <div style="flex: 1; margin-top: 10px;">
+            <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; font-weight: 800; margin: 0 0 10px 0;">Payment Notes</p>
+            <p style="font-size: 14px; color: #475569; white-space: pre-line; line-height: 1.7;">${notes}</p>
+        </div>
+        <div style="width: 320px;">
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569; font-size: 15px;">
+                <span style="font-weight: 500;">Subtotal</span>
+                <span style="font-weight: 700; color: #0f172a;">${money(subtotal)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; color: #475569; font-size: 15px;">
+                <span style="font-weight: 500;">Tax (${taxRate.toFixed(1)}%)</span>
+                <span style="font-weight: 700; color: #0f172a;">${money(taxValue)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 24px; background-color: ${theme.primary}; color: white; border-radius: 16px; margin-top: 16px; align-items: center; box-shadow: 0 10px 25px -5px ${theme.primary}50;">
+                <span style="font-size: 16px; font-weight: 600;">Total Due</span>
+                <span style="font-size: 28px; font-weight: 900; letter-spacing: -0.5px;">${money(total)}</span>
+            </div>
+        </div>
+    </div>
+</div>
+`;
                 status.textContent = `Subtotal ${money(subtotal)} updated.`;
             }
             
