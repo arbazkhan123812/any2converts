@@ -119,6 +119,8 @@ function renderToolHandlerHTML($tool) {
             return getSpeedConverterHTML();
         case 'time_converter':
             return getTimeConverterHTML();
+        case 'youtube_downloader':
+            return getYoutubeDownloaderHTML();
         case 'invoice_generator':
             return getInvoiceGeneratorHTML();
         case 'ats_resume_checker':
@@ -1571,6 +1573,9 @@ function getCurrencyConverterHTML(): string
 
 function getInvoiceGeneratorHTML() {
     return <<<'HTML'
+    <style>
+        #toolModal .modal-box { max-width: 1400px !important; }
+    </style>
     <div class="max-w-6xl mx-auto">
         <div class="grid xl:grid-cols-[1.15fr_0.85fr] gap-6">
             <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/70 shadow-xl shadow-slate-200/50 dark:shadow-black/20 p-6 md:p-7 space-y-6">
@@ -1597,7 +1602,7 @@ function getInvoiceGeneratorHTML() {
                                 <option value="rose">Rose (Creative)</option>
                             </select>
                         </label>
-                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Your Logo URL</span><input id="invoiceLogo" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="https://example.com/logo.png"></label>
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Your Logo</span><input type="file" id="invoiceLogoFile" accept="image/*" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-2.5 text-slate-900 dark:text-white file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:bg-slate-200 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-white"></label>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Invoice Number</span><input id="invoiceNumber" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="INV-2026-001"></label>
@@ -1636,7 +1641,26 @@ function getInvoiceGeneratorHTML() {
             const itemsWrap = document.getElementById("invoiceItems");
             const preview = document.getElementById("invoicePreview");
             const status = document.getElementById("invoiceStatus");
-            const inputs = ["invoiceBusiness","invoiceClient","invoiceNumber","invoiceCurrency","invoiceIssueDate","invoiceDueDate","invoiceBusinessMeta","invoiceTax","invoiceNotes","invoiceColor","invoiceLogo"].map((id) => document.getElementById(id));
+            const inputs = ["invoiceBusiness","invoiceClient","invoiceNumber","invoiceCurrency","invoiceIssueDate","invoiceDueDate","invoiceBusinessMeta","invoiceTax","invoiceNotes","invoiceColor"].map((id) => document.getElementById(id));
+            
+            let logoDataUrl = "";
+            const logoFileInput = document.getElementById("invoiceLogoFile");
+            if (logoFileInput) {
+                logoFileInput.addEventListener("change", function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            logoDataUrl = evt.target.result;
+                            renderInvoice();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        logoDataUrl = "";
+                        renderInvoice();
+                    }
+                });
+            }
             
             document.getElementById("invoiceIssueDate").valueAsDate = new Date();
             const due = new Date(); 
@@ -1691,7 +1715,7 @@ function getInvoiceGeneratorHTML() {
                     rose: { primary: '#e11d48', light: '#fff1f2', border: '#fecdd3', text: '#9f1239' }
                 };
                 const theme = themeColors[document.getElementById("invoiceColor").value || "slate"];
-                const logoUrl = document.getElementById("invoiceLogo").value;
+                const logoUrl = logoDataUrl;
 
                 const rowsHTML = rows.map((row) => `
                     <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -12733,6 +12757,175 @@ function getTranslatePdfHTML() {
     <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
         <p><strong>Related Searches:</strong> convert Translate Pdf online free without email, Translate Pdf no watermark fast for mobile, best Translate Pdf high quality software pc mac, Translate Pdf unlimited file size free 2026, how to use Translate Pdf easily without app install, secure Translate Pdf safe for business confidential files, Translate Pdf unblocked for school chromebook.</p>
     </div>';
+}
+
+function getYoutubeDownloaderHTML() {
+    return <<<'HTML'
+    <div class="max-w-4xl mx-auto">
+        <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/70 shadow-xl shadow-slate-200/50 dark:shadow-black/20 p-6 md:p-8 space-y-6">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <p class="text-[11px] tracking-[0.34em] uppercase text-emerald-500 font-semibold">Media Tool</p>
+                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">YouTube Video Downloader</h2>
+                    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Download YouTube videos instantly in MP4 or MP3 format. Paste your link below.</p>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <label class="block">
+                    <span class="text-xs uppercase tracking-[0.22em] text-slate-500">YouTube Video URL</span>
+                    <div class="mt-2 flex gap-3">
+                        <input id="ytUrl" type="url" class="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="https://www.youtube.com/watch?v=...">
+                        <button id="ytFetchBtn" class="rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-3 font-semibold whitespace-nowrap transition-opacity hover:opacity-90">Fetch Video</button>
+                    </div>
+                </label>
+                <div id="ytStatus" class="text-sm text-slate-500 hidden"></div>
+            </div>
+
+            <div id="ytResultBox" class="hidden rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-slate-50 dark:bg-slate-900 mt-6">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="w-full md:w-1/3">
+                        <div class="aspect-video bg-slate-200 dark:bg-slate-800 rounded-xl overflow-hidden relative shadow-md">
+                            <img id="ytThumbnail" src="" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3 flex flex-col justify-center">
+                        <h3 id="ytTitle" class="text-lg font-bold text-slate-900 dark:text-white line-clamp-2 mb-2">YouTube Video</h3>
+                        <p class="text-sm text-slate-500 mb-4">Select a format to download:</p>
+                        
+                        <div class="flex flex-wrap gap-3" id="ytFormatsWrap">
+                            <!-- Buttons injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        (() => {
+            const btn = document.getElementById("ytFetchBtn");
+            const urlInput = document.getElementById("ytUrl");
+            const statusBox = document.getElementById("ytStatus");
+            const resultBox = document.getElementById("ytResultBox");
+            const thumbnail = document.getElementById("ytThumbnail");
+            const title = document.getElementById("ytTitle");
+            const formatsWrap = document.getElementById("ytFormatsWrap");
+
+            const setStatus = (msg, isError = false) => {
+                statusBox.textContent = msg;
+                statusBox.className = `text-sm mt-2 block ${isError ? 'text-red-500' : 'text-emerald-600 dark:text-emerald-400 font-medium'}`;
+            };
+
+            const generateDownloadLink = async (url, format) => {
+                setStatus("Generating download link... please wait.");
+                formatsWrap.style.opacity = '0.5';
+                
+                try {
+                    const reqBody = {
+                        url: url,
+                        vQuality: format === 'mp3' ? '1080' : format,
+                        isAudioOnly: format === 'mp3',
+                        vCodec: 'h264'
+                    };
+
+                    const response = await fetch("https://api.cobalt.tools/api/json", {
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(reqBody)
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.status === 'stream' || data.status === 'redirect') {
+                        setStatus("Download ready! Your download should start automatically.");
+                        window.open(data.url, '_blank');
+                    } else if (data.status === 'picker') {
+                        if(data.picker && data.picker.length > 0) {
+                            window.open(data.picker[0].url, '_blank');
+                            setStatus("Download started!");
+                        } else {
+                            setStatus("Could not find a suitable format.", true);
+                        }
+                    } else if (data.error) {
+                        setStatus(data.text || "Failed to generate link.", true);
+                    } else {
+                        setStatus("Something went wrong.", true);
+                    }
+                } catch (err) {
+                    setStatus("Error connecting to download API. " + err.message, true);
+                } finally {
+                    formatsWrap.style.opacity = '1';
+                }
+            };
+
+            btn.addEventListener("click", async () => {
+                const url = urlInput.value.trim();
+                if(!url) return setStatus("Please enter a valid YouTube URL.", true);
+                
+                if(!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                    return setStatus("Please enter a valid YouTube URL.", true);
+                }
+
+                resultBox.classList.add("hidden");
+                setStatus("Fetching video information...");
+                btn.disabled = true;
+                btn.textContent = "Fetching...";
+
+                try {
+                    let videoId = "";
+                    try {
+                        const urlObj = new URL(url);
+                        if(urlObj.hostname.includes('youtube.com')) {
+                            videoId = urlObj.searchParams.get('v');
+                        } else if(urlObj.hostname.includes('youtu.be')) {
+                            videoId = urlObj.pathname.substring(1);
+                        }
+                    } catch(e) {}
+                    
+                    if(videoId) {
+                        thumbnail.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                        thumbnail.onerror = function() {
+                            if(this.src.includes('maxresdefault')) {
+                                this.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                            }
+                        };
+                    }
+
+                    formatsWrap.innerHTML = '';
+                    const formats = [
+                        { label: '1080p (MP4)', val: '1080', bg: 'bg-emerald-500', text: 'text-white' },
+                        { label: '720p (MP4)', val: '720', bg: 'bg-slate-900 dark:bg-white', text: 'text-white dark:text-slate-900' },
+                        { label: '480p (MP4)', val: '480', bg: 'bg-slate-200 dark:bg-slate-800', text: 'text-slate-800 dark:text-white' },
+                        { label: 'Audio (MP3)', val: 'mp3', bg: 'bg-indigo-500', text: 'text-white' },
+                    ];
+
+                    formats.forEach(f => {
+                        const btnEl = document.createElement("button");
+                        btnEl.className = `rounded-xl px-5 py-2.5 text-sm font-semibold transition-transform active:scale-95 ${f.bg} ${f.text}`;
+                        btnEl.textContent = f.label;
+                        btnEl.onclick = () => generateDownloadLink(url, f.val);
+                        formatsWrap.appendChild(btnEl);
+                    });
+
+                    setStatus("");
+                    resultBox.classList.remove("hidden");
+                } catch (err) {
+                    setStatus("Error analyzing video.", true);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = "Fetch Video";
+                }
+            });
+        })();
+    </script>
+HTML;
 }
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {

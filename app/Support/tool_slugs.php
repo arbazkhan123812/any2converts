@@ -58,6 +58,7 @@ return [
     'weight_converter' => 'weight-converter',
     'temperature_converter' => 'temperature-converter',
     'area_converter' => 'area-converter',
+    'youtube_downloader' => 'youtube-video-downloader',
     'volume_converter' => 'volume-converter',
     'speed_converter' => 'speed-converter',
     'time_converter' => 'time-converter',
