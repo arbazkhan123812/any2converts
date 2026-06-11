@@ -12832,7 +12832,7 @@ function getYoutubeDownloaderHTML() {
                         vCodec: 'h264'
                     };
 
-                    const response = await fetch("https://api.cobalt.tools/api/json", {
+                    const response = await fetch("/tools/youtube-download", {
                         method: "POST",
                         headers: {
                             "Accept": "application/json",

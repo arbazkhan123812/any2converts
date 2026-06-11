@@ -21,4 +21,31 @@ class ToolController extends Controller
             'error' => 'This server-side endpoint is not configured in the Laravel project yet.',
         ], 501);
     }
+
+    public function youtubeDownload(Request $request): JsonResponse
+    {
+        $url = $request->input('url');
+        $format = $request->input('vQuality', '1080');
+        $isAudioOnly = $request->input('isAudioOnly', false);
+
+        if (!$url) {
+            return response()->json(['error' => 'No URL provided'], 400);
+        }
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ])->post('https://api.cobalt.tools/api/json', [
+                'url' => $url,
+                'vQuality' => $format,
+                'isAudioOnly' => $isAudioOnly,
+                'vCodec' => 'h264'
+            ]);
+
+            return response()->json($response->json(), $response->status());
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Backend connection failed', 'text' => $e->getMessage()], 500);
+        }
+    }
 }

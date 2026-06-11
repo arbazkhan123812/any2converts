@@ -9,6 +9,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tools/render', [ToolController::class, 'render'])->name('tools.render');
 Route::post('/tools/pdf-service', [ToolController::class, 'unavailable'])->name('tools.pdf-service');
 Route::post('/tools/ai-image', [ToolController::class, 'unavailable'])->name('tools.ai-image');
+Route::post('/tools/youtube-download', [ToolController::class, 'youtubeDownload'])->name('tools.youtube');
 
 Route::view('/about', 'page', [
     'title' => 'About Any2Convert Free Online Tools',
