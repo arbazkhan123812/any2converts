@@ -1584,13 +1584,17 @@ function getInvoiceGeneratorHTML() {
                         <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h2"/></svg>
                     </div>
                 </div>
-                <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-4">
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Business Name</span><input id="invoiceBusiness" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Any2Convert Studio"></label>
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Client Name</span><input id="invoiceClient" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Client or company"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Invoice Number</span><input id="invoiceNumber" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="INV-2026-001"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Currency</span><select id="invoiceCurrency" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"><option value="$">USD ($)</option><option value="PKR">PKR</option><option value="AED">AED</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select></label>
-                    <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Issue Date</span><input id="invoiceIssueDate" type="date" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Due Date</span><input id="invoiceDueDate" type="date" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Invoice Number</span><input id="invoiceNumber" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="INV-2026-001"></label>
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Currency</span><select id="invoiceCurrency" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"><option value="$">USD ($)</option><option value="PKR">PKR</option><option value="AED">AED</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select></label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Issue Date</span><input id="invoiceIssueDate" type="date" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label>
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Due Date</span><input id="invoiceDueDate" type="date" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label>
+                    </div>
                 </div>
                 <div class="grid md:grid-cols-[1fr_170px] gap-4">
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Business Details</span><textarea id="invoiceBusinessMeta" rows="3" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Address, email, phone"></textarea></label>
@@ -1743,7 +1747,43 @@ function getInvoiceGeneratorHTML() {
             document.getElementById("addInvoiceItem").addEventListener("click", () => addItemRow());
             inputs.forEach((input) => input.addEventListener("input", renderInvoice));
             
-            document.getElementById("invoicePrint").addEventListener("click", () => window.print());
+            document.getElementById("invoicePrint").addEventListener("click", () => {
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Print Invoice</title>
+                        <script src="https://cdn.tailwindcss.com"><\/script>
+                        <style>
+                            body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+                            @media print {
+                                body { margin: 0; padding: 0; background: white; }
+                            }
+                        </style>
+                    </head>
+                    <body class="bg-white text-slate-900 p-8 flex justify-center">
+                        <div class="w-full max-w-3xl">
+                            ${preview.innerHTML}
+                        </div>
+                        <script>
+                            setTimeout(() => {
+                                window.print();
+                                window.close();
+                            }, 500);
+                        <\/script>
+                    </body>
+                    </html>
+                `;
+                const printWindow = window.open('', '_blank');
+                if (printWindow) {
+                    printWindow.document.write(htmlContent);
+                    printWindow.document.close();
+                } else {
+                    alert("Please allow popups to print the invoice.");
+                }
+            });
             
             document.getElementById("invoiceDownload").addEventListener("click", () => { 
                 const htmlContent = `
