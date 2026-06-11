@@ -1703,37 +1703,37 @@ function getInvoiceGeneratorHTML() {
                 `).join("") || '<tr><td colspan="4" style="padding: 30px 10px; text-align: center; color: #94a3b8;">Add line items to build the invoice.</td></tr>';
                 
                 preview.innerHTML = `
-<div style="font-family: 'Inter', system-ui, sans-serif; max-width: 800px; margin: 0 auto; color: #0f172a;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid ${theme.primary}; padding-bottom: 30px; margin-bottom: 30px;">
+<div style="font-family: 'Inter', system-ui, sans-serif; max-width: 800px; margin: 0 auto; color: #334155;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid ${theme.border}; padding-bottom: 30px; margin-bottom: 30px;">
         <div>
-            ${logoUrl ? `<img src="${logoUrl}" style="max-height: 64px; margin-bottom: 16px; object-fit: contain;">` : `<div style="width: 54px; height: 54px; background-color: ${theme.primary}; border-radius: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px ${theme.primary}40;"><span style="color: white; font-weight: 800; font-size: 26px;">${businessName.charAt(0).toUpperCase() || 'B'}</span></div>`}
-            <h1 style="font-size: 28px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.5px;">${businessName}</h1>
-            <p style="color: #64748b; font-size: 14px; margin-top: 6px; white-space: pre-line; line-height: 1.6;">${businessMeta}</p>
+            ${logoUrl ? `<img src="${logoUrl}" style="max-height: 60px; margin-bottom: 16px; object-fit: contain;">` : `<div style="width: 50px; height: 50px; border: 1px solid ${theme.border}; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;"><span style="color: ${theme.primary}; font-weight: 600; font-size: 22px;">${businessName.charAt(0).toUpperCase() || 'B'}</span></div>`}
+            <h1 style="font-size: 22px; font-weight: 600; color: #0f172a; margin: 0;">${businessName}</h1>
+            <p style="color: #475569; font-size: 14px; margin-top: 6px; white-space: pre-line; line-height: 1.5;">${businessMeta}</p>
         </div>
         <div style="text-align: right;">
-            <h2 style="font-size: 38px; font-weight: 900; color: ${theme.primary}; margin: 0; letter-spacing: 2px;">INVOICE</h2>
-            <p style="font-size: 16px; font-weight: 700; color: #475569; margin-top: 8px;"># ${invoiceNumber}</p>
-            <div style="margin-top: 24px; display: grid; grid-template-columns: auto auto; gap: 8px 16px; text-align: right; justify-content: end; font-size: 14px;">
-                <span style="color: #64748b; font-weight: 500;">Issue Date:</span>
-                <span style="font-weight: 700; color: #0f172a;">${issueDate}</span>
-                <span style="color: #64748b; font-weight: 500;">Due Date:</span>
-                <span style="font-weight: 700; color: #0f172a;">${dueDate}</span>
+            <h2 style="font-size: 28px; font-weight: 400; color: #64748b; margin: 0; letter-spacing: 1px;">INVOICE</h2>
+            <p style="font-size: 15px; font-weight: 500; color: #334155; margin-top: 8px;"># ${invoiceNumber}</p>
+            <div style="margin-top: 20px; display: grid; grid-template-columns: auto auto; gap: 8px 16px; text-align: right; justify-content: end; font-size: 14px;">
+                <span style="color: #64748b;">Issue Date:</span>
+                <span style="color: #0f172a;">${issueDate}</span>
+                <span style="color: #64748b;">Due Date:</span>
+                <span style="color: #0f172a;">${dueDate}</span>
             </div>
         </div>
     </div>
 
-    <div style="margin-bottom: 40px; background-color: ${theme.light}; padding: 24px; border-radius: 16px; border-left: 5px solid ${theme.primary};">
-        <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: ${theme.primary}; font-weight: 800; margin: 0 0 8px 0;">Bill To</p>
-        <p style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0;">${clientName}</p>
+    <div style="margin-bottom: 40px;">
+        <p style="font-size: 13px; text-transform: uppercase; color: #64748b; font-weight: 600; margin: 0 0 8px 0;">Bill To</p>
+        <p style="font-size: 16px; font-weight: 500; color: #0f172a; margin: 0;">${clientName}</p>
     </div>
 
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
         <thead>
-            <tr style="border-bottom: 2px solid ${theme.border};">
-                <th style="text-align: left; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Item Description</th>
-                <th style="text-align: center; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; width: 80px;">Qty</th>
-                <th style="text-align: right; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; width: 140px;">Price</th>
-                <th style="text-align: right; padding: 16px 10px; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; width: 140px;">Amount</th>
+            <tr style="border-bottom: 1px solid ${theme.primary};">
+                <th style="text-align: left; padding: 12px 10px; color: ${theme.primary}; font-size: 13px; font-weight: 600;">Item Description</th>
+                <th style="text-align: center; padding: 12px 10px; color: ${theme.primary}; font-size: 13px; font-weight: 600; width: 80px;">Qty</th>
+                <th style="text-align: right; padding: 12px 10px; color: ${theme.primary}; font-size: 13px; font-weight: 600; width: 140px;">Price</th>
+                <th style="text-align: right; padding: 12px 10px; color: ${theme.primary}; font-size: 13px; font-weight: 600; width: 140px;">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -1743,21 +1743,21 @@ function getInvoiceGeneratorHTML() {
 
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 40px;">
         <div style="flex: 1; margin-top: 10px;">
-            <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; font-weight: 800; margin: 0 0 10px 0;">Payment Notes</p>
-            <p style="font-size: 14px; color: #475569; white-space: pre-line; line-height: 1.7;">${notes}</p>
+            <p style="font-size: 13px; text-transform: uppercase; color: #64748b; font-weight: 600; margin: 0 0 8px 0;">Payment Notes</p>
+            <p style="font-size: 14px; color: #475569; white-space: pre-line; line-height: 1.6;">${notes}</p>
         </div>
-        <div style="width: 320px;">
-            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; color: #475569; font-size: 15px;">
-                <span style="font-weight: 500;">Subtotal</span>
-                <span style="font-weight: 700; color: #0f172a;">${money(subtotal)}</span>
+        <div style="width: 280px;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px;">
+                <span>Subtotal</span>
+                <span style="color: #0f172a;">${money(subtotal)}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 12px 0; color: #475569; font-size: 15px;">
-                <span style="font-weight: 500;">Tax (${taxRate.toFixed(1)}%)</span>
-                <span style="font-weight: 700; color: #0f172a;">${money(taxValue)}</span>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px;">
+                <span>Tax (${taxRate.toFixed(1)}%)</span>
+                <span style="color: #0f172a;">${money(taxValue)}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 24px; background-color: ${theme.primary}; color: white; border-radius: 16px; margin-top: 16px; align-items: center; box-shadow: 0 10px 25px -5px ${theme.primary}50;">
-                <span style="font-size: 16px; font-weight: 600;">Total Due</span>
-                <span style="font-size: 28px; font-weight: 900; letter-spacing: -0.5px;">${money(total)}</span>
+            <div style="display: flex; justify-content: space-between; padding: 16px 0; border-top: 2px solid ${theme.primary}; border-bottom: 2px solid ${theme.primary}; margin-top: 16px; align-items: center;">
+                <span style="font-size: 15px; font-weight: 600; color: ${theme.primary};">Total Due</span>
+                <span style="font-size: 20px; font-weight: 600; color: #0f172a;">${money(total)}</span>
             </div>
         </div>
     </div>
