@@ -7274,39 +7274,66 @@ function getImageEnhancerHTML() {
                 ctx.clearRect(0, 0, outW, outH);
                 
                 // 1. Color Enhancement using Canvas Filters
-                ctx.filter = "contrast(1.12) saturate(1.25) brightness(1.05)";
+                // Reduced contrast to avoid blowing out JPEG artifacts
+                ctx.filter = "contrast(1.04) saturate(1.1) brightness(1.02)";
                 ctx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, outW, outH);
                 
-                // 2. Crisp Sharpening using Convolution Matrix
+                // 2. Smart Edge-Preserving Sharpen & Noise Reduction
                 let imageData = ctx.getImageData(0, 0, outW, outH);
                 const src = imageData.data;
                 const out = new Uint8ClampedArray(src.length);
-                const mix = 0.6; // Sharpening intensity
+                const tmp = new Uint8ClampedArray(src.length);
+                const w = outW;
+                const h = outH;
 
-                for (let y = 0; y < outH; y++) {
-                    for (let x = 0; x < outW; x++) {
-                        const i = (y * outW + x) * 4;
-                        if (x === 0 || x === outW - 1 || y === 0 || y === outH - 1) {
-                            out[i] = src[i];
-                            out[i+1] = src[i+1];
-                            out[i+2] = src[i+2];
-                            out[i+3] = src[i+3];
-                            continue;
+                // Fast Box Blur for HF extraction (Radius 2)
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        let r=0, g=0, b=0, c=0;
+                        for(let k=-2; k<=2; k++) {
+                            let xx = Math.max(0, Math.min(w-1, x+k));
+                            let i = (y*w + xx)*4;
+                            r+=src[i]; g+=src[i+1]; b+=src[i+2]; c++;
                         }
-                        
-                        for (let c = 0; c < 3; c++) {
-                            const top = src[((y - 1) * outW + x) * 4 + c];
-                            const bottom = src[((y + 1) * outW + x) * 4 + c];
-                            const left = src[(y * outW + (x - 1)) * 4 + c];
-                            const right = src[(y * outW + (x + 1)) * 4 + c];
-                            const center = src[i + c];
-                            
-                            const sharpened = center * 5 - top - bottom - left - right;
-                            out[i + c] = center * (1 - mix) + sharpened * mix;
-                        }
-                        out[i + 3] = src[i + 3];
+                        let o = (y*w + x)*4;
+                        tmp[o] = r/c; tmp[o+1] = g/c; tmp[o+2] = b/c; tmp[o+3] = src[o+3];
                     }
                 }
+                const blurred = new Uint8ClampedArray(src.length);
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        let r=0, g=0, b=0, c=0;
+                        for(let k=-2; k<=2; k++) {
+                            let yy = Math.max(0, Math.min(h-1, y+k));
+                            let i = (yy*w + x)*4;
+                            r+=tmp[i]; g+=tmp[i+1]; b+=tmp[i+2]; c++;
+                        }
+                        let o = (y*w + x)*4;
+                        blurred[o] = r/c; blurred[o+1] = g/c; blurred[o+2] = b/c; blurred[o+3] = tmp[o+3];
+                    }
+                }
+
+                // Apply Thresholded Unsharp Mask + Surface Smoothing
+                const threshold = 18; 
+                const sharpenAmount = 1.3;
+
+                for(let i=0; i<src.length; i+=4) {
+                    for(let c=0; c<3; c++) {
+                        let orig = src[i+c];
+                        let blur = blurred[i+c];
+                        let diff = orig - blur;
+                        
+                        if (Math.abs(diff) > threshold) {
+                            // High contrast edge: Sharpen
+                            out[i+c] = orig + diff * sharpenAmount;
+                        } else {
+                            // Flat area / JPEG noise: Smooth (blend original with blur)
+                            out[i+c] = orig * 0.4 + blur * 0.6;
+                        }
+                    }
+                    out[i+3] = src[i+3];
+                }
+                
                 imageData.data.set(out);
                 ctx.putImageData(imageData, 0, 0);
 
