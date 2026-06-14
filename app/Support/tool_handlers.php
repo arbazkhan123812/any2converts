@@ -7243,67 +7243,7 @@ function getImageEnhancerHTML() {
                 reader.readAsDataURL(file);
             });
 
-            function boxBlurPass(src, width, height, radius) {
-                if (radius <= 0) return src;
-                const tmp = new Uint8ClampedArray(src.length);
-                const out = new Uint8ClampedArray(src.length);
-                const r = Math.max(1, radius | 0);
-                for (let y = 0; y < height; y++) {
-                    for (let x = 0; x < width; x++) {
-                        let rs = 0, gs = 0, bs = 0, as = 0, c = 0;
-                        for (let k = -r; k <= r; k++) {
-                            const xx = Math.max(0, Math.min(width - 1, x + k));
-                            const i = (y * width + xx) * 4;
-                            rs += src[i]; gs += src[i + 1]; bs += src[i + 2]; as += src[i + 3]; c++;
-                        }
-                        const o = (y * width + x) * 4;
-                        tmp[o] = rs / c; tmp[o + 1] = gs / c; tmp[o + 2] = bs / c; tmp[o + 3] = as / c;
-                    }
-                }
-                for (let y = 0; y < height; y++) {
-                    for (let x = 0; x < width; x++) {
-                        let rs = 0, gs = 0, bs = 0, as = 0, c = 0;
-                        for (let k = -r; k <= r; k++) {
-                            const yy = Math.max(0, Math.min(height - 1, y + k));
-                            const i = (yy * width + x) * 4;
-                            rs += tmp[i]; gs += tmp[i + 1]; bs += tmp[i + 2]; as += tmp[i + 3]; c++;
-                        }
-                        const o = (y * width + x) * 4;
-                        out[o] = rs / c; out[o + 1] = gs / c; out[o + 2] = bs / c; out[o + 3] = as / c;
-                    }
-                }
-                return out;
-            }
 
-            function enhancePixels(imageData, width, height) {
-                const src = imageData.data;
-                // Use a subtle blur to isolate high frequencies without destroying texture
-                const blur = boxBlurPass(src, width, height, 1);
-                const out = new Uint8ClampedArray(src.length);
-                for (let i = 0; i < src.length; i += 4) {
-                    for (let ch = 0; ch < 3; ch++) {
-                        // Very mild denoise base
-                        const base = src[i + ch] * 0.95 + blur[i + ch] * 0.05;
-                        const hf = src[i + ch] - blur[i + ch];
-                        
-                        // Anti-artifacting clamp: prevent extreme noise/edges from blowing out (tearing)
-                        let safeHf = hf;
-                        if (safeHf > 20) safeHf = 20 + (safeHf - 20) * 0.3;
-                        if (safeHf < -20) safeHf = -20 + (safeHf + 20) * 0.3;
-                        
-                        // Sharpening: smoothly boost safe high frequencies
-                        let v = base + safeHf * 1.25;
-                        
-                        // Refined contrast: gentler boost to avoid clipping
-                        v = (v - 128) * 1.05 + 128;
-                        
-                        out[i + ch] = Math.max(0, Math.min(255, Math.round(v)));
-                    }
-                    out[i + 3] = src[i + 3];
-                }
-                imageData.data.set(out);
-                return imageData;
-            }
 
             runBtn.addEventListener("click", function() {
                 if (!sourceImage) return alert("Please choose an image first.");
@@ -7332,10 +7272,42 @@ function getImageEnhancerHTML() {
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = "high";
                 ctx.clearRect(0, 0, outW, outH);
-                ctx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, outW, outH);
-                let imageData = ctx.getImageData(0, 0, outW, outH);
                 
-                imageData = enhancePixels(imageData, outW, outH);
+                // 1. Color Enhancement using Canvas Filters
+                ctx.filter = "contrast(1.12) saturate(1.25) brightness(1.05)";
+                ctx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, outW, outH);
+                
+                // 2. Crisp Sharpening using Convolution Matrix
+                let imageData = ctx.getImageData(0, 0, outW, outH);
+                const src = imageData.data;
+                const out = new Uint8ClampedArray(src.length);
+                const mix = 0.6; // Sharpening intensity
+
+                for (let y = 0; y < outH; y++) {
+                    for (let x = 0; x < outW; x++) {
+                        const i = (y * outW + x) * 4;
+                        if (x === 0 || x === outW - 1 || y === 0 || y === outH - 1) {
+                            out[i] = src[i];
+                            out[i+1] = src[i+1];
+                            out[i+2] = src[i+2];
+                            out[i+3] = src[i+3];
+                            continue;
+                        }
+                        
+                        for (let c = 0; c < 3; c++) {
+                            const top = src[((y - 1) * outW + x) * 4 + c];
+                            const bottom = src[((y + 1) * outW + x) * 4 + c];
+                            const left = src[(y * outW + (x - 1)) * 4 + c];
+                            const right = src[(y * outW + (x + 1)) * 4 + c];
+                            const center = src[i + c];
+                            
+                            const sharpened = center * 5 - top - bottom - left - right;
+                            out[i + c] = center * (1 - mix) + sharpened * mix;
+                        }
+                        out[i + 3] = src[i + 3];
+                    }
+                }
+                imageData.data.set(out);
                 ctx.putImageData(imageData, 0, 0);
 
                 const format = "image/jpeg";
