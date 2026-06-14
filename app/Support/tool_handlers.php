@@ -7274,66 +7274,91 @@ function getImageEnhancerHTML() {
                 ctx.clearRect(0, 0, outW, outH);
                 
                 // 1. Color Enhancement using Canvas Filters
-                // Reduced contrast to avoid blowing out JPEG artifacts
-                ctx.filter = "contrast(1.04) saturate(1.1) brightness(1.02)";
+                // Stronger contrast to mimic AI clarity for documents
+                ctx.filter = "contrast(1.15) saturate(1.1) brightness(1.02)";
                 ctx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, outW, outH);
                 
-                // 2. Smart Edge-Preserving Sharpen & Noise Reduction
+                // 2. Advanced Adaptive Enhance (Denoise + Sharpen + Clarity)
                 let imageData = ctx.getImageData(0, 0, outW, outH);
                 const src = imageData.data;
                 const out = new Uint8ClampedArray(src.length);
-                const tmp = new Uint8ClampedArray(src.length);
                 const w = outW;
                 const h = outH;
 
-                // Fast Box Blur for HF extraction (Radius 2)
-                for (let y = 0; y < h; y++) {
-                    for (let x = 0; x < w; x++) {
-                        let r=0, g=0, b=0, c=0;
-                        for(let k=-2; k<=2; k++) {
-                            let xx = Math.max(0, Math.min(w-1, x+k));
-                            let i = (y*w + xx)*4;
-                            r+=src[i]; g+=src[i+1]; b+=src[i+2]; c++;
-                        }
-                        let o = (y*w + x)*4;
-                        tmp[o] = r/c; tmp[o+1] = g/c; tmp[o+2] = b/c; tmp[o+3] = src[o+3];
-                    }
-                }
-                const blurred = new Uint8ClampedArray(src.length);
-                for (let y = 0; y < h; y++) {
-                    for (let x = 0; x < w; x++) {
-                        let r=0, g=0, b=0, c=0;
-                        for(let k=-2; k<=2; k++) {
-                            let yy = Math.max(0, Math.min(h-1, y+k));
-                            let i = (yy*w + x)*4;
-                            r+=tmp[i]; g+=tmp[i+1]; b+=tmp[i+2]; c++;
-                        }
-                        let o = (y*w + x)*4;
-                        blurred[o] = r/c; blurred[o+1] = g/c; blurred[o+2] = b/c; blurred[o+3] = tmp[o+3];
-                    }
+                const edgeThreshold = 22; // Higher threshold ignores strong JPEG noise
+                const sharpenPower = 0.25; // Aggressive sharpening for text
+
+                // Initialize borders
+                for (let i = 0; i < src.length; i++) {
+                    out[i] = src[i];
                 }
 
-                // Apply Thresholded Unsharp Mask + Surface Smoothing
-                const threshold = 18; 
-                const sharpenAmount = 1.3;
-
-                for(let i=0; i<src.length; i+=4) {
-                    for(let c=0; c<3; c++) {
-                        let orig = src[i+c];
-                        let blur = blurred[i+c];
-                        let diff = orig - blur;
+                for (let y = 1; y < h - 1; y++) {
+                    for (let x = 1; x < w - 1; x++) {
+                        let i = (y * w + x) * 4;
                         
-                        if (Math.abs(diff) > threshold) {
-                            // High contrast edge: Sharpen
-                            out[i+c] = orig + diff * sharpenAmount;
-                        } else {
-                            // Flat area / JPEG noise: Smooth (blend original with blur)
-                            out[i+c] = orig * 0.4 + blur * 0.6;
+                        for (let c = 0; c < 3; c++) {
+                            let center = src[i + c];
+                            let similarSum = center;
+                            let similarCount = 1;
+                            let edgeDiffSum = 0;
+                            let totalSum = center;
+
+                            // 8 neighbors
+                            let n1 = src[i - w * 4 - 4 + c];
+                            let n2 = src[i - w * 4 + c];
+                            let n3 = src[i - w * 4 + 4 + c];
+                            let n4 = src[i - 4 + c];
+                            let n5 = src[i + 4 + c];
+                            let n6 = src[i + w * 4 - 4 + c];
+                            let n7 = src[i + w * 4 + c];
+                            let n8 = src[i + w * 4 + 4 + c];
+
+                            let neighbors = [n1, n2, n3, n4, n5, n6, n7, n8];
+
+                            for (let n of neighbors) {
+                                totalSum += n;
+                                let diff = center - n;
+                                if (Math.abs(diff) <= edgeThreshold) {
+                                    similarSum += n;
+                                    similarCount++;
+                                } else {
+                                    edgeDiffSum += diff;
+                                }
+                            }
+                            
+                            // Spike reduction (if pixel is totally different from almost all neighbors)
+                            if (similarCount <= 2) {
+                                out[i + c] = totalSum / 9;
+                            } else {
+                                let smoothed = similarSum / similarCount;
+                                let sharpened = smoothed + (edgeDiffSum * sharpenPower);
+                                out[i + c] = Math.max(0, Math.min(255, Math.round(sharpened)));
+                            }
                         }
+                        out[i + 3] = src[i + 3];
                     }
-                    out[i+3] = src[i+3];
                 }
                 
+                // 3. Final Auto-Levels (Histogram Stretch) to ensure pure white backgrounds and deep blacks
+                let minLuma = 255, maxLuma = 0;
+                for (let i = 0; i < out.length; i += 4) {
+                    let luma = out[i]*0.299 + out[i+1]*0.587 + out[i+2]*0.114;
+                    if (luma < minLuma) minLuma = luma;
+                    if (luma > maxLuma) maxLuma = luma;
+                }
+                let range = maxLuma - minLuma;
+                if (range > 30) {
+                    let stretch = 255 / range;
+                    for (let i = 0; i < out.length; i += 4) {
+                        for (let c = 0; c < 3; c++) {
+                            // Blend original with stretched version to pop documents without deep frying colors
+                            let stretched = (out[i+c] - minLuma) * stretch;
+                            out[i+c] = Math.max(0, Math.min(255, Math.round(out[i+c] * 0.3 + stretched * 0.7))); 
+                        }
+                    }
+                }
+
                 imageData.data.set(out);
                 ctx.putImageData(imageData, 0, 0);
 
