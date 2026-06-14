@@ -7182,42 +7182,7 @@ function getImageEnhancerHTML() {
             <p class="text-sm text-gray-500 mt-2">Best for blurry, low-resolution photos</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Upscale</label>
-                <select id="enhancerScale" class="w-full p-3 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600">
-                    <option value="1.5">1.5x</option>
-                    <option value="2" selected>2x</option>
-                    <option value="3">3x</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium mb-1">Sharpness: <span id="enhancerSharpnessValue">55</span>%</label>
-                <input type="range" id="enhancerSharpness" min="0" max="100" value="55" class="w-full">
-            </div>
-            <div>
-                <label class="block text-sm font-medium mb-1">Detail boost: <span id="enhancerDetailValue">18</span>%</label>
-                <input type="range" id="enhancerDetail" min="0" max="40" value="18" class="w-full">
-            </div>
-        </div>
-        <div class="grid md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Denoise: <span id="enhancerDenoiseValue">8</span>%</label>
-                <input type="range" id="enhancerDenoise" min="0" max="30" value="8" class="w-full">
-            </div>
-            <div>
-                <label class="block text-sm font-medium mb-1">Output format</label>
-                <select id="enhancerFormat" class="w-full p-3 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600">
-                    <option value="image/png">PNG</option>
-                    <option value="image/jpeg" selected>JPG</option>
-                    <option value="image/webp">WEBP</option>
-                </select>
-            </div>
-        </div>
-        <div>
-            <label class="block text-sm font-medium mb-1">Output quality: <span id="enhancerQualityValue">92</span>%</label>
-            <input type="range" id="enhancerQuality" min="10" max="100" value="92" class="w-full">
-        </div>
+
 
         <div class="grid md:grid-cols-2 gap-4">
             <div>
@@ -7248,16 +7213,6 @@ function getImageEnhancerHTML() {
             let outputBlob = null;
 
             const input = document.getElementById("enhancerInput");
-            const scaleSelect = document.getElementById("enhancerScale");
-            const sharpness = document.getElementById("enhancerSharpness");
-            const sharpnessValue = document.getElementById("enhancerSharpnessValue");
-            const detail = document.getElementById("enhancerDetail");
-            const detailValue = document.getElementById("enhancerDetailValue");
-            const denoise = document.getElementById("enhancerDenoise");
-            const denoiseValue = document.getElementById("enhancerDenoiseValue");
-            const formatSelect = document.getElementById("enhancerFormat");
-            const qualityRange = document.getElementById("enhancerQuality");
-            const qualityValue = document.getElementById("enhancerQualityValue");
             const runBtn = document.getElementById("enhancerRunBtn");
             const downloadBtn = document.getElementById("enhancerDownloadBtn");
             const status = document.getElementById("enhancerStatus");
@@ -7265,19 +7220,6 @@ function getImageEnhancerHTML() {
             const resultPreview = document.getElementById("enhancerResultPreview");
             const originalPlaceholder = document.getElementById("enhancerOriginalPlaceholder");
             const resultPlaceholder = document.getElementById("enhancerResultPlaceholder");
-
-            sharpness.addEventListener("input", function() {
-                sharpnessValue.textContent = this.value;
-            });
-            detail.addEventListener("input", function() {
-                detailValue.textContent = this.value;
-            });
-            denoise.addEventListener("input", function() {
-                denoiseValue.textContent = this.value;
-            });
-            qualityRange.addEventListener("input", function() {
-                qualityValue.textContent = this.value;
-            });
 
             input.addEventListener("change", function() {
                 const file = this.files[0];
@@ -7333,16 +7275,28 @@ function getImageEnhancerHTML() {
                 return out;
             }
 
-            function enhancePixels(imageData, width, height, sharpAmount, detailAmount, denoiseAmount) {
+            function enhancePixels(imageData, width, height) {
                 const src = imageData.data;
-                const blur = boxBlurPass(src, width, height, 1 + Math.round(denoiseAmount * 1.4));
+                // Use a subtle blur to isolate high frequencies without destroying texture
+                const blur = boxBlurPass(src, width, height, 1);
                 const out = new Uint8ClampedArray(src.length);
                 for (let i = 0; i < src.length; i += 4) {
                     for (let ch = 0; ch < 3; ch++) {
-                        const base = src[i + ch] * (1 - denoiseAmount) + blur[i + ch] * denoiseAmount;
+                        // Very mild denoise base
+                        const base = src[i + ch] * 0.95 + blur[i + ch] * 0.05;
                         const hf = src[i + ch] - blur[i + ch];
-                        let v = base + hf * (0.9 + sharpAmount * 1.2);
-                        v = (v - 128) * (1 + detailAmount * 0.28) + 128;
+                        
+                        // Anti-artifacting clamp: prevent extreme noise/edges from blowing out (tearing)
+                        let safeHf = hf;
+                        if (safeHf > 20) safeHf = 20 + (safeHf - 20) * 0.3;
+                        if (safeHf < -20) safeHf = -20 + (safeHf + 20) * 0.3;
+                        
+                        // Sharpening: smoothly boost safe high frequencies
+                        let v = base + safeHf * 1.25;
+                        
+                        // Refined contrast: gentler boost to avoid clipping
+                        v = (v - 128) * 1.05 + 128;
+                        
                         out[i + ch] = Math.max(0, Math.min(255, Math.round(v)));
                     }
                     out[i + 3] = src[i + 3];
@@ -7354,11 +7308,11 @@ function getImageEnhancerHTML() {
             runBtn.addEventListener("click", function() {
                 if (!sourceImage) return alert("Please choose an image first.");
                 status.textContent = "Enhancing image...";
-                const requestedScale = parseFloat(scaleSelect.value || "2");
-                const sharpAmount = (parseInt(sharpness.value, 10) || 0) / 100;
-                const detailAmount = (parseInt(detail.value, 10) || 0) / 100;
-                const denoiseAmount = (parseInt(denoise.value, 10) || 0) / 100;
-                const qualityAmount = (parseInt(qualityRange.value, 10) || 92) / 100;
+                
+                // Hardcoded optimal settings for 1-click enhancement
+                const requestedScale = 2.0; 
+                const qualityAmount = 0.95;
+                
                 const isMobile = window.matchMedia("(max-width: 768px)").matches;
                 const lowPowerDevice = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
                 const maxPixels = (isMobile || lowPowerDevice) ? 3500000 : 9000000;
@@ -7380,11 +7334,12 @@ function getImageEnhancerHTML() {
                 ctx.clearRect(0, 0, outW, outH);
                 ctx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, outW, outH);
                 let imageData = ctx.getImageData(0, 0, outW, outH);
-                imageData = enhancePixels(imageData, outW, outH, sharpAmount, detailAmount, denoiseAmount);
+                
+                imageData = enhancePixels(imageData, outW, outH);
                 ctx.putImageData(imageData, 0, 0);
 
-                const format = formatSelect.value;
-                const quality = format === "image/png" ? undefined : qualityAmount;
+                const format = "image/jpeg";
+                const quality = qualityAmount;
                 canvas.toBlob(function(blob) {
                     if (!blob) {
                         status.textContent = "Could not process image.";
@@ -7403,8 +7358,7 @@ function getImageEnhancerHTML() {
             downloadBtn.addEventListener("click", function() {
                 if (!outputBlob) return;
                 const file = input.files[0];
-                const format = formatSelect.value;
-                const ext = format === "image/png" ? "png" : (format === "image/webp" ? "webp" : "jpg");
+                const ext = "jpg";
                 const base = (file ? file.name : "image").replace(/\\.[^.]+$/, "");
                 const a = document.createElement("a");
                 a.href = URL.createObjectURL(outputBlob);
