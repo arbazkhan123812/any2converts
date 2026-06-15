@@ -10448,7 +10448,7 @@ function getOptimizePdfHTML() {
                             }
                             
                             // Initialize jsPDF
-                            const jsPdfDoc = new jspdf.jsPDF({ unit: 'pt', format: 'a4', compress: true });
+                            const jsPdfDoc = new jspdf.jsPDF({ unit: "pt", format: "a4", compress: true });
                             jsPdfDoc.deletePage(1); // Remove default blank page
                             
                             for (let i = 1; i <= numPages; i++) {
@@ -10456,8 +10456,8 @@ function getOptimizePdfHTML() {
                                 const page = await pdf.getPage(i);
                                 
                                 const viewport = page.getViewport({ scale: scale });
-                                const canvas = document.createElement('canvas');
-                                const ctx = canvas.getContext('2d', { alpha: false });
+                                const canvas = document.createElement("canvas");
+                                const ctx = canvas.getContext("2d", { alpha: false });
                                 canvas.height = viewport.height;
                                 canvas.width = viewport.width;
                                 
@@ -10468,17 +10468,17 @@ function getOptimizePdfHTML() {
                                 await page.render({ canvasContext: ctx, viewport: viewport }).promise;
                                 
                                 // Compress to JPEG
-                                const imgData = canvas.toDataURL('image/jpeg', jpegQuality);
+                                const imgData = canvas.toDataURL("image/jpeg", jpegQuality);
                                 
                                 // Add to jsPDF
                                 const pdfWidth = viewport.width / scale;
                                 const pdfHeight = viewport.height / scale;
                                 jsPdfDoc.addPage([pdfWidth, pdfHeight]);
-                                jsPdfDoc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                                jsPdfDoc.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
                             }
                             
                             status.textContent = "Finalizing PDF...";
-                            const pdfBytes = jsPdfDoc.output('arraybuffer');
+                            const pdfBytes = jsPdfDoc.output("arraybuffer");
                             const bytesBlob = new Blob([pdfBytes], { type: "application/pdf" });
                             
                             if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
