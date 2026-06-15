@@ -1840,56 +1840,42 @@ function getInvoiceGeneratorHTML() {
                 btn.disabled = true;
                 const pdfFilename = (document.getElementById("invoiceNumber").value || "invoice") + '.pdf';
 
-                const pdfWindow = window.open('', '_blank', 'width=950,height=700');
-                if (!pdfWindow) {
-                    alert("Please allow popups to download the PDF.");
-                    btn.textContent = oldText;
-                    btn.disabled = false;
-                    return;
-                }
+                // Use a hidden iframe — content inside is fully visible in its own context
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'position:fixed;top:0;left:0;width:1000px;height:2000px;opacity:0;pointer-events:none;border:none;z-index:-9999;';
+                document.body.appendChild(iframe);
 
-                pdfWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Generating PDF...</title>
-                        <style>
-                            body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; background: white; margin: 0; padding: 40px; }
-                            #pdfContent { max-width: 800px; margin: 0 auto; }
-                            #statusMsg { text-align: center; padding: 30px; font-size: 18px; color: #64748b; }
-                        </style>
-                    </head>
-                    <body>
-                        <div id="statusMsg">Generating your PDF, please wait...</div>
-                        <div id="pdfContent">${preview.innerHTML}</div>
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\\/script>
-                        <script>
-                            window.onload = function() {
-                                var el = document.getElementById("pdfContent");
-                                var opt = {
-                                    margin: [0.3, 0.4, 0.3, 0.4],
-                                    filename: "${pdfFilename}",
-                                    image: { type: "jpeg", quality: 0.98 },
-                                    html2canvas: { scale: 2, useCORS: true },
-                                    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-                                    pagebreak: { mode: ["avoid-all", "css", "legacy"] }
-                                };
-                                html2pdf().set(opt).from(el).save().then(function() {
-                                    document.getElementById("statusMsg").textContent = "PDF downloaded! You can close this window.";
-                                    setTimeout(function() { window.close(); }, 1500);
-                                }).catch(function(err) {
-                                    document.getElementById("statusMsg").textContent = "Error: " + err.message;
-                                });
-                            };
-                        <\\/script>
-                    </body>
-                    </html>
-                `);
-                pdfWindow.document.close();
-                btn.textContent = oldText;
-                btn.disabled = false;
+                const iDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iDoc.open();
+                iDoc.write('<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:white;padding:40px;}#pdfContent{max-width:800px;margin:0 auto;}</style></head><body><div id="pdfContent">' + preview.innerHTML + '</div></body></html>');
+                iDoc.close();
+
+                // Load html2pdf.js inside the iframe and generate PDF from there
+                const scr = iDoc.createElement('script');
+                scr.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+                scr.onload = function() {
+                    const el = iDoc.getElementById('pdfContent');
+                    const h2p = iframe.contentWindow.html2pdf;
+                    h2p().set({
+                        margin: [0.3, 0.4, 0.3, 0.4],
+                        filename: pdfFilename,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    }).from(el).save().then(function() {
+                        document.body.removeChild(iframe);
+                        btn.textContent = oldText;
+                        btn.disabled = false;
+                    }).catch(function(err) {
+                        console.error(err);
+                        if (iframe.parentNode) document.body.removeChild(iframe);
+                        btn.textContent = oldText;
+                        btn.disabled = false;
+                        alert('Failed to generate PDF. Please try again.');
+                    });
+                };
+                iDoc.head.appendChild(scr);
             });
             
             addItemRow({ desc: "Creative service", qty: 1, price: 150 }); 
