@@ -1838,44 +1838,40 @@ function getInvoiceGeneratorHTML() {
                 const oldText = btn.textContent;
                 btn.textContent = "Generating PDF...";
                 btn.disabled = true;
-                const pdfFilename = (document.getElementById("invoiceNumber").value || "invoice") + '.pdf';
 
-                // Use a hidden iframe — content inside is fully visible in its own context
-                const iframe = document.createElement('iframe');
-                iframe.style.cssText = 'position:fixed;top:0;left:0;width:1000px;height:2000px;opacity:0;pointer-events:none;border:none;z-index:-9999;';
-                document.body.appendChild(iframe);
-
-                const iDoc = iframe.contentDocument || iframe.contentWindow.document;
-                iDoc.open();
-                iDoc.write('<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:white;padding:40px;}#pdfContent{max-width:800px;margin:0 auto;}</style></head><body><div id="pdfContent">' + preview.innerHTML + '</div></body></html>');
-                iDoc.close();
-
-                // Load html2pdf.js inside the iframe and generate PDF from there
-                const scr = iDoc.createElement('script');
-                scr.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-                scr.onload = function() {
-                    const el = iDoc.getElementById('pdfContent');
-                    const h2p = iframe.contentWindow.html2pdf;
-                    h2p().set({
+                function generatePDF() {
+                    const element = document.createElement("div");
+                    element.innerHTML = preview.innerHTML;
+                    
+                    const opt = {
                         margin: [0.3, 0.4, 0.3, 0.4],
-                        filename: pdfFilename,
+                        filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
                         image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true },
+                        html2canvas: { scale: 2, useCORS: true, windowWidth: 900, windowHeight: 5000 },
                         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
                         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                    }).from(el).save().then(function() {
-                        document.body.removeChild(iframe);
+                    };
+
+                    html2pdf().set(opt).from(element).save().then(() => {
                         btn.textContent = oldText;
                         btn.disabled = false;
-                    }).catch(function(err) {
+                    }).catch((err) => {
                         console.error(err);
-                        if (iframe.parentNode) document.body.removeChild(iframe);
                         btn.textContent = oldText;
                         btn.disabled = false;
-                        alert('Failed to generate PDF. Please try again.');
+                        alert("Failed to generate PDF. Please try again.");
                     });
-                };
-                iDoc.head.appendChild(scr);
+                }
+
+                if (typeof html2pdf === "undefined") {
+                    const script = document.createElement("script");
+                    script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+                    script.onload = () => generatePDF();
+                    script.onerror = () => { btn.textContent = oldText; btn.disabled = false; alert("Failed to load PDF library."); };
+                    document.head.appendChild(script);
+                } else {
+                    generatePDF();
+                }
             });
             
             addItemRow({ desc: "Creative service", qty: 1, price: 150 }); 
