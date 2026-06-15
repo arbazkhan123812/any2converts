@@ -10358,6 +10358,15 @@ function getOptimizePdfHTML() {
             <p class="text-sm text-gray-500 mt-2">Click to browse or drag & drop your PDF file here</p>
             <p id="optimizePdfFileName" class="text-sm font-medium text-blue-600 mt-3 hidden"></p>
         </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Compression Level</label>
+            <select id="optimizeLevel" class="w-full p-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">
+                <option value="recommended" selected>Recommended (Good balance of quality & size)</option>
+                <option value="extreme">Extreme Compression (Smallest size, lower quality)</option>
+                <option value="high">High Quality (Larger size, best quality)</option>
+            </select>
+        </div>
 
         <div class="grid sm:grid-cols-2 gap-3">
             <button id="optimizePdfBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Optimize PDF</button>
@@ -10365,8 +10374,12 @@ function getOptimizePdfHTML() {
         </div>
         <p id="optimizePdfStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        // Set worker for pdf.js
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+
         (function() {
             const input = document.getElementById("optimizePdfInput");
             const dropzone = document.getElementById("optimizePdfDropzone");
@@ -10374,6 +10387,7 @@ function getOptimizePdfHTML() {
             const btn = document.getElementById("optimizePdfBtn");
             const downloadBtn = document.getElementById("optimizePdfDownloadBtn");
             const status = document.getElementById("optimizePdfStatus");
+            const levelSelect = document.getElementById("optimizeLevel");
             let optimizedUrl = null;
             let optimizedName = "optimized.pdf";
 
@@ -10383,7 +10397,7 @@ function getOptimizePdfHTML() {
                     fileNameEl.textContent = input.files[0].name + " (" + (input.files[0].size / 1024).toFixed(1) + " KB)";
                     fileNameEl.classList.remove("hidden");
                     downloadBtn.classList.add("hidden");
-                    status.textContent = "PDF loaded. Click Optimize PDF to compress.";
+                    status.textContent = "PDF loaded. Select compression level and click Optimize.";
                 }
             });
 
@@ -10411,30 +10425,93 @@ function getOptimizePdfHTML() {
                 const oldText = btn.textContent;
                 btn.textContent = "Optimizing...";
                 btn.disabled = true;
-                status.textContent = "Processing PDF...";
+                
                 try {
-                    const pdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
-                    const bytes = await pdf.save({ useObjectStreams: true, addDefaultPage: false });
-                    if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
-                    optimizedUrl = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
-                    optimizedName = file.name.replace(/\\.pdf$/i, "") + "_optimized.pdf";
-                    
-                    const originalKB = (file.size / 1024).toFixed(1);
-                    const optimizedKB = (bytes.length / 1024).toFixed(1);
-                    const savings = ((1 - bytes.length / file.size) * 100).toFixed(1);
+                    const fileReader = new FileReader();
+                    fileReader.onload = async function() {
+                        try {
+                            const typedarray = new Uint8Array(this.result);
+                            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                            const numPages = pdf.numPages;
+                            
+                            // Determine compression settings based on selected level
+                            let scale = 1.5;
+                            let jpegQuality = 0.65;
+                            const level = levelSelect.value;
+                            
+                            if (level === "extreme") {
+                                scale = 1.0;
+                                jpegQuality = 0.40;
+                            } else if (level === "high") {
+                                scale = 2.0;
+                                jpegQuality = 0.85;
+                            }
+                            
+                            // Initialize jsPDF
+                            const jsPdfDoc = new jspdf.jsPDF({ unit: 'pt', format: 'a4', compress: true });
+                            jsPdfDoc.deletePage(1); // Remove default blank page
+                            
+                            for (let i = 1; i <= numPages; i++) {
+                                status.textContent = "Compressing page " + i + " of " + numPages + "...";
+                                const page = await pdf.getPage(i);
+                                
+                                const viewport = page.getViewport({ scale: scale });
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d', { alpha: false });
+                                canvas.height = viewport.height;
+                                canvas.width = viewport.width;
+                                
+                                // Fill white background (PDFs are transparent by default)
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                                
+                                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                                
+                                // Compress to JPEG
+                                const imgData = canvas.toDataURL('image/jpeg', jpegQuality);
+                                
+                                // Add to jsPDF
+                                const pdfWidth = viewport.width / scale;
+                                const pdfHeight = viewport.height / scale;
+                                jsPdfDoc.addPage([pdfWidth, pdfHeight]);
+                                jsPdfDoc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                            }
+                            
+                            status.textContent = "Finalizing PDF...";
+                            const pdfBytes = jsPdfDoc.output('arraybuffer');
+                            const bytesBlob = new Blob([pdfBytes], { type: "application/pdf" });
+                            
+                            if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
+                            optimizedUrl = URL.createObjectURL(bytesBlob);
+                            optimizedName = file.name.replace(/\\.pdf$/i, "") + "_optimized.pdf";
+                            
+                            const originalKB = (file.size / 1024).toFixed(1);
+                            const optimizedKB = (bytesBlob.size / 1024).toFixed(1);
+                            const savings = ((1 - bytesBlob.size / file.size) * 100).toFixed(1);
 
-                    if (bytes.length >= file.size) {
-                        status.textContent = "This PDF is already well-optimized (" + originalKB + " KB). Downloaded original structure.";
-                    } else {
-                        status.textContent = "Optimized: " + originalKB + " KB → " + optimizedKB + " KB (" + savings + "% smaller)";
-                    }
-                    downloadBtn.classList.remove("hidden");
+                            if (bytesBlob.size >= file.size) {
+                                status.textContent = "This PDF is already highly compressed (" + originalKB + " KB). Optimization did not reduce size further.";
+                            } else {
+                                status.textContent = "Optimized: " + originalKB + " KB → " + optimizedKB + " KB (" + savings + "% smaller)";
+                            }
+                            downloadBtn.classList.remove("hidden");
+                            
+                            btn.textContent = oldText;
+                            btn.disabled = false;
+                        } catch(err) {
+                            console.error(err);
+                            status.textContent = "Error during compression: " + err.message;
+                            btn.textContent = oldText;
+                            btn.disabled = false;
+                        }
+                    };
+                    fileReader.readAsArrayBuffer(file);
                 } catch(err) {
                     console.error(err);
                     status.textContent = "Error: " + err.message;
+                    btn.textContent = oldText;
+                    btn.disabled = false;
                 }
-                btn.textContent = oldText;
-                btn.disabled = false;
             });
 
             // Download button
