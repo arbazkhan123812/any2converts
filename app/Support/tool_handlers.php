@@ -1840,27 +1840,41 @@ function getInvoiceGeneratorHTML() {
                 btn.disabled = true;
 
                 function generatePDF() {
-                    const element = document.createElement("div");
-                    element.innerHTML = preview.innerHTML;
+                    // Wrapper: 1px tall, overflow hidden — invisible to user but IN the DOM
+                    const wrapper = document.createElement("div");
+                    wrapper.style.cssText = "position:fixed;top:0;left:0;width:900px;height:1px;overflow:hidden;z-index:-1;opacity:0.01;pointer-events:none;";
                     
-                    const opt = {
-                        margin: [0.3, 0.4, 0.3, 0.4],
-                        filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true, windowWidth: 900, windowHeight: 5000 },
-                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                    };
+                    // Content: fully visible INSIDE wrapper so html2canvas computes correct layout
+                    const content = document.createElement("div");
+                    content.style.cssText = "width:900px;padding:40px;background:white;box-sizing:border-box;";
+                    content.innerHTML = preview.innerHTML;
+                    
+                    wrapper.appendChild(content);
+                    document.body.appendChild(wrapper);
+                    
+                    // Wait for browser to compute flex/grid layouts
+                    setTimeout(() => {
+                        const opt = {
+                            margin: [0.3, 0.4, 0.3, 0.4],
+                            filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2, useCORS: true, width: 900, height: content.scrollHeight, scrollX: 0, scrollY: 0 },
+                            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                        };
 
-                    html2pdf().set(opt).from(element).save().then(() => {
-                        btn.textContent = oldText;
-                        btn.disabled = false;
-                    }).catch((err) => {
-                        console.error(err);
-                        btn.textContent = oldText;
-                        btn.disabled = false;
-                        alert("Failed to generate PDF. Please try again.");
-                    });
+                        html2pdf().set(opt).from(content).save().then(() => {
+                            document.body.removeChild(wrapper);
+                            btn.textContent = oldText;
+                            btn.disabled = false;
+                        }).catch((err) => {
+                            console.error("PDF error:", err);
+                            if (wrapper.parentNode) document.body.removeChild(wrapper);
+                            btn.textContent = oldText;
+                            btn.disabled = false;
+                            alert("Failed to generate PDF. Please try again.");
+                        });
+                    }, 200);
                 }
 
                 if (typeof html2pdf === "undefined") {
