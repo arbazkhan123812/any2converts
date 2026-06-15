@@ -2070,73 +2070,178 @@ HTML;
 
 function getBankStatementToExcelHTML() {
     return <<<'HTML'
-    <div class="max-w-6xl mx-auto grid xl:grid-cols-[0.95fr_1.05fr] gap-6">
-        <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 shadow-xl p-6 md:p-7 space-y-5">
-            <div class="flex items-start justify-between gap-4">
-                <div>
-                    <p class="text-[11px] tracking-[0.34em] uppercase text-emerald-500 font-semibold">Finance Tool</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Bank Statement PDF to Excel</h2>
-                    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Extract statement rows from PDF text and export them as an Excel sheet.</p>
-                </div>
-                <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
-                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M9 14l2 2 4-4"/></svg>
-                </div>
-            </div>
-            <input id="statementPdfInput" type="file" accept="application/pdf" class="block w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white">
-            <div class="grid md:grid-cols-2 gap-4">
-                <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Date Pattern</span><input id="statementDatePattern" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" value="dd/mm/yyyy or dd-mm-yyyy"></label>
-                <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Currency Hint</span><input id="statementCurrencyHint" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" value="PKR, USD, AED, etc."></label>
-            </div>
-            <div class="flex flex-wrap gap-3">
-                <button id="statementExtractBtn" class="rounded-2xl bg-emerald-500 text-white px-5 py-3 font-semibold">Extract Transactions</button>
-                <button id="statementExportBtn" class="rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 font-semibold">Export Excel</button>
-                <p id="statementStatus" class="text-sm text-slate-500 dark:text-slate-400 self-center">Upload a statement PDF to start.</p>
-            </div>
+    <div class="space-y-6 max-w-4xl mx-auto">
+        <div class="rounded-2xl border border-emerald-200/70 bg-emerald-50/80 dark:bg-emerald-950/30 dark:border-emerald-900 p-4">
+            <div class="font-semibold text-emerald-900 dark:text-emerald-100">Bank Statement PDF to Excel</div>
+            <p class="mt-1 text-sm text-emerald-800 dark:text-emerald-200">Automatically extract transaction rows from your bank statement PDF and export them as an Excel spreadsheet.</p>
         </div>
-        <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 shadow-xl p-5">
-            <div class="flex items-center justify-between gap-4">
-                <div><p class="text-[11px] tracking-[0.3em] uppercase text-slate-500">Extracted Rows</p><h3 class="mt-2 text-2xl font-black text-slate-900 dark:text-white">Transaction Preview</h3></div>
-                <div id="statementCount" class="rounded-full bg-slate-100 dark:bg-slate-900 px-4 py-2 text-sm text-slate-600 dark:text-slate-300">0 rows</div>
+
+        <div id="statementDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-emerald-500 transition cursor-pointer" onclick="document.getElementById('statementPdfInput').click()">
+            <input type="file" id="statementPdfInput" class="hidden" accept=".pdf">
+            <div class="mb-3 flex justify-center text-emerald-500">
+                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
             </div>
-            <div class="mt-5 overflow-auto rounded-[28px] border border-slate-200 dark:border-slate-800">
-                <table class="w-full text-sm">
-                    <thead class="bg-slate-100 dark:bg-slate-900">
-                        <tr><th class="text-left px-4 py-3">Date</th><th class="text-left px-4 py-3">Description</th><th class="text-left px-4 py-3">Amount</th><th class="text-left px-4 py-3">Balance</th></tr>
+            <p class="font-medium">Choose your bank statement PDF</p>
+            <p class="text-sm text-gray-500 mt-2">Click to browse or drag & drop</p>
+            <p id="statementFileName" class="text-sm font-medium text-emerald-600 mt-3 hidden"></p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+            <button id="statementExtractBtn" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-semibold hover:bg-emerald-700 transition">Extract Transactions</button>
+            <button id="statementExportBtn" class="w-full bg-slate-800 dark:bg-slate-700 text-white py-3 rounded-xl font-semibold hover:bg-slate-900 transition hidden">Export to Excel</button>
+        </div>
+        
+        <p id="statementStatus" class="text-sm text-gray-500 text-center"></p>
+
+        <div id="statementPreviewContainer" class="hidden mt-6 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+            <div class="bg-slate-50 dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                <h3 class="font-semibold text-slate-800 dark:text-slate-200">Transaction Preview</h3>
+                <span id="statementCount" class="text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 px-2 py-1 rounded-full">0 rows</span>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+                <table class="w-full text-sm text-left whitespace-nowrap">
+                    <thead class="bg-slate-100 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3 font-medium">Date</th>
+                            <th class="px-4 py-3 font-medium">Description</th>
+                            <th class="px-4 py-3 font-medium">Amounts</th>
+                        </tr>
                     </thead>
-                    <tbody id="statementRows"></tbody>
+                    <tbody id="statementRows" class="divide-y divide-slate-100 dark:divide-slate-800">
+                    </tbody>
                 </table>
             </div>
         </div>
+        
+        <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+            <p><strong>Related Searches:</strong> convert Bank Statement To Excel online free without email, Bank Statement To Excel no watermark fast for mobile, best Bank Statement To Excel high quality software pc mac, Bank Statement To Excel unlimited file size free 2026, how to use Bank Statement To Excel easily without app install, secure Bank Statement To Excel safe for business confidential files, Bank Statement To Excel unblocked for school chromebook.</p>
+        </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <script>
+        // Set worker for pdf.js
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+
         (() => {
-            const fileInput = document.getElementById("statementPdfInput"), status = document.getElementById("statementStatus"), rowsWrap = document.getElementById("statementRows"), countEl = document.getElementById("statementCount");
+            const fileInput = document.getElementById("statementPdfInput");
+            const dropzone = document.getElementById("statementDropzone");
+            const fileNameEl = document.getElementById("statementFileName");
+            const status = document.getElementById("statementStatus");
+            const extractBtn = document.getElementById("statementExtractBtn");
+            const exportBtn = document.getElementById("statementExportBtn");
+            const rowsWrap = document.getElementById("statementRows");
+            const countEl = document.getElementById("statementCount");
+            const previewContainer = document.getElementById("statementPreviewContainer");
+            
             let rows = [];
-            async function extractRows() {
-                const file = fileInput.files?.[0];
-                if (!file) { status.textContent = "Select a PDF statement first."; return; }
-                if (!window.pdfjsLib) { status.textContent = "PDF library not loaded."; return; }
-                const buffer = await file.arrayBuffer();
-                const pdf = await window.pdfjsLib.getDocument({ data: buffer }).promise;
-                const allLines = [];
-                for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
-                    const page = await pdf.getPage(pageNo);
-                    const content = await page.getTextContent();
-                    const text = content.items.map((item) => item.str).join(" ");
-                    text.split(/(?=\d{2}[\/-]\d{2}[\/-]\d{2,4})/).forEach((line) => allLines.push(line.trim()));
+
+            // UI Interactions
+            fileInput.addEventListener("change", function() {
+                if (fileInput.files[0]) {
+                    fileNameEl.textContent = fileInput.files[0].name + " (" + (fileInput.files[0].size / 1024).toFixed(1) + " KB)";
+                    fileNameEl.classList.remove("hidden");
+                    exportBtn.classList.add("hidden");
+                    previewContainer.classList.add("hidden");
+                    status.textContent = "PDF loaded. Click Extract Transactions.";
                 }
-                rows = allLines.map((line) => {
-                    const match = line.match(/(\d{2}[\/-]\d{2}[\/-]\d{2,4})\s+(.+?)\s+(-?\d[\d,]*\.?\d*)\s+(-?\d[\d,]*\.?\d*)$/);
-                    if (!match) return null;
-                    return { date: match[1], description: match[2], amount: match[3], balance: match[4] };
-                }).filter(Boolean);
-                rowsWrap.innerHTML = rows.length ? rows.map((row) => `<tr class="border-t border-slate-200 dark:border-slate-800"><td class="px-4 py-3">${row.date}</td><td class="px-4 py-3">${row.description}</td><td class="px-4 py-3">${row.amount}</td><td class="px-4 py-3">${row.balance}</td></tr>`).join("") : '<tr><td colspan="4" class="px-4 py-6 text-center text-slate-500">No transaction rows detected. Try a clearer statement PDF.</td></tr>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Bank Statement To Excel online free without email, Bank Statement To Excel no watermark fast for mobile, best Bank Statement To Excel high quality software pc mac, Bank Statement To Excel unlimited file size free 2026, how to use Bank Statement To Excel easily without app install, secure Bank Statement To Excel safe for business confidential files, Bank Statement To Excel unblocked for school chromebook.</p>
-    </div>';
-                countEl.textContent = `${rows.length} rows`;
-                status.textContent = rows.length ? "Transactions extracted. Review and export to Excel." : "Could not detect rows automatically.";
+            });
+
+            ["dragenter", "dragover"].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add("border-emerald-500", "bg-emerald-50/50"); }));
+            ["dragleave", "drop"].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove("border-emerald-500", "bg-emerald-50/50"); }));
+            dropzone.addEventListener("drop", e => {
+                const file = e.dataTransfer.files[0];
+                if (file && file.type === "application/pdf") {
+                    const dt = new DataTransfer(); dt.items.add(file); fileInput.files = dt.files;
+                    fileInput.dispatchEvent(new Event("change"));
+                }
+            });
+
+            async function extractRows() {
+                const file = fileInput.files[0];
+                if (!file) { status.textContent = "Select a PDF statement first."; return; }
+                if (!window.pdfjsLib) { status.textContent = "PDF library not loaded. Check internet connection."; return; }
+                
+                const oldText = extractBtn.textContent;
+                extractBtn.textContent = "Extracting...";
+                extractBtn.disabled = true;
+                status.textContent = "Processing PDF...";
+                
+                try {
+                    const buffer = await file.arrayBuffer();
+                    const pdf = await window.pdfjsLib.getDocument({ data: buffer }).promise;
+                    const allLines = [];
+                    
+                    for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
+                        const page = await pdf.getPage(pageNo);
+                        const content = await page.getTextContent();
+                        
+                        // Heuristic: Group items by Y-coordinate to form text lines
+                        let lastY = -1;
+                        let currentLine = "";
+                        
+                        // Sort by Y descending, then X ascending
+                        content.items.sort((a, b) => {
+                            if (Math.abs(b.transform[5] - a.transform[5]) > 3) return b.transform[5] - a.transform[5];
+                            return a.transform[4] - b.transform[4];
+                        });
+
+                        content.items.forEach(item => {
+                            if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 3) {
+                                allLines.push(currentLine.trim());
+                                currentLine = "";
+                            }
+                            currentLine += item.str + " ";
+                            lastY = item.transform[5];
+                        });
+                        if (currentLine) allLines.push(currentLine.trim());
+                    }
+                    
+                    // Simple Regex to capture Date, Description, and trailing numbers (Amount/Balance)
+                    // Matches lines that start with a Date and end with Numbers
+                    rows = allLines.map((line) => {
+                        const match = line.match(/(\d{1,2}[\/\-\.][A-Za-z0-9]{2,3}[\/\-\.]\d{2,4})\s+(.+?)\s+([-\d\.,\s]+)$/);
+                        if (!match) return null;
+                        
+                        // Clean up multiple spaces
+                        const desc = match[2].trim().replace(/\s{2,}/g, ' ');
+                        const amounts = match[3].trim().replace(/\s{2,}/g, ' ');
+
+                        return { 
+                            date: match[1], 
+                            description: desc, 
+                            amounts: amounts
+                        };
+                    }).filter(Boolean);
+
+                    if (rows.length > 0) {
+                        rowsWrap.innerHTML = rows.map((row) => `
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                <td class="px-4 py-3 font-mono">${row.date}</td>
+                                <td class="px-4 py-3 max-w-sm truncate" title="${row.description}">${row.description}</td>
+                                <td class="px-4 py-3 font-mono text-emerald-600 dark:text-emerald-400">${row.amounts}</td>
+                            </tr>
+                        `).join("");
+                        countEl.textContent = `${rows.length} rows`;
+                        status.textContent = "Successfully extracted " + rows.length + " transactions.";
+                        exportBtn.classList.remove("hidden");
+                        previewContainer.classList.remove("hidden");
+                    } else {
+                        rowsWrap.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-slate-500">No transaction rows detected. The PDF format might not be supported.</td></tr>';
+                        countEl.textContent = "0 rows";
+                        status.textContent = "Could not detect rows automatically.";
+                        previewContainer.classList.remove("hidden");
+                        exportBtn.classList.add("hidden");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    status.textContent = error.message || "Extraction failed.";
+                }
+                
+                extractBtn.textContent = oldText;
+                extractBtn.disabled = false;
             }
+
             function exportExcel() {
                 if (!rows.length) { status.textContent = "Extract rows first."; return; }
                 if (!window.XLSX) { status.textContent = "Excel library not loaded."; return; }
@@ -2145,8 +2250,9 @@ function getBankStatementToExcelHTML() {
                 window.XLSX.utils.book_append_sheet(wb, sheet, "Statement");
                 window.XLSX.writeFile(wb, "bank-statement.xlsx");
             }
-            document.getElementById("statementExtractBtn").addEventListener("click", () => extractRows().catch((error) => status.textContent = error.message || "Extraction failed."));
-            document.getElementById("statementExportBtn").addEventListener("click", exportExcel);
+
+            extractBtn.addEventListener("click", extractRows);
+            exportBtn.addEventListener("click", exportExcel);
         })();
     </script>
 HTML;
