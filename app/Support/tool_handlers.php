@@ -1954,36 +1954,201 @@ HTML;
 
 function getSocialImageResizerHTML() {
     return <<<'HTML'
-    <div class="max-w-6xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
-        <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 shadow-xl p-6 md:p-7 space-y-5">
-            <div class="flex items-start justify-between gap-4"><div><p class="text-[11px] tracking-[0.34em] uppercase text-cyan-500 font-semibold">Social Media Tool</p><h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Social Image Resizer</h2><p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Resize one image for Instagram, YouTube, LinkedIn, Facebook, X, and more.</p></div><div class="w-14 h-14 rounded-2xl bg-cyan-500/15 text-cyan-500 flex items-center justify-center"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 8h8v8H8z"/></svg></div></div>
-            <div class="grid md:grid-cols-[1fr_240px] gap-4"><label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Upload Image</span><input id="socialImageInput" type="file" accept="image/*" class="mt-2 block w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label><label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Platform Preset</span><select id="socialPreset" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></select></label></div>
-            <div class="grid md:grid-cols-2 gap-4"><label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Fit Mode</span><select id="socialFit" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"><option value="cover">Cover</option><option value="contain">Contain</option></select></label><label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Background</span><input id="socialBg" type="color" value="#0f172a" class="mt-2 w-full h-[52px] rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-2 py-2"></label></div>
-            <div class="flex flex-wrap gap-3"><button id="socialResize" class="rounded-2xl bg-cyan-600 text-white px-5 py-3 font-semibold">Resize Image</button><button id="socialDownload" class="rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 font-semibold">Download PNG</button><p id="socialStatus" class="text-sm text-slate-500 dark:text-slate-400 self-center">Choose a platform preset to generate the output.</p></div>
+    <div class="space-y-6 max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-blue-900 dark:text-blue-100">Social Image Resizer</div>
+                    <p class="text-sm text-blue-800 dark:text-blue-200">Perfectly size your images for Instagram, YouTube, Facebook, X, and more.</p>
+                </div>
+            </div>
         </div>
-        <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-slate-950 shadow-xl p-5 text-white">
-            <div class="flex items-center justify-between"><div><p class="text-[11px] tracking-[0.3em] uppercase text-cyan-300">Preview</p><h3 id="socialMeta" class="mt-2 text-xl font-black">Ready for export</h3></div><div id="socialDims" class="text-sm text-slate-300">0 ? 0</div></div>
-            <div class="mt-5 rounded-[28px] overflow-hidden bg-slate-900 border border-white/10 min-h-[420px] flex items-center justify-center"><canvas id="socialCanvas" class="max-w-full max-h-[480px]"></canvas></div>
+
+        <!-- Dropzone -->
+        <div id="socialDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById('socialImageInput').click()">
+            <input type="file" id="socialImageInput" class="hidden" accept="image/*">
+            <div class="mb-3 flex justify-center text-blue-500">
+                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <p class="font-medium">Upload your image</p>
+            <p class="text-sm text-gray-500 mt-2">Click to browse or drag & drop</p>
+            <p id="socialFileName" class="text-sm font-medium text-blue-600 mt-3 hidden"></p>
+        </div>
+
+        <!-- Controls -->
+        <div class="grid md:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Platform Preset</label>
+                <select id="socialPreset" class="w-full p-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"></select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fit Mode</label>
+                <select id="socialFit" class="w-full p-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="cover">Cover (Fill space, crop edges)</option>
+                    <option value="contain">Contain (Show all, add padding)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Background Color</label>
+                <input id="socialBg" type="color" value="#0f172a" class="w-full h-[42px] rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 cursor-pointer p-1">
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="grid sm:grid-cols-2 gap-3">
+            <button id="socialResize" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition disabled:opacity-50">Update Preview</button>
+            <button id="socialDownload" class="w-full bg-slate-800 dark:bg-slate-700 text-white py-3 rounded-xl font-semibold hover:bg-slate-900 transition disabled:opacity-50">Download Resized Image</button>
+        </div>
+        
+        <p id="socialStatus" class="text-sm text-gray-500 text-center">Awaiting image upload...</p>
+
+        <!-- Preview -->
+        <div id="socialPreviewContainer" class="mt-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+            <div class="bg-slate-50 dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                <h3 id="socialMeta" class="font-semibold text-slate-800 dark:text-slate-200">Preview</h3>
+                <span id="socialDims" class="text-xs font-mono bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 px-3 py-1 rounded-full">0 × 0</span>
+            </div>
+            <div class="p-6 bg-slate-100 dark:bg-slate-950 flex items-center justify-center min-h-[400px]">
+                <canvas id="socialCanvas" class="max-w-full max-h-[500px] shadow-lg rounded object-contain border border-slate-200/50 dark:border-slate-700/50"></canvas>
+            </div>
+        </div>
+        
+        <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+            <p><strong>Related Searches:</strong> social image resizer online free, resize image for instagram without crop, resize photo for youtube thumbnail, resize image for facebook cover fast, resize image for twitter x post best quality.</p>
         </div>
     </div>
+
     <script>
         (() => {
-            const presets = { instagram_post: { label: "Instagram Post", width: 1080, height: 1080 }, instagram_story: { label: "Instagram Story", width: 1080, height: 1920 }, youtube_thumb: { label: "YouTube Thumbnail", width: 1280, height: 720 }, linkedin_post: { label: "LinkedIn Post", width: 1200, height: 627 }, facebook_post: { label: "Facebook Post", width: 1200, height: 630 }, x_post: { label: "X / Twitter Post", width: 1600, height: 900 }, whatsapp_status: { label: "WhatsApp Status", width: 1080, height: 1920 } };
-            const presetSelect = document.getElementById("socialPreset"), input = document.getElementById("socialImageInput"), fitSelect = document.getElementById("socialFit"), bgInput = document.getElementById("socialBg"), canvas = document.getElementById("socialCanvas"), ctx = canvas.getContext("2d"), status = document.getElementById("socialStatus"), dims = document.getElementById("socialDims"), meta = document.getElementById("socialMeta"); let image = null;
-            Object.entries(presets).forEach(([value, preset]) => { const option = document.createElement("option"); option.value = value; option.textContent = `${preset.label} (${preset.width}?${preset.height})`; presetSelect.appendChild(option); });
+            const presets = { 
+                instagram_post: { label: "Instagram Post", width: 1080, height: 1080 }, 
+                instagram_story: { label: "Instagram Story", width: 1080, height: 1920 }, 
+                youtube_thumb: { label: "YouTube Thumbnail", width: 1280, height: 720 }, 
+                linkedin_post: { label: "LinkedIn Post", width: 1200, height: 627 }, 
+                facebook_post: { label: "Facebook Post", width: 1200, height: 630 }, 
+                x_post: { label: "X / Twitter Post", width: 1600, height: 900 }, 
+                whatsapp_status: { label: "WhatsApp Status", width: 1080, height: 1920 } 
+            };
+            
+            const presetSelect = document.getElementById("socialPreset");
+            const input = document.getElementById("socialImageInput");
+            const dropzone = document.getElementById("socialDropzone");
+            const fileNameEl = document.getElementById("socialFileName");
+            const fitSelect = document.getElementById("socialFit");
+            const bgInput = document.getElementById("socialBg");
+            const canvas = document.getElementById("socialCanvas");
+            const ctx = canvas.getContext("2d");
+            const status = document.getElementById("socialStatus");
+            const dims = document.getElementById("socialDims");
+            const meta = document.getElementById("socialMeta");
+            const downloadBtn = document.getElementById("socialDownload");
+            const resizeBtn = document.getElementById("socialResize");
+            
+            let image = null;
+
+            // Populate Dropdown
+            Object.entries(presets).forEach(([value, preset]) => { 
+                const option = document.createElement("option"); 
+                option.value = value; 
+                option.textContent = `${preset.label} (${preset.width}×${preset.height})`; 
+                presetSelect.appendChild(option); 
+            });
+
             function draw() {
-                const preset = presets[presetSelect.value]; if (!preset) return;
-                canvas.width = preset.width; canvas.height = preset.height; ctx.fillStyle = bgInput.value; ctx.fillRect(0, 0, canvas.width, canvas.height); dims.textContent = `${preset.width} ? ${preset.height}`; meta.textContent = preset.label;
-                if (!image) { status.textContent = "Upload an image first."; return; }
-                const scale = fitSelect.value === "cover" ? Math.max(canvas.width / image.width, canvas.height / image.height) : Math.min(canvas.width / image.width, canvas.height / image.height);
-                const drawWidth = image.width * scale, drawHeight = image.height * scale, x = (canvas.width - drawWidth) / 2, y = (canvas.height - drawHeight) / 2;
-                ctx.drawImage(image, x, y, drawWidth, drawHeight); status.textContent = `Resized for ${preset.label}.`;
+                const preset = presets[presetSelect.value]; 
+                if (!preset) return;
+                
+                // Update Canvas Dimensions
+                canvas.width = preset.width; 
+                canvas.height = preset.height; 
+                
+                // Fill Background
+                ctx.fillStyle = bgInput.value; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height); 
+                
+                // Update Labels
+                dims.textContent = `${preset.width} × ${preset.height}`; 
+                meta.textContent = preset.label;
+                
+                if (!image) { 
+                    status.textContent = "Awaiting image upload..."; 
+                    downloadBtn.disabled = true;
+                    return; 
+                }
+
+                // Calculate Aspect Ratio Fit
+                let scale = 1;
+                if (fitSelect.value === "cover") {
+                    scale = Math.max(canvas.width / image.width, canvas.height / image.height);
+                } else {
+                    scale = Math.min(canvas.width / image.width, canvas.height / image.height);
+                }
+                
+                const drawWidth = image.width * scale;
+                const drawHeight = image.height * scale;
+                const x = (canvas.width - drawWidth) / 2;
+                const y = (canvas.height - drawHeight) / 2;
+                
+                // Draw Image
+                ctx.drawImage(image, x, y, drawWidth, drawHeight); 
+                status.textContent = `Resized successfully for ${preset.label}. Ready to download!`;
+                downloadBtn.disabled = false;
             }
-            input.addEventListener("change", (event) => { const file = event.target.files?.[0]; if (!file) return; const img = new Image(); img.onload = () => { image = img; draw(); }; img.src = URL.createObjectURL(file); });
+
+            // File Upload Handler
+            function handleFile(file) {
+                if (!file || !file.type.startsWith("image/")) {
+                    alert("Please select a valid image file.");
+                    return;
+                }
+                
+                fileNameEl.textContent = file.name + " (" + (file.size / 1024).toFixed(1) + " KB)";
+                fileNameEl.classList.remove("hidden");
+                
+                const img = new Image(); 
+                img.onload = () => { 
+                    image = img; 
+                    draw(); 
+                }; 
+                img.src = URL.createObjectURL(file);
+            }
+
+            // Listeners
+            input.addEventListener("change", (e) => handleFile(e.target.files?.[0]));
+            
+            // Drag and Drop
+            ["dragenter", "dragover"].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add("border-blue-500", "bg-blue-50/50"); }));
+            ["dragleave", "drop"].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove("border-blue-500", "bg-blue-50/50"); }));
+            dropzone.addEventListener("drop", e => {
+                e.preventDefault();
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+                    handleFile(file);
+                }
+            });
+
+            // Input Changes
             [presetSelect, fitSelect, bgInput].forEach((el) => el.addEventListener("input", draw));
-            document.getElementById("socialResize").addEventListener("click", draw);
-            document.getElementById("socialDownload").addEventListener("click", () => { if (!canvas.width) return; const a = document.createElement("a"); a.href = canvas.toDataURL("image/png"); a.download = `${presetSelect.value || "social-image"}.png`; a.click(); });
-            presetSelect.value = "instagram_post"; draw();
+            resizeBtn.addEventListener("click", draw);
+            
+            // Download
+            downloadBtn.addEventListener("click", () => { 
+                if (!canvas.width || !image) return; 
+                const a = document.createElement("a"); 
+                a.href = canvas.toDataURL("image/png"); 
+                a.download = `${presetSelect.value || "social-image"}.png`; 
+                a.click(); 
+            });
+
+            // Initialization
+            presetSelect.value = "instagram_post"; 
+            downloadBtn.disabled = true;
+            draw();
         })();
     </script>
 HTML;
