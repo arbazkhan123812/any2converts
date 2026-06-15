@@ -11469,7 +11469,7 @@ function getAddWatermarkHTML() {
                 <p class="text-sm text-gray-500 mt-1">Upload a PDF, preview all pages, choose watermark text or image, pick a position, and download the watermarked PDF.</p>
             </div>
             
-            <div id="watermarkDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'watermarkPdfInput\').click()">
+            <div id="watermarkDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(&#39;watermarkPdfInput&#39;).click()">
                 <input type="file" id="watermarkPdfInput" class="hidden" accept=".pdf">
                 <div class="mb-3 flex justify-center text-blue-500">
                     <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>
