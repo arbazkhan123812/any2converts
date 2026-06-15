@@ -1627,7 +1627,7 @@ function getInvoiceGeneratorHTML() {
                 <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Notes</span><textarea id="invoiceNotes" rows="3" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Payment terms, thank-you note, bank details"></textarea></label>
                 <div class="flex flex-wrap gap-3">
                     <button id="invoicePrint" class="rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 font-semibold">Print Invoice</button>
-                    <button id="invoiceDownload" class="rounded-2xl bg-blue-600 text-white px-5 py-3 font-semibold">Download HTML</button>
+                    <button id="invoiceDownloadPdf" class="rounded-2xl bg-rose-600 text-white px-5 py-3 font-semibold">Download PDF</button>
                     <p id="invoiceStatus" class="text-sm text-slate-500 dark:text-slate-400 self-center">Invoice preview updates automatically.</p>
                 </div>
             </div>
@@ -1833,33 +1833,44 @@ function getInvoiceGeneratorHTML() {
                 }
             });
             
-            document.getElementById("invoiceDownload").addEventListener("click", () => { 
-                const htmlContent = `
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Invoice</title>
-                        <script src="https://cdn.tailwindcss.com"><\/script>
-                        <style>
-                            body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
-                        </style>
-                    </head>
-                    <body class="bg-slate-50 p-8 flex justify-center">
-                        <div class="w-full max-w-3xl bg-white p-10 rounded-[32px] shadow-xl border border-slate-200">
-                            ${preview.innerHTML}
-                        </div>
-                    </body>
-                    </html>
-                `;
-                const blob = new Blob([htmlContent], { type: "text/html" }); 
-                const url = URL.createObjectURL(blob); 
-                const a = document.createElement("a"); 
-                a.href = url; 
-                a.download = "invoice.html"; 
-                a.click(); 
-                URL.revokeObjectURL(url); 
+            document.getElementById("invoiceDownloadPdf").addEventListener("click", () => { 
+                const btn = document.getElementById("invoiceDownloadPdf");
+                const oldText = btn.textContent;
+                btn.textContent = "Generating PDF...";
+                btn.disabled = true;
+
+                function generatePDF() {
+                    const element = document.createElement("div");
+                    // Wrap the preview in a fixed-width container to ensure proper PDF scaling
+                    element.innerHTML = `<div style="background: white; width: 800px; padding: 40px; margin: 0 auto; box-sizing: border-box;">${preview.innerHTML}</div>`;
+                    
+                    const opt = {
+                        margin: 0.5,
+                        filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    html2pdf().set(opt).from(element).save().then(() => {
+                        btn.textContent = oldText;
+                        btn.disabled = false;
+                    }).catch((err) => {
+                        console.error(err);
+                        btn.textContent = oldText;
+                        btn.disabled = false;
+                        alert("Failed to generate PDF. Please try again.");
+                    });
+                }
+
+                if (typeof html2pdf === "undefined") {
+                    const script = document.createElement("script");
+                    script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+                    script.onload = () => generatePDF();
+                    document.head.appendChild(script);
+                } else {
+                    generatePDF();
+                }
             });
             
             addItemRow({ desc: "Creative service", qty: 1, price: 150 }); 
