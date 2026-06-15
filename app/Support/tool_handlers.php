@@ -1841,26 +1841,42 @@ function getInvoiceGeneratorHTML() {
 
                 function generatePDF() {
                     const element = document.createElement("div");
-                    // Wrap the preview in a fixed-width container to ensure proper PDF scaling
-                    element.innerHTML = `<div style="background: white; width: 900px; padding: 40px; margin: 0 auto; box-sizing: border-box;">${preview.innerHTML}</div>`;
+                    // Must be in DOM for html2canvas to measure layout properly.
+                    // visibility:hidden keeps it invisible but in the rendering flow.
+                    element.style.visibility = "hidden";
+                    element.style.position = "fixed";
+                    element.style.top = "0";
+                    element.style.left = "0";
+                    element.style.width = "900px";
+                    element.style.background = "white";
+                    element.style.padding = "40px";
+                    element.style.boxSizing = "border-box";
+                    element.style.zIndex = "-9999";
+                    element.innerHTML = preview.innerHTML;
+                    document.body.appendChild(element);
                     
-                    const opt = {
-                        margin: [0.5, 0.5, 0.5, 0.5],
-                        filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
-                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                    };
+                    // Allow browser to calculate the full layout
+                    requestAnimationFrame(() => {
+                        const opt = {
+                            margin: [0.3, 0.3, 0.3, 0.3],
+                            filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, width: element.scrollWidth, height: element.scrollHeight },
+                            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                        };
 
-                    html2pdf().set(opt).from(element).save().then(() => {
-                        btn.textContent = oldText;
-                        btn.disabled = false;
-                    }).catch((err) => {
-                        console.error(err);
-                        btn.textContent = oldText;
-                        btn.disabled = false;
-                        alert("Failed to generate PDF. Please try again.");
+                        html2pdf().set(opt).from(element).save().then(() => {
+                            document.body.removeChild(element);
+                            btn.textContent = oldText;
+                            btn.disabled = false;
+                        }).catch((err) => {
+                            if (element.parentNode) document.body.removeChild(element);
+                            console.error(err);
+                            btn.textContent = oldText;
+                            btn.disabled = false;
+                            alert("Failed to generate PDF. Please try again.");
+                        });
                     });
                 }
 
