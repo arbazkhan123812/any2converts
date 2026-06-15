@@ -11468,7 +11468,16 @@ function getAddWatermarkHTML() {
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Add Watermark to PDF</div>
                 <p class="text-sm text-gray-500 mt-1">Upload a PDF, preview all pages, choose watermark text or image, pick a position, and download the watermarked PDF.</p>
             </div>
-            <input type="file" id="watermarkPdfInput" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600" accept=".pdf">
+            
+            <div id="watermarkDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById('watermarkPdfInput').click()">
+                <input type="file" id="watermarkPdfInput" class="hidden" accept=".pdf">
+                <div class="mb-3 flex justify-center text-blue-500">
+                    <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>
+                </div>
+                <p class="font-medium">Choose a PDF to watermark</p>
+                <p class="text-sm text-gray-500 mt-2">Click to browse or drag & drop your PDF file here</p>
+                <p id="watermarkFileName" class="text-sm font-medium text-blue-600 mt-3 hidden"></p>
+            </div>
             <div id="watermarkStatus" class="hidden text-sm text-gray-500 text-center"></div>
             <div id="watermarkControls" class="hidden grid md:grid-cols-2 gap-4">
                 <select id="watermarkType" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600">
@@ -11517,6 +11526,8 @@ function getAddWatermarkHTML() {
         const watermarkControls = document.getElementById("watermarkControls");
         const watermarkGrid = document.getElementById("watermarkGrid");
         const watermarkEmpty = document.getElementById("watermarkEmpty");
+        const watermarkDropzone = document.getElementById("watermarkDropzone");
+        const watermarkFileName = document.getElementById("watermarkFileName");
 
         let watermarkPdfBytes = null;
         let watermarkPdfDoc = null;
@@ -11524,6 +11535,17 @@ function getAddWatermarkHTML() {
         let watermarkPages = [];
         let watermarkImageBytes = null;
         let watermarkImageUrl = "";
+        
+        // Drag and Drop Logic
+        ["dragenter", "dragover"].forEach(evt => watermarkDropzone.addEventListener(evt, e => { e.preventDefault(); watermarkDropzone.classList.add("border-blue-500", "bg-blue-50/50"); }));
+        ["dragleave", "drop"].forEach(evt => watermarkDropzone.addEventListener(evt, e => { e.preventDefault(); watermarkDropzone.classList.remove("border-blue-500", "bg-blue-50/50"); }));
+        watermarkDropzone.addEventListener("drop", e => {
+            const file = e.dataTransfer.files[0];
+            if (file && file.type === "application/pdf") {
+                const dt = new DataTransfer(); dt.items.add(file); watermarkPdfInput.files = dt.files;
+                watermarkPdfInput.dispatchEvent(new Event("change"));
+            }
+        });
 
         function setWatermarkStatus(message, isError) {
             if (!message) {
@@ -11696,8 +11718,12 @@ function getAddWatermarkHTML() {
 
             if (!file) {
                 setWatermarkStatus("");
+                watermarkFileName.classList.add("hidden");
                 return;
             }
+            
+            watermarkFileName.textContent = file.name + " (" + (file.size / 1024).toFixed(1) + " KB)";
+            watermarkFileName.classList.remove("hidden");
 
             try {
                 setWatermarkStatus("Loading PDF pages...");
