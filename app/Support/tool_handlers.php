@@ -1842,7 +1842,7 @@ function getInvoiceGeneratorHTML() {
                 function generatePDF() {
                     const element = document.createElement("div");
                     // Wrap the preview in a fixed-width container to ensure proper PDF scaling
-                    element.innerHTML = `<div style="background: white; width: 800px; padding: 40px; margin: 0 auto; box-sizing: border-box;">${preview.innerHTML}</div>`;
+                    element.innerHTML = `<div style="background: white; width: 900px; padding: 40px; margin: 0 auto; box-sizing: border-box;">${preview.innerHTML}</div>`;
                     
                     const opt = {
                         margin: 0.5,
