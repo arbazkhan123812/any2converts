@@ -10347,22 +10347,105 @@ function getScanToPdfHTML() {
 function getOptimizePdfHTML() {
     return '
     <div class="space-y-6">
-        <input type="file" id="optimizePdfInput" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600" accept=".pdf">
-        <button id="optimizePdfBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Optimize PDF</button>
-        <p class="text-sm text-gray-500">Best-effort optimization for cleaner, smaller PDF structure.</p>
+        <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
+            <div class="font-semibold text-blue-900 dark:text-blue-100">Reduce PDF file size</div>
+            <p class="mt-1 text-sm text-blue-800 dark:text-blue-200">Compress and optimize PDF documents directly in your browser. No upload required — your files stay private.</p>
+        </div>
+        <div id="optimizePdfDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'optimizePdfInput\').click()">
+            <input type="file" id="optimizePdfInput" class="hidden" accept=".pdf">
+            <div class="mb-3 flex justify-center text-blue-500"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><path d="M14 2v6h6"></path><path d="M12 18v-6"></path><path d="m9 15 3-3 3 3"></path></svg></div>
+            <p class="font-medium">Choose a PDF to optimize</p>
+            <p class="text-sm text-gray-500 mt-2">Click to browse or drag & drop your PDF file here</p>
+            <p id="optimizePdfFileName" class="text-sm font-medium text-blue-600 mt-3 hidden"></p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+            <button id="optimizePdfBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Optimize PDF</button>
+            <button id="optimizePdfDownloadBtn" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition hidden">Download Optimized</button>
+        </div>
+        <p id="optimizePdfStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script>
-        document.getElementById("optimizePdfBtn").addEventListener("click", async function() {
-            const file = document.getElementById("optimizePdfInput").files[0];
-            if (!file) return alert("Please select a PDF file");
-            const pdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
-            const bytes = await pdf.save({ useObjectStreams: true, addDefaultPage: false });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
-            a.download = "optimized.pdf";
-            a.click();
-        });
+        (function() {
+            const input = document.getElementById("optimizePdfInput");
+            const dropzone = document.getElementById("optimizePdfDropzone");
+            const fileNameEl = document.getElementById("optimizePdfFileName");
+            const btn = document.getElementById("optimizePdfBtn");
+            const downloadBtn = document.getElementById("optimizePdfDownloadBtn");
+            const status = document.getElementById("optimizePdfStatus");
+            let optimizedUrl = null;
+            let optimizedName = "optimized.pdf";
+
+            // Show file name on selection
+            input.addEventListener("change", function() {
+                if (input.files[0]) {
+                    fileNameEl.textContent = input.files[0].name + " (" + (input.files[0].size / 1024).toFixed(1) + " KB)";
+                    fileNameEl.classList.remove("hidden");
+                    downloadBtn.classList.add("hidden");
+                    status.textContent = "PDF loaded. Click Optimize PDF to compress.";
+                }
+            });
+
+            // Drag and drop support
+            ["dragenter", "dragover"].forEach(evt => {
+                dropzone.addEventListener(evt, function(e) { e.preventDefault(); e.stopPropagation(); dropzone.classList.add("border-blue-500", "bg-blue-50/50"); });
+            });
+            ["dragleave", "drop"].forEach(evt => {
+                dropzone.addEventListener(evt, function(e) { e.preventDefault(); e.stopPropagation(); dropzone.classList.remove("border-blue-500", "bg-blue-50/50"); });
+            });
+            dropzone.addEventListener("drop", function(e) {
+                const file = e.dataTransfer.files[0];
+                if (file && file.type === "application/pdf") {
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event("change"));
+                }
+            });
+
+            // Optimize button
+            btn.addEventListener("click", async function() {
+                const file = input.files[0];
+                if (!file) return alert("Please select a PDF file");
+                const oldText = btn.textContent;
+                btn.textContent = "Optimizing...";
+                btn.disabled = true;
+                status.textContent = "Processing PDF...";
+                try {
+                    const pdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
+                    const bytes = await pdf.save({ useObjectStreams: true, addDefaultPage: false });
+                    if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
+                    optimizedUrl = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+                    optimizedName = file.name.replace(/\\.pdf$/i, "") + "_optimized.pdf";
+                    
+                    const originalKB = (file.size / 1024).toFixed(1);
+                    const optimizedKB = (bytes.length / 1024).toFixed(1);
+                    const savings = ((1 - bytes.length / file.size) * 100).toFixed(1);
+
+                    if (bytes.length >= file.size) {
+                        status.textContent = "This PDF is already well-optimized (" + originalKB + " KB). Downloaded original structure.";
+                    } else {
+                        status.textContent = "Optimized: " + originalKB + " KB → " + optimizedKB + " KB (" + savings + "% smaller)";
+                    }
+                    downloadBtn.classList.remove("hidden");
+                } catch(err) {
+                    console.error(err);
+                    status.textContent = "Error: " + err.message;
+                }
+                btn.textContent = oldText;
+                btn.disabled = false;
+            });
+
+            // Download button
+            downloadBtn.addEventListener("click", function() {
+                if (!optimizedUrl) return;
+                const a = document.createElement("a");
+                a.href = optimizedUrl;
+                a.download = optimizedName;
+                a.click();
+            });
+        })();
     </script>
     <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
         <p><strong>Related Searches:</strong> convert Optimize Pdf online free without email, Optimize Pdf no watermark fast for mobile, best Optimize Pdf high quality software pc mac, Optimize Pdf unlimited file size free 2026, how to use Optimize Pdf easily without app install, secure Optimize Pdf safe for business confidential files, Optimize Pdf unblocked for school chromebook.</p>
