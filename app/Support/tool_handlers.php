@@ -1838,56 +1838,58 @@ function getInvoiceGeneratorHTML() {
                 const oldText = btn.textContent;
                 btn.textContent = "Generating PDF...";
                 btn.disabled = true;
+                const pdfFilename = (document.getElementById("invoiceNumber").value || "invoice") + '.pdf';
 
-                function generatePDF() {
-                    const element = document.createElement("div");
-                    // Must be in DOM for html2canvas to measure layout properly.
-                    // visibility:hidden keeps it invisible but in the rendering flow.
-                    element.style.visibility = "hidden";
-                    element.style.position = "fixed";
-                    element.style.top = "0";
-                    element.style.left = "0";
-                    element.style.width = "900px";
-                    element.style.background = "white";
-                    element.style.padding = "40px";
-                    element.style.boxSizing = "border-box";
-                    element.style.zIndex = "-9999";
-                    element.innerHTML = preview.innerHTML;
-                    document.body.appendChild(element);
-                    
-                    // Allow browser to calculate the full layout
-                    requestAnimationFrame(() => {
-                        const opt = {
-                            margin: [0.3, 0.3, 0.3, 0.3],
-                            filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
-                            image: { type: 'jpeg', quality: 0.98 },
-                            html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, width: element.scrollWidth, height: element.scrollHeight },
-                            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-                            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                        };
-
-                        html2pdf().set(opt).from(element).save().then(() => {
-                            document.body.removeChild(element);
-                            btn.textContent = oldText;
-                            btn.disabled = false;
-                        }).catch((err) => {
-                            if (element.parentNode) document.body.removeChild(element);
-                            console.error(err);
-                            btn.textContent = oldText;
-                            btn.disabled = false;
-                            alert("Failed to generate PDF. Please try again.");
-                        });
-                    });
+                const pdfWindow = window.open('', '_blank', 'width=950,height=700');
+                if (!pdfWindow) {
+                    alert("Please allow popups to download the PDF.");
+                    btn.textContent = oldText;
+                    btn.disabled = false;
+                    return;
                 }
 
-                if (typeof html2pdf === "undefined") {
-                    const script = document.createElement("script");
-                    script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
-                    script.onload = () => generatePDF();
-                    document.head.appendChild(script);
-                } else {
-                    generatePDF();
-                }
+                pdfWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Generating PDF...</title>
+                        <style>
+                            body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; background: white; margin: 0; padding: 40px; }
+                            #pdfContent { max-width: 800px; margin: 0 auto; }
+                            #statusMsg { text-align: center; padding: 30px; font-size: 18px; color: #64748b; }
+                        </style>
+                    </head>
+                    <body>
+                        <div id="statusMsg">Generating your PDF, please wait...</div>
+                        <div id="pdfContent">${preview.innerHTML}</div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\\/script>
+                        <script>
+                            window.onload = function() {
+                                var el = document.getElementById("pdfContent");
+                                var opt = {
+                                    margin: [0.3, 0.4, 0.3, 0.4],
+                                    filename: "${pdfFilename}",
+                                    image: { type: "jpeg", quality: 0.98 },
+                                    html2canvas: { scale: 2, useCORS: true },
+                                    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+                                    pagebreak: { mode: ["avoid-all", "css", "legacy"] }
+                                };
+                                html2pdf().set(opt).from(el).save().then(function() {
+                                    document.getElementById("statusMsg").textContent = "PDF downloaded! You can close this window.";
+                                    setTimeout(function() { window.close(); }, 1500);
+                                }).catch(function(err) {
+                                    document.getElementById("statusMsg").textContent = "Error: " + err.message;
+                                });
+                            };
+                        <\\/script>
+                    </body>
+                    </html>
+                `);
+                pdfWindow.document.close();
+                btn.textContent = oldText;
+                btn.disabled = false;
             });
             
             addItemRow({ desc: "Creative service", qty: 1, price: 150 }); 
