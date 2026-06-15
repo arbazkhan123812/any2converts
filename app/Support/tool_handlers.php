@@ -1602,7 +1602,7 @@ function getInvoiceGeneratorHTML() {
                                 <option value="rose">Rose (Creative)</option>
                             </select>
                         </label>
-                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Your Logo</span><input type="file" id="invoiceLogoFile" accept="image/*" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-2.5 text-slate-900 dark:text-white file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:bg-slate-200 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-white"></label>
+                        <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Your Logo</span><input type="file" id="invoiceLogoFile" accept="image/*" class="mt-2 w-full overflow-hidden text-ellipsis rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-2.5 text-slate-900 dark:text-white file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:bg-slate-200 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-white"></label>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Invoice Number</span><input id="invoiceNumber" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="INV-2026-001"></label>
@@ -1631,8 +1631,10 @@ function getInvoiceGeneratorHTML() {
                     <p id="invoiceStatus" class="text-sm text-slate-500 dark:text-slate-400 self-center">Invoice preview updates automatically.</p>
                 </div>
             </div>
-            <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-slate-50/85 dark:bg-slate-950/80 shadow-xl shadow-slate-200/50 dark:shadow-black/20 p-4 md:p-5">
-                <div id="invoicePreview" class="rounded-[28px] bg-white border border-slate-200 p-8 min-h-[800px] text-slate-900 shadow-sm overflow-hidden"></div>
+            <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-slate-50/85 dark:bg-slate-950/80 shadow-xl shadow-slate-200/50 dark:shadow-black/20 p-4 md:p-5 overflow-hidden max-w-full">
+                <div class="overflow-x-auto w-full rounded-[28px] bg-white border border-slate-200 shadow-sm max-w-full">
+                    <div id="invoicePreview" class="p-4 sm:p-8 min-h-[800px] text-slate-900 min-w-[600px] md:min-w-[700px]"></div>
+                </div>
             </div>
         </div>
     </div>
