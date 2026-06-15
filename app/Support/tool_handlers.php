@@ -1845,11 +1845,12 @@ function getInvoiceGeneratorHTML() {
                     element.innerHTML = `<div style="background: white; width: 900px; padding: 40px; margin: 0 auto; box-sizing: border-box;">${preview.innerHTML}</div>`;
                     
                     const opt = {
-                        margin: 0.5,
+                        margin: [0.5, 0.5, 0.5, 0.5],
                         filename: (document.getElementById("invoiceNumber").value || "invoice") + '.pdf',
                         image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true },
-                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
                     };
 
                     html2pdf().set(opt).from(element).save().then(() => {
