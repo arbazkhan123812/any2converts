@@ -10362,9 +10362,10 @@ function getOptimizePdfHTML() {
         <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Compression Level</label>
             <select id="optimizeLevel" class="w-full p-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-sm">
-                <option value="recommended" selected>Recommended (Good balance of quality & size)</option>
-                <option value="extreme">Extreme Compression (Smallest size, lower quality)</option>
-                <option value="high">High Quality (Larger size, best quality)</option>
+                <option value="recommended" selected>Standard (Balance of size and readability)</option>
+                <option value="high">High Quality (Crisp text, less compression)</option>
+                <option value="extreme">Extreme Compression (Smallest size, blurry text)</option>
+                <option value="lossless">Lossless / Text Only (No quality loss, structural optimization only)</option>
             </select>
         </div>
 
@@ -10374,6 +10375,7 @@ function getOptimizePdfHTML() {
         </div>
         <p id="optimizePdfStatus" class="text-sm text-gray-500 text-center"></p>
     </div>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
@@ -10431,56 +10433,68 @@ function getOptimizePdfHTML() {
                     fileReader.onload = async function() {
                         try {
                             const typedarray = new Uint8Array(this.result);
-                            const pdf = await pdfjsLib.getDocument(typedarray).promise;
-                            const numPages = pdf.numPages;
-                            
-                            // Determine compression settings based on selected level
-                            let scale = 1.5;
-                            let jpegQuality = 0.65;
                             const level = levelSelect.value;
+                            let bytesBlob;
                             
-                            if (level === "extreme") {
-                                scale = 1.0;
-                                jpegQuality = 0.40;
-                            } else if (level === "high") {
-                                scale = 2.0;
-                                jpegQuality = 0.85;
+                            if (level === "lossless") {
+                                // Lossless structural optimization
+                                status.textContent = "Performing lossless structural optimization...";
+                                const pdfLibDoc = await PDFLib.PDFDocument.load(typedarray);
+                                const bytes = await pdfLibDoc.save({ useObjectStreams: true, addDefaultPage: false });
+                                bytesBlob = new Blob([bytes], { type: "application/pdf" });
+                            } else {
+                                // Rasterizing compression
+                                const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                                const numPages = pdf.numPages;
+                                
+                                // Determine compression settings based on selected level
+                                let scale = 2.0;
+                                let jpegQuality = 0.75;
+                                
+                                if (level === "extreme") {
+                                    scale = 1.2;
+                                    jpegQuality = 0.50;
+                                } else if (level === "high") {
+                                    scale = 3.0; // Very high resolution to keep text crisp
+                                    jpegQuality = 0.90;
+                                }
+                                
+                                // Initialize jsPDF
+                                const jsPdfDoc = new jspdf.jsPDF({ unit: "pt", format: "a4", compress: true });
+                                jsPdfDoc.deletePage(1); // Remove default blank page
+                                
+                                for (let i = 1; i <= numPages; i++) {
+                                    status.textContent = "Compressing page " + i + " of " + numPages + "...";
+                                    const page = await pdf.getPage(i);
+                                    
+                                    const viewport = page.getViewport({ scale: scale });
+                                    const canvas = document.createElement("canvas");
+                                    const ctx = canvas.getContext("2d", { alpha: false });
+                                    canvas.height = viewport.height;
+                                    canvas.width = viewport.width;
+                                    
+                                    // Fill white background (PDFs are transparent by default)
+                                    ctx.fillStyle = "white";
+                                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                                    
+                                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                                    
+                                    // Compress to JPEG
+                                    const imgData = canvas.toDataURL("image/jpeg", jpegQuality);
+                                    
+                                    // Add to jsPDF
+                                    const pdfWidth = viewport.width / scale;
+                                    const pdfHeight = viewport.height / scale;
+                                    jsPdfDoc.addPage([pdfWidth, pdfHeight]);
+                                    jsPdfDoc.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+                                }
+                                
+                                status.textContent = "Finalizing PDF...";
+                                const pdfBytes = jsPdfDoc.output("arraybuffer");
+                                bytesBlob = new Blob([pdfBytes], { type: "application/pdf" });
                             }
                             
-                            // Initialize jsPDF
-                            const jsPdfDoc = new jspdf.jsPDF({ unit: "pt", format: "a4", compress: true });
-                            jsPdfDoc.deletePage(1); // Remove default blank page
-                            
-                            for (let i = 1; i <= numPages; i++) {
-                                status.textContent = "Compressing page " + i + " of " + numPages + "...";
-                                const page = await pdf.getPage(i);
-                                
-                                const viewport = page.getViewport({ scale: scale });
-                                const canvas = document.createElement("canvas");
-                                const ctx = canvas.getContext("2d", { alpha: false });
-                                canvas.height = viewport.height;
-                                canvas.width = viewport.width;
-                                
-                                // Fill white background (PDFs are transparent by default)
-                                ctx.fillStyle = "white";
-                                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                                
-                                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-                                
-                                // Compress to JPEG
-                                const imgData = canvas.toDataURL("image/jpeg", jpegQuality);
-                                
-                                // Add to jsPDF
-                                const pdfWidth = viewport.width / scale;
-                                const pdfHeight = viewport.height / scale;
-                                jsPdfDoc.addPage([pdfWidth, pdfHeight]);
-                                jsPdfDoc.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-                            }
-                            
-                            status.textContent = "Finalizing PDF...";
-                            const pdfBytes = jsPdfDoc.output("arraybuffer");
-                            const bytesBlob = new Blob([pdfBytes], { type: "application/pdf" });
-                            
+                            // Handle download
                             if (optimizedUrl) URL.revokeObjectURL(optimizedUrl);
                             optimizedUrl = URL.createObjectURL(bytesBlob);
                             optimizedName = file.name.replace(/\\.pdf$/i, "") + "_optimized.pdf";
