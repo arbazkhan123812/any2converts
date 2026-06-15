@@ -1592,7 +1592,7 @@ function getInvoiceGeneratorHTML() {
                 <div class="space-y-4">
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Business Name</span><input id="invoiceBusiness" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Any2Convert Studio"></label>
                     <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Client Name</span><input id="invoiceClient" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="Client or company"></label>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Theme Color</span>
                             <select id="invoiceColor" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white">
                                 <option value="slate">Slate (Classic)</option>
@@ -1604,11 +1604,11 @@ function getInvoiceGeneratorHTML() {
                         </label>
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Your Logo</span><input type="file" id="invoiceLogoFile" accept="image/*" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-2.5 text-slate-900 dark:text-white file:mr-4 file:py-1.5 file:px-4 file:rounded-xl file:border-0 file:bg-slate-200 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-white"></label>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Invoice Number</span><input id="invoiceNumber" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="INV-2026-001"></label>
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Currency</span><select id="invoiceCurrency" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"><option value="$">USD ($)</option><option value="PKR">PKR</option><option value="AED">AED</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select></label>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Issue Date</span><input id="invoiceIssueDate" type="date" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label>
                         <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Due Date</span><input id="invoiceDueDate" type="date" class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white"></label>
                     </div>
@@ -7269,98 +7269,39 @@ function getImageEnhancerHTML() {
                 canvas.width = outW;
                 canvas.height = outH;
                 const ctx = canvas.getContext("2d", { willReadFrequently: true });
+                
+                // Super-Sampling Anti-Aliasing (SSAA) for ZERO jagged pixels
+                // 1. Create a massive temporary canvas (4x scale)
+                const ssaaScale = 4.0;
+                let tempW = Math.max(1, Math.round(sourceImage.width * ssaaScale));
+                let tempH = Math.max(1, Math.round(sourceImage.height * ssaaScale));
+                
+                // Limit temp canvas size to prevent crashing on mobile (max ~16 megapixels)
+                const maxTempPixels = 16000000;
+                if (tempW * tempH > maxTempPixels) {
+                    const ratio = Math.sqrt(maxTempPixels / (tempW * tempH));
+                    tempW = Math.max(1, Math.round(tempW * ratio));
+                    tempH = Math.max(1, Math.round(tempH * ratio));
+                }
+
+                const tempCanvas = document.createElement("canvas");
+                tempCanvas.width = tempW;
+                tempCanvas.height = tempH;
+                const tempCtx = tempCanvas.getContext("2d", { willReadFrequently: true });
+                tempCtx.imageSmoothingEnabled = true;
+                tempCtx.imageSmoothingQuality = "high";
+                
+                // 2. Aggressive Blur + Contrast on the high-res canvas.
+                // This destroys JPEG noise and creates clean, hard edges.
+                tempCtx.filter = "blur(1.5px) contrast(3.5) saturate(1.1) brightness(1.1)";
+                tempCtx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, tempW, tempH);
+                
+                // 3. Downscale to final size (2x). 
+                // This perfectly anti-aliases the hard edges, eliminating ANY "pixel tearing" or staircase effects!
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = "high";
                 ctx.clearRect(0, 0, outW, outH);
-                
-                // 1. Color Enhancement using Canvas Filters
-                // Stronger contrast to mimic AI clarity for documents
-                ctx.filter = "contrast(1.15) saturate(1.1) brightness(1.02)";
-                ctx.drawImage(sourceImage, 0, 0, sourceImage.width, sourceImage.height, 0, 0, outW, outH);
-                
-                // 2. Advanced Adaptive Enhance (Denoise + Sharpen + Clarity)
-                let imageData = ctx.getImageData(0, 0, outW, outH);
-                const src = imageData.data;
-                const out = new Uint8ClampedArray(src.length);
-                const w = outW;
-                const h = outH;
-
-                const edgeThreshold = 22; // Higher threshold ignores strong JPEG noise
-                const sharpenPower = 0.25; // Aggressive sharpening for text
-
-                // Initialize borders
-                for (let i = 0; i < src.length; i++) {
-                    out[i] = src[i];
-                }
-
-                for (let y = 1; y < h - 1; y++) {
-                    for (let x = 1; x < w - 1; x++) {
-                        let i = (y * w + x) * 4;
-                        
-                        for (let c = 0; c < 3; c++) {
-                            let center = src[i + c];
-                            let similarSum = center;
-                            let similarCount = 1;
-                            let edgeDiffSum = 0;
-                            let totalSum = center;
-
-                            // 8 neighbors
-                            let n1 = src[i - w * 4 - 4 + c];
-                            let n2 = src[i - w * 4 + c];
-                            let n3 = src[i - w * 4 + 4 + c];
-                            let n4 = src[i - 4 + c];
-                            let n5 = src[i + 4 + c];
-                            let n6 = src[i + w * 4 - 4 + c];
-                            let n7 = src[i + w * 4 + c];
-                            let n8 = src[i + w * 4 + 4 + c];
-
-                            let neighbors = [n1, n2, n3, n4, n5, n6, n7, n8];
-
-                            for (let n of neighbors) {
-                                totalSum += n;
-                                let diff = center - n;
-                                if (Math.abs(diff) <= edgeThreshold) {
-                                    similarSum += n;
-                                    similarCount++;
-                                } else {
-                                    edgeDiffSum += diff;
-                                }
-                            }
-                            
-                            // Spike reduction (if pixel is totally different from almost all neighbors)
-                            if (similarCount <= 2) {
-                                out[i + c] = totalSum / 9;
-                            } else {
-                                let smoothed = similarSum / similarCount;
-                                let sharpened = smoothed + (edgeDiffSum * sharpenPower);
-                                out[i + c] = Math.max(0, Math.min(255, Math.round(sharpened)));
-                            }
-                        }
-                        out[i + 3] = src[i + 3];
-                    }
-                }
-                
-                // 3. Final Auto-Levels (Histogram Stretch) to ensure pure white backgrounds and deep blacks
-                let minLuma = 255, maxLuma = 0;
-                for (let i = 0; i < out.length; i += 4) {
-                    let luma = out[i]*0.299 + out[i+1]*0.587 + out[i+2]*0.114;
-                    if (luma < minLuma) minLuma = luma;
-                    if (luma > maxLuma) maxLuma = luma;
-                }
-                let range = maxLuma - minLuma;
-                if (range > 30) {
-                    let stretch = 255 / range;
-                    for (let i = 0; i < out.length; i += 4) {
-                        for (let c = 0; c < 3; c++) {
-                            // Blend original with stretched version to pop documents without deep frying colors
-                            let stretched = (out[i+c] - minLuma) * stretch;
-                            out[i+c] = Math.max(0, Math.min(255, Math.round(out[i+c] * 0.3 + stretched * 0.7))); 
-                        }
-                    }
-                }
-
-                imageData.data.set(out);
-                ctx.putImageData(imageData, 0, 0);
+                ctx.drawImage(tempCanvas, 0, 0, tempW, tempH, 0, 0, outW, outH);
 
                 const format = "image/jpeg";
                 const quality = qualityAmount;
