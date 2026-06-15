@@ -2197,21 +2197,32 @@ function getBankStatementToExcelHTML() {
                         if (currentLine) allLines.push(currentLine.trim());
                     }
                     
-                    // Simple Regex to capture Date, Description, and trailing numbers (Amount/Balance)
-                    // Matches lines that start with a Date and end with Numbers
+                    // Very permissive regex to capture different date formats at the start of a line
+                    const dateRegex = /^\s*(\d{1,4}[\/\-]\d{1,2}[\/\-]\d{1,4}|\d{1,2}[\.\s\-]+[a-zA-Z]{3,9}[\.\s\-]+\d{2,4}|\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{2,4}|\d{1,2}[\.\s\-]+[a-zA-Z]{3,9}|[a-zA-Z]{3,9}\s+\d{1,2},?\s+\d{4})\s+(.*)$/i;
+                    
                     rows = allLines.map((line) => {
-                        const match = line.match(/(\d{1,2}[\/\-\.][A-Za-z0-9]{2,3}[\/\-\.]\d{2,4})\s+(.+?)\s+([-\d\.,\s]+)$/);
-                        if (!match) return null;
+                        const dateMatch = line.match(dateRegex);
+                        if (!dateMatch) return null;
                         
-                        // Clean up multiple spaces
-                        const desc = match[2].trim().replace(/\s{2,}/g, ' ');
-                        const amounts = match[3].trim().replace(/\s{2,}/g, ' ');
+                        const date = dateMatch[1].trim();
+                        let description = dateMatch[2].trim();
+                        let amounts = "";
+                        
+                        // Try to pull numbers/amounts from the end of the description
+                        // e.g., "Transfer to Ali 1,000.00 4,000.00" -> pulls "1,000.00 4,000.00"
+                        const amountMatch = description.match(/(.*?)\s+([-\d\.,\s]+)$/);
+                        
+                        // Only split if the amounts part actually contains digits
+                        if (amountMatch && /\d/.test(amountMatch[2])) {
+                            description = amountMatch[1].trim();
+                            amounts = amountMatch[2].trim();
+                        }
 
-                        return { 
-                            date: match[1], 
-                            description: desc, 
-                            amounts: amounts
-                        };
+                        // Clean up multiple spaces
+                        description = description.replace(/\s{2,}/g, ' ');
+                        amounts = amounts.replace(/\s{2,}/g, ' | '); // Separate multiple amounts with pipe for readability
+
+                        return { date, description, amounts };
                     }).filter(Boolean);
 
                     if (rows.length > 0) {
