@@ -1841,8 +1841,16 @@ function getInvoiceGeneratorHTML() {
 
                 function generatePDF() {
                     const element = document.createElement("div");
-                    // Wrap the preview in a fixed-width container to ensure proper PDF scaling
-                    element.innerHTML = `<div style="background: white; width: 800px; padding: 40px; margin: 0 auto; box-sizing: border-box;">${preview.innerHTML}</div>`;
+                    // Attach temporarily to the DOM off-screen to guarantee proper rendering width on mobile
+                    element.style.position = "absolute";
+                    element.style.left = "-9999px";
+                    element.style.top = "0";
+                    element.style.width = "800px";
+                    element.style.background = "white";
+                    element.style.padding = "40px";
+                    element.style.boxSizing = "border-box";
+                    element.innerHTML = preview.innerHTML;
+                    document.body.appendChild(element);
                     
                     const opt = {
                         margin: 0.5,
@@ -1853,9 +1861,11 @@ function getInvoiceGeneratorHTML() {
                     };
 
                     html2pdf().set(opt).from(element).save().then(() => {
+                        document.body.removeChild(element);
                         btn.textContent = oldText;
                         btn.disabled = false;
                     }).catch((err) => {
+                        document.body.removeChild(element);
                         console.error(err);
                         btn.textContent = oldText;
                         btn.disabled = false;
