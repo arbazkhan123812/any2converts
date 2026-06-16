@@ -11469,7 +11469,7 @@ function getAddWatermarkHTML() {
                 <p class="text-sm text-gray-500 mt-1">Upload a PDF, preview all pages, choose watermark text or image, pick a position, and download the watermarked PDF.</p>
             </div>
             
-            <div id="watermarkDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(&#39;watermarkPdfInput&#39;).click()">
+            <div id="watermarkDropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'watermarkPdfInput\').click()">
                 <input type="file" id="watermarkPdfInput" class="hidden" accept=".pdf">
                 <div class="mb-3 flex justify-center text-blue-500">
                     <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>
@@ -13206,7 +13206,7 @@ function getYoutubeDownloaderHTML() {
             <div class="space-y-4">
                 <label class="block">
                     <span class="text-xs uppercase tracking-[0.22em] text-slate-500">YouTube Video URL</span>
-                    <div class="mt-2 flex gap-3">
+                    <div class="mt-2 flex flex-col md:flex-row gap-3">
                         <input id="ytUrl" type="url" class="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-3 text-slate-900 dark:text-white" placeholder="https://www.youtube.com/watch?v=...">
                         <button id="ytFetchBtn" class="rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-3 font-semibold whitespace-nowrap transition-opacity hover:opacity-90">Fetch Video</button>
                     </div>
@@ -13228,9 +13228,19 @@ function getYoutubeDownloaderHTML() {
                         <div class="flex flex-wrap gap-3" id="ytFormatsWrap">
                             <!-- Buttons injected via JS -->
                         </div>
+                        <div id="ytIframeContainer" class="mt-4 w-full"></div>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="mt-12 prose dark:prose-invert max-w-none text-sm text-slate-600 dark:text-slate-400">
+            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-3">About the Free YouTube Video Downloader</h3>
+            <p>Our online video downloader tool helps you download YouTube videos instantly in HD MP4 or high-quality MP3 format. Whether you want to save a music video, a tutorial, or your favorite vlog, this tool processes links rapidly without requiring any software installation.</p>
+            <h4 class="text-md font-semibold text-slate-800 dark:text-slate-200 mt-6 mb-2">How to save videos directly to your device?</h4>
+            <p>Simply copy the link of the video from the app or browser, paste it into the URL box above, and tap "Fetch Video". You'll see a preview and options to save the video in 1080p, 720p, 480p, or as an audio-only MP3.</p>
+            <h4 class="text-md font-semibold text-slate-800 dark:text-slate-200 mt-6 mb-2">Features & Commonly Searched Terms</h4>
+            <p class="leading-relaxed">This tool is fully optimized for a variety of tasks that users commonly search for. This includes: youtube video download hd, youtube mp4 converter, youtube to mp3 320kbps, download youtube videos online free without software, youtube downloader 1080p 4k, best youtube downloader 2026, free yt video saver, yt to mp3 online, youtube audio downloader, download video yt, save youtube shorts, youtube reels downloader, download youtube playlist free, how to save youtube video to gallery, youtube video download link generator, video saver free, yt mp4 download. Whether you are searching for a fast youtube short downloader, a reliable yt mp3 converter, or a way to download youtube audio online free, this simple browser utility has got you covered.</p>
         </div>
     </div>
     
@@ -13243,58 +13253,27 @@ function getYoutubeDownloaderHTML() {
             const thumbnail = document.getElementById("ytThumbnail");
             const title = document.getElementById("ytTitle");
             const formatsWrap = document.getElementById("ytFormatsWrap");
+            const iframeContainer = document.getElementById("ytIframeContainer");
 
             const setStatus = (msg, isError = false) => {
                 statusBox.textContent = msg;
                 statusBox.className = `text-sm mt-2 block ${isError ? 'text-red-500' : 'text-emerald-600 dark:text-emerald-400 font-medium'}`;
             };
 
-            const generateDownloadLink = async (url, format) => {
-                setStatus("Generating download link... please wait.");
-                formatsWrap.style.opacity = '0.5';
-                
-                try {
-                    const reqBody = {
-                        url: url,
-                        vQuality: format === 'mp3' ? '1080' : format,
-                        isAudioOnly: format === 'mp3',
-                        vCodec: 'h264'
-                    };
-
-                    const response = await fetch("/tools/youtube-download", {
-                        method: "POST",
-                        headers: {
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(reqBody)
-                    });
-
-                    const data = await response.json();
-                    
-                    if (data.status === 'stream' || data.status === 'redirect') {
-                        setStatus("Download ready! Your download should start automatically.");
-                        window.open(data.url, '_blank');
-                    } else if (data.status === 'picker') {
-                        if(data.picker && data.picker.length > 0) {
-                            window.open(data.picker[0].url, '_blank');
-                            setStatus("Download started!");
-                        } else {
-                            setStatus("Could not find a suitable format.", true);
-                        }
-                    } else if (data.error) {
-                        setStatus(data.text || "Failed to generate link.", true);
-                    } else {
-                        setStatus("Something went wrong.", true);
-                    }
-                } catch (err) {
-                    setStatus("Error connecting to download API. " + err.message, true);
-                } finally {
-                    formatsWrap.style.opacity = '1';
-                }
+            const loadIframe = (url, format) => {
+                iframeContainer.innerHTML = '';
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '60px';
+                iframe.style.border = '0';
+                iframe.style.overflow = 'hidden';
+                iframe.style.borderRadius = '12px';
+                iframe.scrolling = 'no';
+                iframe.src = `https://loader.to/api/button/?url=${encodeURIComponent(url)}&f=${format}&color=10B981`;
+                iframeContainer.appendChild(iframe);
             };
 
-            btn.addEventListener("click", async () => {
+            btn.addEventListener("click", () => {
                 const url = urlInput.value.trim();
                 if(!url) return setStatus("Please enter a valid YouTube URL.", true);
                 
@@ -13303,11 +13282,12 @@ function getYoutubeDownloaderHTML() {
                 }
 
                 resultBox.classList.add("hidden");
+                iframeContainer.innerHTML = '';
                 setStatus("Fetching video information...");
                 btn.disabled = true;
                 btn.textContent = "Fetching...";
 
-                try {
+                setTimeout(() => {
                     let videoId = "";
                     try {
                         const urlObj = new URL(url);
@@ -13339,18 +13319,19 @@ function getYoutubeDownloaderHTML() {
                         const btnEl = document.createElement("button");
                         btnEl.className = `rounded-xl px-5 py-2.5 text-sm font-semibold transition-transform active:scale-95 ${f.bg} ${f.text}`;
                         btnEl.textContent = f.label;
-                        btnEl.onclick = () => generateDownloadLink(url, f.val);
+                        btnEl.onclick = () => {
+                            Array.from(formatsWrap.children).forEach(c => c.style.opacity = '0.6');
+                            btnEl.style.opacity = '1';
+                            loadIframe(url, f.val);
+                        };
                         formatsWrap.appendChild(btnEl);
                     });
 
                     setStatus("");
                     resultBox.classList.remove("hidden");
-                } catch (err) {
-                    setStatus("Error analyzing video.", true);
-                } finally {
                     btn.disabled = false;
                     btn.textContent = "Fetch Video";
-                }
+                }, 600);
             });
         })();
     </script>

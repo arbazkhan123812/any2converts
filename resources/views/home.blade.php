@@ -33,6 +33,7 @@ $tool_slugs = [
     'social_image_resizer' => 'social-image-resizer', 'jwt_decoder' => 'jwt-decoder',
     'bank_statement_to_excel' => 'bank-statement-pdf-to-excel', 'grammar_checker' => 'grammar-checker',
     'paraphrase_tool' => 'paraphrase-tool', 'percentage_calculator' => 'percentage-calculator',
+    'youtube_downloader' => 'youtube-video-downloader',
     'loan_calculator' => 'loan-calculator', 'bmi_calculator' => 'bmi-calculator',
     'age_calculator' => 'age-calculator',
     'sensitivity_converter' => 'sensitivity-converter',
