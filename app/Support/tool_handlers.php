@@ -884,61 +884,66 @@ function getGenericUnitConverterHTML(array $config): string
 
     return '
     <div class="space-y-6">
-        <div class="grid 2xl:grid-cols-[1.12fr_0.88fr] gap-6">
-            <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-white via-blue-50/70 to-cyan-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-                <div class="flex items-start justify-between gap-4 mb-5">
+        <div class="grid xl:grid-cols-[1.1fr_0.9fr] gap-8">
+            <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-white via-blue-50/70 to-cyan-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 p-6 sm:p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+                <div class="flex items-start justify-between gap-4 mb-6">
                     <div>
                         <p class="text-[11px] font-black uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">' . $badge . '</p>
-                        <h3 class="text-2xl font-black text-gray-900 dark:text-white mt-2">' . $title . '</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 max-w-2xl">' . $description . '</p>
+                        <h3 class="text-3xl font-black text-gray-900 dark:text-white mt-2">' . $title . '</h3>
+                        <p class="text-[15px] text-gray-500 dark:text-gray-400 mt-3 max-w-2xl">' . $description . '</p>
                     </div>
-                    <div class="hidden sm:flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300 text-xl">' . $icon . '</div>
+                    <div class="hidden sm:flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300 text-2xl">' . $icon . '</div>
                 </div>
-                <div id="unitConverterPresets" class="flex flex-wrap gap-2 mb-4"></div>
-                <div class="grid md:grid-cols-[1.25fr_0.75fr] gap-4">
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-4">
+                <div id="unitConverterPresets" class="flex flex-wrap gap-2 mb-6"></div>
+                <div class="grid md:grid-cols-[1fr_200px] gap-5">
+                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5">
                         <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-2">Enter value</label>
-                        <input type="number" id="unitConverterValue" value="' . $defaultValue . '" step="any" placeholder="' . $inputPlaceholder . '" class="w-full min-h-[62px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-2xl font-black text-gray-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">Type any number and the result updates instantly.</p>
+                        <input type="number" id="unitConverterValue" value="' . $defaultValue . '" step="any" placeholder="' . $inputPlaceholder . '" class="w-full min-h-[64px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-2xl font-black text-gray-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">Type any number to convert instantly.</p>
                     </div>
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-4">
+                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5 flex flex-col justify-center">
                         <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-2">Precision</label>
                         <input type="range" id="unitConverterPrecision" min="0" max="' . $decimals . '" value="' . min(4, $decimals) . '" class="w-full mt-2 accent-blue-600">
-                        <div class="mt-3 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                            <span>Rounded output</span>
-                            <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300 font-black"><span id="unitConverterPrecisionValue">' . min(4, $decimals) . '</span> dp</span>
+                        <div class="mt-4 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                            <span>Rounding</span>
+                            <span class="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300 font-black"><span id="unitConverterPrecisionValue">' . min(4, $decimals) . '</span> dp</span>
                         </div>
                     </div>
                 </div>
-                <div class="grid md:grid-cols-[1fr_auto_1fr] gap-4 items-end mt-4">
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-4">
-                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-2">Convert from</label>
-                        <select id="unitConverterFrom" class="w-full min-h-[62px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[15px] font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30"></select>
+                <div class="flex flex-col gap-3 mt-5 relative">
+                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5">
+                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-3">Convert from</label>
+                        <select id="unitConverterFrom" class="w-full min-h-[64px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[16px] font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 appearance-none cursor-pointer"></select>
                     </div>
-                    <button id="unitConverterSwap" class="h-[62px] w-[62px] rounded-2xl bg-blue-600 text-white font-black text-xl hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">&#8646;</button>
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-4">
-                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-2">Convert to</label>
-                        <select id="unitConverterTo" class="w-full min-h-[62px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[15px] font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30"></select>
+                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center">
+                        <button id="unitConverterSwap" class="h-[54px] w-[54px] rounded-full bg-blue-600 text-white font-black text-2xl hover:bg-blue-700 hover:rotate-180 transition-all duration-300 shadow-[0_8px_20px_rgba(37,99,235,0.3)] flex items-center justify-center">&#8645;</button>
+                    </div>
+                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5">
+                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-3">Convert to</label>
+                        <select id="unitConverterTo" class="w-full min-h-[64px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[16px] font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 appearance-none cursor-pointer"></select>
                     </div>
                 </div>
-                <div class="mt-5 flex flex-wrap gap-3">
-                    <button id="unitConverterCopy" class="px-5 py-3 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition">Copy Result</button>
-                    <div class="px-4 py-3 rounded-2xl bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 text-sm font-semibold">Fast, private, and client-side</div>
+                <div class="mt-6 flex flex-wrap items-center gap-4">
+                    <button id="unitConverterCopy" class="px-6 py-3.5 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-500/20">Copy Result</button>
+                    <div class="px-4 py-3 rounded-2xl bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 text-sm font-semibold flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        Private & Client-Side
+                    </div>
                 </div>
-                <p id="unitConverterStatus" class="text-sm text-gray-500 dark:text-gray-400 mt-4">' . $formulaText . '</p>
+                <p id="unitConverterStatus" class="text-sm text-gray-500 dark:text-gray-400 mt-5 font-medium">' . $formulaText . '</p>
             </div>
-            <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-slate-50 via-white to-blue-50/50 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 p-6">
-                <p class="text-[11px] font-black uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Live Preview</p>
-                <div class="mt-4 rounded-[1.8rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-                    <p id="unitConverterResultText" class="text-4xl font-black tracking-tight text-gray-900 dark:text-white">0</p>
-                    <p id="unitConverterFormula" class="text-sm text-gray-500 dark:text-gray-400 mt-3 leading-6">Choose units to start converting.</p>
+            <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-slate-50 via-white to-blue-50/50 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 p-6 sm:p-8 flex flex-col">
+                <p class="text-[11px] font-black uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400 mb-4">Live Preview</p>
+                <div class="rounded-[1.8rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm flex-1 flex flex-col justify-center min-h-[180px]">
+                    <p id="unitConverterResultText" class="text-5xl sm:text-6xl font-black tracking-tight text-gray-900 dark:text-white break-all">0</p>
+                    <p id="unitConverterFormula" class="text-base sm:text-lg text-gray-500 dark:text-gray-400 mt-4 leading-relaxed font-medium">Choose units to start converting.</p>
                 </div>
-                <div class="mt-4 rounded-[1.8rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5">
-                    <div class="flex items-center justify-between gap-3">
+                <div class="mt-6 rounded-[1.8rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+                    <div class="flex items-center justify-between gap-3 mb-5">
                         <h4 class="font-black text-gray-900 dark:text-white">Quick conversions</h4>
-                        <span class="text-xs font-black uppercase tracking-[0.18em] text-gray-400">Popular</span>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">Popular</span>
                     </div>
-                    <div id="unitConverterQuickGrid" class="mt-4 grid sm:grid-cols-2 gap-3"></div>
+                    <div id="unitConverterQuickGrid" class="grid grid-cols-2 gap-3 sm:gap-4"></div>
                 </div>
             </div>
         </div>
