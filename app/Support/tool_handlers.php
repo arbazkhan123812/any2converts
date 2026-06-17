@@ -10828,23 +10828,38 @@ function getOptimizePdfHTML() {
 function getRepairPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Repair PDF Online Free - Repair PDF File</h2>
-            <p>Use this repair PDF tool to repair PDF files online free, rebuild damaged PDF documents, and learn how to repair PDF file issues directly in your browser.</p>
-            <p>Repair PDF file online free, repair PDF files with browser-based rebuilding, and create a cleaner copy when a document has minor structure or compatibility issues.</p>
+        <div>
+            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Repair PDF Online Free</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Rebuild damaged PDF documents and fix PDF file issues directly in your browser securely.</p>
         </div>
-        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
-            <div>
-                <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Repair PDF File</div>
-                <p class="text-sm text-gray-500 mt-1">Upload a PDF to repair PDF file issues, rebuild the document structure, and download a fresh repaired copy.</p>
+
+        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden shadow-sm">
+            <div class="p-6 sm:p-8 space-y-6">
+                <!-- Custom Drag and Drop Uploader -->
+                <label id="repairPdfDropzone" class="relative flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-blue-300 dark:border-blue-700/70 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all cursor-pointer group">
+                    <input type="file" id="repairPdfInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div class="p-4 bg-white dark:bg-gray-800 rounded-full shadow-sm mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                        </div>
+                        <p class="mb-1 text-base font-semibold text-gray-700 dark:text-gray-200"><span class="text-blue-600 dark:text-blue-400">Click to upload</span> or drag and drop</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">PDF documents only</p>
+                        <p id="repairPdfFileName" class="mt-4 text-sm font-bold text-emerald-600 dark:text-emerald-400 hidden bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-full"></p>
+                    </div>
+                </label>
+
+                <div id="repairPdfStatus" class="hidden p-4 rounded-xl bg-gray-50 dark:bg-gray-800/80 text-sm text-gray-700 dark:text-gray-300 text-center font-medium border border-gray-200 dark:border-gray-700"></div>
+
+                <button id="repairPdfBtn" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    Start Repair Process
+                </button>
             </div>
-            <input type="file" id="repairPdfInput" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600" accept=".pdf">
-            <div id="repairPdfStatus" class="hidden text-sm text-gray-500 text-center"></div>
-            <div class="rounded-2xl border border-blue-100 bg-blue-50/70 dark:bg-blue-950/20 dark:border-blue-900 p-4 text-sm text-blue-900 dark:text-blue-100">
-                How to repair PDF:
-                Upload the file, let the tool rebuild the PDF, and download a repaired version if the browser can recover the document pages.
+            
+            <div class="bg-gray-50 dark:bg-gray-800/40 p-6 sm:px-8 border-t border-gray-200 dark:border-gray-700">
+                <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">How it works</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">The tool attempts a direct structural repair first. If that fails, it visually renders and rebuilds the pages securely in your browser without sending your private files to any server.</p>
             </div>
-            <button id="repairPdfBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Repair PDF</button>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -10852,9 +10867,27 @@ function getRepairPdfHTML() {
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+        
+        const fileInput = document.getElementById("repairPdfInput");
+        const dropzone = document.getElementById("repairPdfDropzone");
+        const fileNameDisplay = document.getElementById("repairPdfFileName");
+        
+        fileInput.addEventListener("change", function() {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = "Selected: " + this.files[0].name;
+                fileNameDisplay.classList.remove("hidden");
+                dropzone.classList.add("border-emerald-400", "bg-emerald-50/50", "dark:border-emerald-600", "dark:bg-emerald-900/20");
+                dropzone.classList.remove("border-blue-300", "bg-blue-50/50", "dark:border-blue-700/70", "dark:bg-blue-950/20");
+            } else {
+                fileNameDisplay.classList.add("hidden");
+                dropzone.classList.remove("border-emerald-400", "bg-emerald-50/50", "dark:border-emerald-600", "dark:bg-emerald-900/20");
+                dropzone.classList.add("border-blue-300", "bg-blue-50/50", "dark:border-blue-700/70", "dark:bg-blue-950/20");
+            }
+        });
+
         document.getElementById("repairPdfBtn").addEventListener("click", async function() {
-            const file = document.getElementById("repairPdfInput").files[0];
-            if (!file) return alert("Please select a PDF file");
+            const file = fileInput.files[0];
+            if (!file) return alert("Please select a PDF file first.");
             const status = document.getElementById("repairPdfStatus");
             status.classList.remove("hidden", "text-red-500");
             try {
