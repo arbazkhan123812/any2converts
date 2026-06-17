@@ -884,68 +884,57 @@ function getGenericUnitConverterHTML(array $config): string
 
     return '
     <div class="space-y-6">
-        <div class="grid xl:grid-cols-[1.1fr_0.9fr] gap-8">
-            <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-white via-blue-50/70 to-cyan-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 p-6 sm:p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-                <div class="flex items-start justify-between gap-4 mb-6">
-                    <div>
-                        <p class="text-[11px] font-black uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">' . $badge . '</p>
-                        <h3 class="text-3xl font-black text-gray-900 dark:text-white mt-2">' . $title . '</h3>
-                        <p class="text-[15px] text-gray-500 dark:text-gray-400 mt-3 max-w-2xl">' . $description . '</p>
-                    </div>
-                    <div class="hidden sm:flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300 text-2xl">' . $icon . '</div>
+        <div>
+            <h2 class="text-3xl font-black text-slate-900 dark:text-white">' . $title . '</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">' . $description . '</p>
+        </div>
+        <div id="unitConverterPresets" class="flex flex-wrap gap-2"></div>
+        <div class="grid sm:grid-cols-2 gap-4 items-end">
+            <label class="block">
+                <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Convert from</span>
+                <select id="unitConverterFrom" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></select>
+            </label>
+            <label class="block relative">
+                <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Convert to</span>
+                <select id="unitConverterTo" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></select>
+                <div class="absolute left-0 -translate-x-1/2 top-[50%] sm:top-[38px] hidden sm:flex items-center justify-center -ml-[8px]">
+                    <button id="unitConverterSwap" class="h-10 w-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 hover:rotate-180 transition shadow-md">&#8644;</button>
                 </div>
-                <div id="unitConverterPresets" class="flex flex-wrap gap-2 mb-6"></div>
-                <div class="grid md:grid-cols-[1fr_200px] gap-5">
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5">
-                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-2">Enter value</label>
-                        <input type="number" id="unitConverterValue" value="' . $defaultValue . '" step="any" placeholder="' . $inputPlaceholder . '" class="w-full min-h-[64px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-2xl font-black text-gray-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">Type any number to convert instantly.</p>
-                    </div>
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5 flex flex-col justify-center">
-                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-2">Precision</label>
-                        <input type="range" id="unitConverterPrecision" min="0" max="' . $decimals . '" value="' . min(4, $decimals) . '" class="w-full mt-2 accent-blue-600">
-                        <div class="mt-4 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                            <span>Rounding</span>
-                            <span class="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300 font-black"><span id="unitConverterPrecisionValue">' . min(4, $decimals) . '</span> dp</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-3 mt-5 relative">
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5">
-                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-3">Convert from</label>
-                        <select id="unitConverterFrom" class="w-full min-h-[64px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[16px] font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 appearance-none cursor-pointer"></select>
-                    </div>
-                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center">
-                        <button id="unitConverterSwap" class="h-[54px] w-[54px] rounded-full bg-blue-600 text-white font-black text-2xl hover:bg-blue-700 hover:rotate-180 transition-all duration-300 shadow-[0_8px_20px_rgba(37,99,235,0.3)] flex items-center justify-center">&#8645;</button>
-                    </div>
-                    <div class="rounded-[1.6rem] border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-950/70 p-5">
-                        <label class="block text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 mb-3">Convert to</label>
-                        <select id="unitConverterTo" class="w-full min-h-[64px] px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-[16px] font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 appearance-none cursor-pointer"></select>
-                    </div>
-                </div>
-                <div class="mt-6 flex flex-wrap items-center gap-4">
-                    <button id="unitConverterCopy" class="px-6 py-3.5 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-500/20">Copy Result</button>
-                    <div class="px-4 py-3 rounded-2xl bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 text-sm font-semibold flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        Private & Client-Side
-                    </div>
-                </div>
-                <p id="unitConverterStatus" class="text-sm text-gray-500 dark:text-gray-400 mt-5 font-medium">' . $formulaText . '</p>
-            </div>
-            <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-slate-50 via-white to-blue-50/50 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 p-6 sm:p-8 flex flex-col">
-                <p class="text-[11px] font-black uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400 mb-4">Live Preview</p>
-                <div class="rounded-[1.8rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm flex-1 flex flex-col justify-center min-h-[180px]">
-                    <p id="unitConverterResultText" class="text-5xl sm:text-6xl font-black tracking-tight text-gray-900 dark:text-white break-all">0</p>
-                    <p id="unitConverterFormula" class="text-base sm:text-lg text-gray-500 dark:text-gray-400 mt-4 leading-relaxed font-medium">Choose units to start converting.</p>
-                </div>
-                <div class="mt-6 rounded-[1.8rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
-                    <div class="flex items-center justify-between gap-3 mb-5">
-                        <h4 class="font-black text-gray-900 dark:text-white">Quick conversions</h4>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">Popular</span>
-                    </div>
-                    <div id="unitConverterQuickGrid" class="grid grid-cols-2 gap-3 sm:gap-4"></div>
+            </label>
+        </div>
+        <div class="flex justify-center sm:hidden -my-2 relative z-10">
+            <button id="unitConverterSwapMobile" class="h-10 w-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition shadow-md transform rotate-90">&#8644;</button>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 gap-4">
+            <label class="block">
+                <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Enter value</span>
+                <input type="number" id="unitConverterValue" value="' . $defaultValue . '" step="any" placeholder="' . $inputPlaceholder . '" class="w-full p-4 text-lg font-bold bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+            </label>
+            <div class="block">
+                <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Converted result</span>
+                <div class="w-full p-4 min-h-[60px] text-lg font-bold bg-blue-50 text-blue-900 dark:bg-blue-900/30 dark:text-blue-100 rounded-xl border border-blue-200 dark:border-blue-800 flex items-center justify-between">
+                    <span id="unitConverterResultText" class="truncate overflow-hidden">0</span>
+                    <button id="unitConverterCopy" class="text-blue-600 hover:text-blue-800 ml-2 focus:outline-none" title="Copy result">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
                 </div>
             </div>
+        </div>
+
+        <div class="pt-2">
+            <div class="flex justify-between text-sm font-medium mb-2">
+                <span class="text-slate-700 dark:text-slate-200">Precision (<span id="unitConverterPrecisionValue">' . min(4, $decimals) . '</span> decimal places)</span>
+            </div>
+            <input type="range" id="unitConverterPrecision" min="0" max="' . $decimals . '" value="' . min(4, $decimals) . '" class="w-full accent-blue-600">
+        </div>
+
+        <p id="unitConverterFormula" class="text-sm text-gray-600 dark:text-gray-300 font-medium bg-gray-100 dark:bg-gray-800 p-3 rounded-xl border border-gray-200 dark:border-gray-700">Choose units to start converting.</p>
+        <p id="unitConverterStatus" class="sr-only"></p>
+
+        <div class="mt-6">
+            <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4 uppercase tracking-wider">Quick conversions</h4>
+            <div id="unitConverterQuickGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
         </div>
     </div>
     <script>
@@ -958,6 +947,7 @@ function getGenericUnitConverterHTML(array $config): string
             const fromSelect = document.getElementById("unitConverterFrom");
             const toSelect = document.getElementById("unitConverterTo");
             const swapBtn = document.getElementById("unitConverterSwap");
+            const swapBtnMobile = document.getElementById("unitConverterSwapMobile");
             const copyBtn = document.getElementById("unitConverterCopy");
             const status = document.getElementById("unitConverterStatus");
             const resultText = document.getElementById("unitConverterResultText");
@@ -990,7 +980,7 @@ function getGenericUnitConverterHTML(array $config): string
                 presets.forEach((preset) => {
                     const button = document.createElement("button");
                     button.type = "button";
-                    button.className = "px-3 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900 text-xs font-black uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300 hover:border-blue-400 hover:text-blue-600 transition";
+                    button.className = "px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-blue-400 hover:text-blue-600 transition";
                     button.textContent = preset.label || "Preset";
                     button.addEventListener("click", () => {
                         if (preset.value !== undefined) valueInput.value = preset.value;
@@ -1026,9 +1016,9 @@ function getGenericUnitConverterHTML(array $config): string
                 quickGrid.innerHTML = "";
                 Object.entries(units).filter(([key]) => key !== fromKey).slice(0, 6).forEach(([key, unit]) => {
                     const card = document.createElement("div");
-                    card.className = "rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3";
+                    card.className = "rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2";
                     const converted = convertValue(currentValue, fromKey, key);
-                    card.innerHTML = `<p class="text-[11px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">${unit.short || unit.label}</p><p class="text-lg font-black text-gray-900 dark:text-white mt-2">${formatNumber(converted, Number(precisionInput.value))}</p><p class="text-xs text-gray-400 dark:text-gray-500 mt-1">${unit.label}</p>`;
+                    card.innerHTML = `<p class="text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400">${unit.short || unit.label}</p><p class="text-base font-bold text-gray-900 dark:text-white mt-1">${formatNumber(converted, Number(precisionInput.value))}</p><p class="text-[11px] text-gray-400 dark:text-gray-500">${unit.label}</p>`;
                     quickGrid.appendChild(card);
                 });
             }
@@ -1050,11 +1040,15 @@ function getGenericUnitConverterHTML(array $config): string
             }
 
             [valueInput, precisionInput, fromSelect, toSelect].forEach((el) => el.addEventListener("input", update));
-            swapBtn.addEventListener("click", () => {
-                const currentFrom = fromSelect.value;
-                fromSelect.value = toSelect.value;
-                toSelect.value = currentFrom;
-                update();
+            [swapBtn, swapBtnMobile].forEach((btn) => {
+                if(btn) {
+                    btn.addEventListener("click", () => {
+                        const currentFrom = fromSelect.value;
+                        fromSelect.value = toSelect.value;
+                        toSelect.value = currentFrom;
+                        update();
+                    });
+                }
             });
             copyBtn.addEventListener("click", async () => {
                 try {
