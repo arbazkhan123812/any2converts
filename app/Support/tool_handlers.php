@@ -991,9 +991,13 @@ function getGenericUnitConverterHTML(array $config): string
 
             function formatNumber(value, digits) {
                 if (!Number.isFinite(value)) return "--";
-                const fixed = value.toFixed(digits);
-                if (fixed.indexOf(".") === -1) return fixed;
-                return fixed.replace(/0+$/, "").replace(/\\.$/, "");
+                let fixed = value.toFixed(digits);
+                if (fixed.indexOf(".") !== -1) {
+                    fixed = fixed.replace(/0+$/, "").replace(/\\.$/, "");
+                }
+                const parts = fixed.split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return parts.join(".");
             }
 
             function convertValue(value, fromKey, toKey) {
