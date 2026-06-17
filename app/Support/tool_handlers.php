@@ -889,21 +889,18 @@ function getGenericUnitConverterHTML(array $config): string
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">' . $description . '</p>
         </div>
         <div id="unitConverterPresets" class="flex flex-wrap gap-2"></div>
-        <div class="grid sm:grid-cols-2 gap-4 items-end">
-            <label class="block">
+        <div class="flex flex-col sm:flex-row items-end gap-3 sm:gap-4">
+            <label class="block flex-1 w-full">
                 <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Convert from</span>
-                <select id="unitConverterFrom" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></select>
+                <select id="unitConverterFrom" class="w-full h-[58px] px-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></select>
             </label>
-            <label class="block relative">
+            <div class="flex justify-center w-full sm:w-auto -my-2 sm:my-0 relative z-10">
+                <button id="unitConverterSwap" class="h-10 w-10 sm:h-[58px] sm:w-[58px] bg-blue-600 text-white sm:bg-blue-50 sm:text-blue-600 hover:bg-blue-700 sm:hover:bg-blue-100 sm:border border-blue-200 dark:bg-blue-600 dark:text-white dark:sm:bg-blue-900/40 dark:sm:text-blue-400 dark:sm:border-blue-800 dark:hover:bg-blue-700 dark:sm:hover:bg-blue-800 rounded-full sm:rounded-xl flex items-center justify-center transition shadow-md sm:shadow-sm transform rotate-90 sm:rotate-0 hover:rotate-[270deg] sm:hover:rotate-180 flex-shrink-0" title="Swap Units">&#8644;</button>
+            </div>
+            <label class="block flex-1 w-full">
                 <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Convert to</span>
-                <select id="unitConverterTo" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></select>
-                <div class="absolute left-0 -translate-x-1/2 top-[50%] sm:top-[38px] hidden sm:flex items-center justify-center -ml-[8px]">
-                    <button id="unitConverterSwap" class="h-10 w-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 hover:rotate-180 transition shadow-md">&#8644;</button>
-                </div>
+                <select id="unitConverterTo" class="w-full h-[58px] px-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></select>
             </label>
-        </div>
-        <div class="flex justify-center sm:hidden -my-2 relative z-10">
-            <button id="unitConverterSwapMobile" class="h-10 w-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition shadow-md transform rotate-90">&#8644;</button>
         </div>
         
         <div class="grid sm:grid-cols-2 gap-4">
