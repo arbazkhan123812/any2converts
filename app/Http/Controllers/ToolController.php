@@ -81,7 +81,9 @@ class ToolController extends Controller
             escapeshellarg($url)
         );
 
-        exec($cmd . ' 2>&1', $output, $returnCode);
+        $outputStr = shell_exec($cmd . ' 2>&1');
+        $returnCode = ($outputStr === null) ? 1 : 0;
+        $output = explode("\n", (string)$outputStr);
 
         if ($returnCode !== 0) {
             return response()->json(['error' => 'Download failed', 'details' => implode("\n", $output)], 500);
