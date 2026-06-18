@@ -24,28 +24,63 @@ class ToolController extends Controller
 
     public function youtubeDownload(Request $request): JsonResponse
     {
+        set_time_limit(0);
         $url = $request->input('url');
         $format = $request->input('vQuality', '1080');
-        $isAudioOnly = $request->input('isAudioOnly', false);
 
         if (!$url) {
             return response()->json(['error' => 'No URL provided'], 400);
         }
 
-        try {
-            $response = \Illuminate\Support\Facades\Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ])->post('https://api.cobalt.tools/api/json', [
-                'url' => $url,
-                'vQuality' => $format,
-                'isAudioOnly' => $isAudioOnly,
-                'vCodec' => 'h264'
-            ]);
-
-            return response()->json($response->json(), $response->status());
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Backend connection failed', 'text' => $e->getMessage()], 500);
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return response()->json(['error' => 'Invalid URL'], 400);
         }
+
+        $binDir = base_path('bin');
+        $ytDlp = $binDir . DIRECTORY_SEPARATOR . 'yt-dlp.exe';
+
+        if (!file_exists($ytDlp)) {
+            return response()->json(['error' => 'Downloader executable not found on server.'], 500);
+        }
+
+        $uniqueId = uniqid('yt_');
+        $downloadDirRelative = 'downloads/youtube/' . $uniqueId;
+        $downloadDir = public_path($downloadDirRelative);
+        if (!is_dir($downloadDir)) {
+            mkdir($downloadDir, 0755, true);
+        }
+
+        $outputPath = $downloadDir . DIRECTORY_SEPARATOR . '%(title)s.%(ext)s';
+
+        if ($format === 'mp3') {
+            $formatArg = "-x --audio-format mp3 --audio-quality 0";
+        } else {
+            $formatArg = "-f \"bestvideo[height<={$format}][ext=mp4]+bestaudio[ext=m4a]/best[height<={$format}][ext=mp4]/best\" --merge-output-format mp4";
+        }
+
+        $cmd = sprintf(
+            '"%s" --ffmpeg-location "%s" %s -o "%s" "%s"',
+            $ytDlp,
+            $binDir,
+            $formatArg,
+            $outputPath,
+            escapeshellarg($url)
+        );
+
+        exec($cmd . ' 2>&1', $output, $returnCode);
+
+        if ($returnCode !== 0) {
+            return response()->json(['error' => 'Download failed', 'details' => implode("\n", $output)], 500);
+        }
+
+        $files = glob($downloadDir . '/*');
+        if (empty($files)) {
+            return response()->json(['error' => 'File not found after download'], 500);
+        }
+
+        $downloadedFile = basename($files[0]);
+        $fileUrl = asset($downloadDirRelative . '/' . rawurlencode($downloadedFile));
+
+        return response()->json(['url' => $fileUrl, 'filename' => $downloadedFile]);
     }
 }

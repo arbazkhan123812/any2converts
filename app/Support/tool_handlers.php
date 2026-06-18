@@ -13363,17 +13363,32 @@ function getYoutubeDownloaderHTML() {
                 statusBox.className = `text-sm mt-2 block ${isError ? 'text-red-500' : 'text-emerald-600 dark:text-emerald-400 font-medium'}`;
             };
 
-            const loadIframe = (url, format) => {
-                iframeContainer.innerHTML = '';
-                const iframe = document.createElement('iframe');
-                iframe.style.width = '100%';
-                iframe.style.height = '60px';
-                iframe.style.border = '0';
-                iframe.style.overflow = 'hidden';
-                iframe.style.borderRadius = '12px';
-                iframe.scrolling = 'no';
-                iframe.src = `https://loader.to/api/button/?url=${encodeURIComponent(url)}&f=${format}&color=10B981`;
-                iframeContainer.appendChild(iframe);
+            const loadIframe = async (url, format) => {
+                iframeContainer.innerHTML = '<div class="text-sm text-blue-600 mt-4 font-semibold flex items-center justify-center gap-2"><svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg> Downloading video on server... This may take a minute.</div>';
+                
+                try {
+                    const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (csrfTokenMeta) {
+                        headers['X-CSRF-TOKEN'] = csrfTokenMeta.getAttribute('content');
+                    }
+
+                    const res = await fetch('/tools/youtube-download', {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify({ url: url, vQuality: format })
+                    });
+                    
+                    const data = await res.json();
+                    if (!res.ok) {
+                        iframeContainer.innerHTML = `<div class="text-sm text-red-500 mt-4 text-center font-medium">Error: ${data.error || 'Download failed'}</div>`;
+                        return;
+                    }
+                    
+                    iframeContainer.innerHTML = `<div class="mt-4 text-center"><a href="${data.url}" download="${data.filename}" class="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">Download File</a></div>`;
+                } catch (e) {
+                    iframeContainer.innerHTML = `<div class="text-sm text-red-500 mt-4 text-center font-medium">Error: ${e.message}</div>`;
+                }
             };
 
             btn.addEventListener("click", () => {
