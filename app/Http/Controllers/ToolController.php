@@ -36,11 +36,24 @@ class ToolController extends Controller
             return response()->json(['error' => 'Invalid URL'], 400);
         }
 
-        $binDir = base_path('bin');
-        $ytDlp = base_path('bin/yt-dlp.exe');
+        // Detect OS and set appropriate yt-dlp path
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        
+        if ($isWindows) {
+            $binDir = base_path('bin');
+            $ytDlp = base_path('bin/yt-dlp.exe');
+            $ffmpegLocationArg = '--ffmpeg-location "' . $binDir . '"';
+        } else {
+            // On Linux server, it's usually installed globally in /usr/local/bin/yt-dlp or /usr/bin/yt-dlp
+            $ytDlp = '/usr/local/bin/yt-dlp';
+            if (!file_exists($ytDlp)) {
+                $ytDlp = '/usr/bin/yt-dlp'; // fallback
+            }
+            $ffmpegLocationArg = ''; // On Linux, ffmpeg is usually installed globally and found automatically
+        }
 
         if (!file_exists($ytDlp)) {
-            return response()->json(['error' => 'Downloader executable not found on server. Path: ' . $ytDlp], 500);
+            return response()->json(['error' => 'Downloader executable not found on server. Expected at: ' . $ytDlp], 500);
         }
 
         $uniqueId = uniqid('yt_');
@@ -59,9 +72,9 @@ class ToolController extends Controller
         }
 
         $cmd = sprintf(
-            '"%s" --ffmpeg-location "%s" %s -o "%s" "%s"',
+            '"%s" %s %s -o "%s" "%s"',
             $ytDlp,
-            $binDir,
+            $ffmpegLocationArg,
             $formatArg,
             $outputPath,
             escapeshellarg($url)
