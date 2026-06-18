@@ -9114,6 +9114,16 @@ function getOcrToolHTML() {
             <p>Free online OCR for JPG, JPEG, PNG, WEBP, screenshots, receipts, scanned pages, and document photos.</p>
             <p>OCR meaning is optical character recognition. This OCR tool uses Tesseract OCR technology to turn images into editable text in your browser.</p>
         </div>
+        
+        <div class="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/40 dark:bg-emerald-900/10 p-5 flex items-start gap-4 transition hover:bg-emerald-50 dark:hover:bg-emerald-900/30">
+            <div class="p-3 bg-emerald-100 dark:bg-emerald-800/80 text-emerald-600 dark:text-emerald-300 rounded-xl hidden sm:block">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            </div>
+            <div>
+                <h4 class="text-base font-bold text-gray-900 dark:text-white">Need to extract text from a PDF document instead?</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Try our lightning-fast <a href="/ocr-pdf" class="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">OCR PDF Tool</a>.</p>
+            </div>
+        </div>
         <div class="grid 2xl:grid-cols-[1.05fr_0.95fr] gap-6">
             <div class="rounded-[2rem] border border-slate-200/80 dark:border-slate-700/70 bg-gradient-to-br from-white via-blue-50/70 to-cyan-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
                 <div class="flex items-start justify-between gap-4 mb-5">
@@ -10988,6 +10998,17 @@ function getOcrPdfHTML() {
             What is OCR PDF:
             OCR reads scanned PDF pages like images and converts them into selectable text. This helps when you need OCR PDF to text, OCR PDF to Word-style content, or searchable document text.
         </div>
+        
+        <div class="rounded-2xl border border-blue-200 dark:border-blue-800 bg-blue-50/40 dark:bg-blue-900/10 p-5 flex items-start gap-4 transition hover:bg-blue-50 dark:hover:bg-blue-900/30">
+            <div class="p-3 bg-blue-100 dark:bg-blue-800/80 text-blue-600 dark:text-blue-300 rounded-xl hidden sm:block">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <div>
+                <h4 class="text-base font-bold text-gray-900 dark:text-white">Need to extract text from a standard JPG/PNG instead?</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Try our lightning-fast <a href="/ocr-image-to-text" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">OCR Image to Text Tool</a>.</p>
+            </div>
+        </div>
+
         <textarea id="ocrPdfOutput" class="hidden w-full h-64 p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600" placeholder="Recognized text will appear here..."></textarea>
         <div id="ocrPdfActions" class="hidden flex flex-wrap gap-3">
             <button id="ocrPdfCopyBtn" type="button" class="px-4 py-3 rounded-xl bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Copy Text</button>
