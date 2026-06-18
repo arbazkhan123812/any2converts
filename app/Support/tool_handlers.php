@@ -13079,12 +13079,12 @@ function getEditPdfSmartHTML() {
             .a2c-row{gap:7px}.a2c-empty-card{background:#fff;box-shadow:0 16px 38px rgba(15,23,42,.12)}
             @media(max-width:1180px){.a2c-editor-body{grid-template-columns:130px minmax(0,1fr) 220px}.a2c-editor-top{grid-template-columns:190px minmax(0,1fr)}.a2c-editor-top>.a2c-toolbar:nth-child(3){grid-column:1/-1;justify-content:flex-start;border-top:1px solid #e2e8f0}.dark .a2c-editor-top>.a2c-toolbar:nth-child(3){border-color:#1e293b}.a2c-tool-btn{min-width:70px}}
             @media(max-width:850px){
-                .a2c-editor-shell{height:auto;min-height:100vh;overflow:visible;border-radius:0;border-left:0;border-right:0;}
-                .a2c-editor-body{display:flex;flex-direction:column;overflow:visible;}
-                .a2c-sidebar, .a2c-props{height:auto;border-right:none;border-left:none;border-bottom:1px solid #e2e8f0;padding:16px;}
+                .a2c-editor-shell{height:auto !important;min-height:100vh !important;overflow:visible !important;border-radius:0;border-left:0;border-right:0;display:flex;flex-direction:column;}
+                .a2c-editor-body{display:flex;flex-direction:column;overflow:visible !important;height:auto !important;}
+                .a2c-sidebar, .a2c-props{height:auto !important;border-right:none;border-left:none;border-bottom:1px solid #e2e8f0;padding:16px;}
                 .dark .a2c-sidebar, .dark .a2c-props{border-color:#1e293b;}
-                .a2c-canvas-panel{min-height:75vh;max-width:100vw;overflow:hidden;display:flex;flex-direction:column;}
-                .a2c-workspace{width:100%;max-width:100%;overflow:auto;flex-grow:1;}
+                .a2c-canvas-panel{height:auto !important;min-height:60vh;max-width:100vw;overflow:visible !important;display:flex;flex-direction:column;}
+                .a2c-workspace{width:100%;max-width:100vw;overflow-x:auto !important;overflow-y:visible !important;flex-grow:1;padding:12px;box-sizing:border-box;}
                 .a2c-editor-top{display:flex;flex-direction:column;align-items:stretch;}
                 .a2c-editor-top > .a2c-toolbar:nth-child(2){border-right:0;border-bottom:1px solid #e2e8f0;overflow-x:auto;padding:12px;justify-content:flex-start;flex-wrap:nowrap;}
                 .dark .a2c-editor-top > .a2c-toolbar:nth-child(2){border-color:#1e293b;}
