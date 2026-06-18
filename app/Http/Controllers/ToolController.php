@@ -36,20 +36,21 @@ class ToolController extends Controller
             return response()->json(['error' => 'Invalid URL'], 400);
         }
 
-        // Detect OS and set appropriate yt-dlp path
+        // Detect OS and set appropriate executable paths
         $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        $binDir = base_path('bin');
         
         if ($isWindows) {
-            $binDir = base_path('bin');
-            $ytDlp = base_path('bin/yt-dlp.exe');
-            $ffmpegLocationArg = '--ffmpeg-location "' . $binDir . '"';
+            $ytDlp = $binDir . DIRECTORY_SEPARATOR . 'yt-dlp.exe';
+            $ffmpegPath = $binDir . DIRECTORY_SEPARATOR . 'ffmpeg.exe';
         } else {
-            // On Linux server, it's usually installed globally in /usr/local/bin/yt-dlp or /usr/bin/yt-dlp
-            $ytDlp = '/usr/local/bin/yt-dlp';
-            if (!file_exists($ytDlp)) {
-                $ytDlp = '/usr/bin/yt-dlp'; // fallback
-            }
-            $ffmpegLocationArg = ''; // On Linux, ffmpeg is usually installed globally and found automatically
+            $ytDlp = $binDir . DIRECTORY_SEPARATOR . 'yt-dlp';
+            $ffmpegPath = $binDir . DIRECTORY_SEPARATOR . 'ffmpeg';
+        }
+        
+        $ffmpegLocationArg = '';
+        if (file_exists($ffmpegPath)) {
+            $ffmpegLocationArg = '--ffmpeg-location ' . escapeshellarg($binDir);
         }
 
         if (!file_exists($ytDlp)) {
