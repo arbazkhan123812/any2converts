@@ -10989,10 +10989,25 @@ function getOcrPdfHTML() {
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">OCR PDF Converter</div>
                 <p class="text-sm text-gray-500 mt-1">Upload a scanned or image-based PDF to extract text with OCR, make the content searchable, and copy or download the recognized text for free.</p>
             </div>
-            <input type="file" id="ocrPdfInput" class="w-full p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600" accept=".pdf">
+            
+            <label id="ocrPdfDropzone" class="relative flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-blue-300 dark:border-blue-700/70 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all cursor-pointer group">
+                <input type="file" id="ocrPdfInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                    <div class="p-4 bg-white dark:bg-gray-800 rounded-full shadow-sm mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                    </div>
+                    <p class="mb-1 text-base font-semibold text-gray-700 dark:text-gray-200"><span class="text-blue-600 dark:text-blue-400">Click to upload</span> or drag and drop</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Scanned PDF documents</p>
+                    <p id="ocrPdfFileName" class="mt-4 text-sm font-bold text-emerald-600 dark:text-emerald-400 hidden bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-full"></p>
+                </div>
+            </label>
+
             <div id="ocrPdfPreview" class="hidden text-sm text-gray-500 text-center"></div>
-            <button id="ocrPdfBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">OCR PDF Free</button>
-            <div id="ocrPdfStatus" class="text-sm text-gray-500 text-center hidden"></div>
+            <button id="ocrPdfBtn" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                Extract Text via OCR
+            </button>
+            <div id="ocrPdfStatus" class="text-sm text-gray-500 text-center font-medium hidden p-3 rounded-lg bg-gray-50 dark:bg-gray-800"></div>
         </div>
         <div class="rounded-2xl border border-blue-100 bg-blue-50/70 dark:bg-blue-950/20 dark:border-blue-900 p-4 text-sm text-blue-900 dark:text-blue-100">
             What is OCR PDF:
@@ -11023,6 +11038,8 @@ function getOcrPdfHTML() {
         }
 
         const ocrPdfInput = document.getElementById("ocrPdfInput");
+        const ocrPdfDropzone = document.getElementById("ocrPdfDropzone");
+        const ocrPdfFileName = document.getElementById("ocrPdfFileName");
         const ocrPdfBtn = document.getElementById("ocrPdfBtn");
         const ocrPdfStatus = document.getElementById("ocrPdfStatus");
         const ocrPdfOutput = document.getElementById("ocrPdfOutput");
@@ -11030,6 +11047,19 @@ function getOcrPdfHTML() {
         const ocrPdfCopyBtn = document.getElementById("ocrPdfCopyBtn");
         const ocrPdfDownloadBtn = document.getElementById("ocrPdfDownloadBtn");
         const ocrPdfPreview = document.getElementById("ocrPdfPreview");
+
+        ocrPdfInput.addEventListener("change", function() {
+            if (this.files && this.files.length > 0) {
+                ocrPdfFileName.textContent = "Selected: " + this.files[0].name;
+                ocrPdfFileName.classList.remove("hidden");
+                ocrPdfDropzone.classList.add("border-emerald-400", "bg-emerald-50/50", "dark:border-emerald-600", "dark:bg-emerald-900/20");
+                ocrPdfDropzone.classList.remove("border-blue-300", "bg-blue-50/50", "dark:border-blue-700/70", "dark:bg-blue-950/20");
+            } else {
+                ocrPdfFileName.classList.add("hidden");
+                ocrPdfDropzone.classList.remove("border-emerald-400", "bg-emerald-50/50", "dark:border-emerald-600", "dark:bg-emerald-900/20");
+                ocrPdfDropzone.classList.add("border-blue-300", "bg-blue-50/50", "dark:border-blue-700/70", "dark:bg-blue-950/20");
+            }
+        });
 
         function setOcrStatus(message, isError) {
             if (!message) {
