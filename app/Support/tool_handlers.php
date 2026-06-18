@@ -13079,18 +13079,19 @@ function getEditPdfSmartHTML() {
             .a2c-row{gap:7px}.a2c-empty-card{background:#fff;box-shadow:0 16px 38px rgba(15,23,42,.12)}
             @media(max-width:1180px){.a2c-editor-body{grid-template-columns:130px minmax(0,1fr) 220px}.a2c-editor-top{grid-template-columns:190px minmax(0,1fr)}.a2c-editor-top>.a2c-toolbar:nth-child(3){grid-column:1/-1;justify-content:flex-start;border-top:1px solid #e2e8f0}.dark .a2c-editor-top>.a2c-toolbar:nth-child(3){border-color:#1e293b}.a2c-tool-btn{min-width:70px}}
             @media(max-width:850px){
-                .a2c-editor-shell{height:auto;min-height:100vh;}
-                .a2c-editor-body{display:flex;flex-direction:column;overflow-y:visible;}
+                .a2c-editor-shell{height:auto;min-height:100vh;overflow:visible;border-radius:0;border-left:0;border-right:0;}
+                .a2c-editor-body{display:flex;flex-direction:column;overflow:visible;}
                 .a2c-sidebar, .a2c-props{height:auto;border-right:none;border-left:none;border-bottom:1px solid #e2e8f0;padding:16px;}
                 .dark .a2c-sidebar, .dark .a2c-props{border-color:#1e293b;}
-                .a2c-canvas-panel{min-height:75vh;}
+                .a2c-canvas-panel{min-height:75vh;max-width:100vw;overflow:hidden;display:flex;flex-direction:column;}
+                .a2c-workspace{width:100%;max-width:100%;overflow:auto;flex-grow:1;}
                 .a2c-editor-top{display:flex;flex-direction:column;align-items:stretch;}
                 .a2c-editor-top > .a2c-toolbar:nth-child(2){border-right:0;border-bottom:1px solid #e2e8f0;overflow-x:auto;padding:12px;justify-content:flex-start;flex-wrap:nowrap;}
                 .dark .a2c-editor-top > .a2c-toolbar:nth-child(2){border-color:#1e293b;}
                 .a2c-editor-brand{border-right:0;border-bottom:1px solid #e2e8f0;}
                 .dark .a2c-editor-brand{border-color:#1e293b;}
                 .a2c-pagebar{flex-direction:column;align-items:stretch;height:auto;gap:12px;}
-                .a2c-pagebar > .a2c-toolbar{justify-content:space-between;min-width:100% !important;}
+                .a2c-pagebar > .a2c-toolbar{justify-content:space-between;min-width:100% !important;flex-wrap:wrap;}
                 .a2c-pagebar select{flex-grow:1;}
             }
         </style>
