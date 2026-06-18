@@ -37,10 +37,10 @@ class ToolController extends Controller
         }
 
         $binDir = base_path('bin');
-        $ytDlp = $binDir . DIRECTORY_SEPARATOR . 'yt-dlp.exe';
+        $ytDlp = base_path('bin/yt-dlp.exe');
 
         if (!file_exists($ytDlp)) {
-            return response()->json(['error' => 'Downloader executable not found on server.'], 500);
+            return response()->json(['error' => 'Downloader executable not found on server. Path: ' . $ytDlp], 500);
         }
 
         $uniqueId = uniqid('yt_');
