@@ -82,16 +82,14 @@ class ToolController extends Controller
         );
 
         $outputStr = shell_exec($cmd . ' 2>&1');
-        $returnCode = ($outputStr === null) ? 1 : 0;
         $output = explode("\n", (string)$outputStr);
-
-        if ($returnCode !== 0) {
-            return response()->json(['error' => 'Download failed', 'details' => implode("\n", $output)], 500);
-        }
 
         $files = glob($downloadDir . '/*');
         if (empty($files)) {
-            return response()->json(['error' => 'File not found after download'], 500);
+            return response()->json([
+                'error' => 'Download failed', 
+                'details' => implode("\n", $output)
+            ], 500);
         }
 
         $downloadedFile = basename($files[0]);
