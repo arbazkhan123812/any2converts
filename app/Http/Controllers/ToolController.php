@@ -72,8 +72,15 @@ class ToolController extends Controller
             $formatArg = "-f \"bestvideo[height<={$format}][ext=mp4]+bestaudio[ext=m4a]/best[height<={$format}][ext=mp4]/best\" --merge-output-format mp4";
         }
 
+        // Set TMPDIR to bypass Hostinger /tmp noexec restriction
+        $tmpDir = public_path('tmp');
+        if (!file_exists($tmpDir)) {
+            mkdir($tmpDir, 0755, true);
+        }
+
         $cmd = sprintf(
-            '"%s" %s %s -o "%s" "%s"',
+            'TMPDIR="%s" "%s" %s %s -o "%s" "%s"',
+            $tmpDir,
             $ytDlp,
             $ffmpegLocationArg,
             $formatArg,
