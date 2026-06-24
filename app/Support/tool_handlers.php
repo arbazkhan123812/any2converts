@@ -3400,125 +3400,375 @@ HTML;
 
 function getTournamentBracketGeneratorHTML() {
     return <<<'HTML'
-    <style>
-        .bq{max-width:98rem;margin:0 auto;display:grid;grid-template-columns:minmax(300px,332px) minmax(0,1fr);gap:1.15rem}
-        .bq-side,.bq-board{border:1px solid rgba(148,163,184,.12);box-shadow:0 24px 80px rgba(15,23,42,.28)}
-        .bq-side{border-radius:2rem;padding:1.2rem;background:linear-gradient(180deg,rgba(17,24,39,.96),rgba(15,23,42,.98));color:#f8fafc;backdrop-filter:blur(16px)}
-        .bq-card{border-radius:1.4rem;padding:1rem;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
-        .bq-field{width:100%;margin-top:.7rem;border-radius:1rem;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(15,23,42,.88),rgba(15,23,42,.76));color:#f8fafc;padding:.9rem .95rem;font-weight:700;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);transition:border-color .22s ease, box-shadow .22s ease, transform .22s ease}
-        .bq-field:focus{border-color:rgba(56,189,248,.42);box-shadow:0 0 0 4px rgba(56,189,248,.12), inset 0 1px 0 rgba(255,255,255,.03)}
-        .bq-side textarea.bq-field{min-height:14rem;line-height:1.65}
-        .bq-side button{transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease}
-        .bq-side button:hover{transform:translateY(-1px)}
-        .bq-board{border-radius:2rem;padding:1.2rem;min-height:44rem;color:#fff;background:
-            radial-gradient(circle at top left,rgba(59,130,246,.1),transparent 22rem),
-            radial-gradient(circle at bottom right,rgba(34,211,238,.08),transparent 20rem),
-            linear-gradient(180deg,#1d2128 0%,#141821 100%)}
-        .bq-board-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.08)}
-        .bq-board-head h3{line-height:1}
-        .bq-board-head p{max-width:38rem}
-        .bq-board-stats{display:flex;flex-wrap:wrap;gap:.75rem}
-        .bq-canvas{overflow:auto;margin-top:1rem;padding:1.05rem 4.75rem 2rem 1rem;border-radius:1.6rem;border:1px solid rgba(255,255,255,.06);background:
-            linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.015)),
-            linear-gradient(transparent 31px,rgba(255,255,255,.03) 32px),
-            linear-gradient(90deg,transparent 31px,rgba(255,255,255,.03) 32px);
-            background-size:auto,32px 32px,32px 32px;
-            box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
-        .bq-rounds{display:flex;gap:2.1rem;align-items:flex-start;min-width:max-content;padding-right:8rem;padding-bottom:1rem}
-        .bq-round{min-width:15.4rem;display:flex;flex-direction:column}
-        .bq-stage{margin-bottom:1rem;padding-left:.15rem}
-        .bq-match{position:relative;width:13.75rem;height:5.1rem}.bq-box{height:100%;display:grid;grid-template-rows:1fr 1fr;background:rgba(18,22,31,.98);border:1px solid rgba(255,255,255,.1);border-radius:1.05rem;overflow:hidden;position:relative;z-index:2;box-shadow:0 12px 30px rgba(2,8,23,.22)}
-        .bq-row{display:grid;grid-template-columns:auto 1fr auto;gap:.55rem;align-items:center;padding:.58rem .72rem}.bq-row+.bq-row{border-top:1px solid rgba(255,255,255,.08)}
-        .bq-row.win{background:linear-gradient(90deg,rgba(34,197,94,.12),transparent 85%)}.bq-row.dim .bq-name{color:rgba(148,163,184,.8);font-weight:700}
-        .bq-seed,.bq-score{font-size:.8rem;font-weight:900}.bq-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.92rem;font-weight:800}
-        .bq-pill{position:absolute;top:-.72rem;left:.7rem;z-index:3;padding:.22rem .5rem;border-radius:999px;font-size:.61rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(14,165,233,.16);border:1px solid rgba(56,189,248,.18);color:#7dd3fc;font-weight:800}
-        .bq-h,.bq-v{position:absolute;background:rgba(255,255,255,.72);z-index:1}.bq-h{top:calc(50% - 1px);left:calc(100% + .15rem);width:1.35rem;height:2px}.bq-v{left:calc(100% + 1.48rem);width:2px;height:var(--span)}.bq-v.down{top:50%}.bq-v.up{top:calc(50% - var(--span))}
-        .bq-stat{border-radius:1.1rem;padding:.9rem 1rem;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.07);min-width:8.5rem}
-        .bq-bar{height:.9rem;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}.bq-bar>span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#4ade80)}
-        .bq-sched-wrap{margin-top:1.05rem;border-radius:1.55rem;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.025));padding:1rem 1rem 1.05rem}
-        .bq-sched{border-radius:1rem;padding:.95rem 1rem;background:rgba(15,23,42,.48);border:1px solid rgba(255,255,255,.06);transition:transform .22s ease,border-color .22s ease,background .22s ease}
-        .bq-sched:hover{transform:translateY(-2px);border-color:rgba(56,189,248,.2);background:rgba(15,23,42,.62)}
-        .bq-canvas::-webkit-scrollbar{height:12px;width:12px}
-        .bq-canvas::-webkit-scrollbar-track{background:rgba(15,23,42,.55);border-radius:999px}
-        .bq-canvas::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(56,189,248,.8),rgba(59,130,246,.82));border-radius:999px;border:2px solid rgba(15,23,42,.55)}
-        @media (min-width:1280px){.bq-side{position:sticky;top:6.4rem;align-self:start;max-height:calc(100vh - 7.4rem);overflow:auto}}
-        @media (max-width:1279px){.bq{grid-template-columns:1fr}.bq-canvas{padding-right:1rem}.bq-rounds{padding-right:1.5rem}}
-        @media (max-width:767px){.bq-side,.bq-board{border-radius:1.55rem}.bq-side{padding:1rem}.bq-board{padding:1rem}.bq-card{padding:.9rem}.bq-board-top{padding-bottom:.85rem}.bq-canvas{padding:.85rem .85rem 1.35rem}.bq-rounds{gap:1.6rem;padding-right:1rem}.bq-round{min-width:14.2rem}.bq-match{width:12.75rem}}
-    </style>
-    <div class="bq">
-        <aside class="bq-side">
-            <p class="text-[11px] tracking-[0.32em] uppercase text-cyan-300 font-semibold">Gaming Tools</p>
-            <h2 class="mt-2 text-3xl font-black">Bracket HQ</h2>
-            <p class="mt-3 text-sm leading-6 text-slate-300">Generate a real single-elimination bracket board with seeded matchups, match times, and a clean stream-style layout.</p>
-            <div class="mt-6 space-y-4">
-                <div class="bq-card">
-                    <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">Tournament Name<input id="bracketTitle" class="bq-field" value="Valorant Tourney"></label>
-                    <div class="grid grid-cols-2 gap-3 mt-3">
-                        <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">Total Teams<input id="bracketTeamCount" type="number" min="2" max="32" step="1" class="bq-field" value="8"></label>
-                        <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">Bracket Size<select id="bracketSize" class="bq-field"><option value="auto">Auto Fit</option><option value="4">4</option><option value="8" selected>8</option><option value="16">16</option><option value="32">32</option></select></label>
+    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[360px_1fr] gap-6">
+        <!-- Sidebar -->
+        <aside class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-sm xl:sticky xl:top-[6.4rem] xl:max-h-[calc(100vh-7.4rem)] overflow-y-auto custom-scrollbar">
+            <p class="text-[11px] tracking-[0.32em] uppercase text-blue-500 font-bold">Gaming Tools</p>
+            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
+            <p class="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">Generate a properly seeded single-elimination bracket with stream-ready aesthetics.</p>
+            
+            <div class="mt-8 space-y-6">
+                <!-- Basic Info -->
+                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Tournament Name</label>
+                        <input id="bracketTitle" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="Championship Tourney">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Total Teams</label>
+                            <input id="bracketTeamCount" type="number" min="2" max="64" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="8">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Bracket Size</label>
+                            <select id="bracketSize" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                                <option value="auto">Auto Fit</option>
+                                <option value="4">4 Teams</option>
+                                <option value="8" selected>8 Teams</option>
+                                <option value="16">16 Teams</option>
+                                <option value="32">32 Teams</option>
+                                <option value="64">64 Teams</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="bq-card">
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">Start Date<input id="bracketDate" type="date" class="bq-field"></label>
-                        <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">First Match<input id="bracketTime" type="time" class="bq-field" value="18:00"></label>
+
+                <!-- Scheduling -->
+                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Start Date</label>
+                            <input id="bracketDate" type="date" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">First Match</label>
+                            <input id="bracketTime" type="time" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="18:00">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3 mt-3">
-                        <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">Match Slot<select id="bracketInterval" class="bq-field"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">60 min</option></select></label>
-                        <label class="block text-[11px] uppercase tracking-[0.22em] text-slate-400">Status<select id="bracketStatus" class="bq-field"><option value="open">Open</option><option value="check-in">Check-in</option><option value="in-progress" selected>In Progress</option><option value="complete">Complete</option></select></label>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Match Slot Interval</label>
+                        <select id="bracketInterval" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                            <option value="15">15 Minutes</option>
+                            <option value="30" selected>30 Minutes</option>
+                            <option value="45">45 Minutes</option>
+                            <option value="60">1 Hour</option>
+                            <option value="90">1.5 Hours</option>
+                        </select>
                     </div>
                 </div>
-                <div class="bq-card">
-                    <div class="flex items-center justify-between gap-3 mb-3"><span class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Team Names</span><button id="bracketAutofillBtn" type="button" class="rounded-full bg-cyan-400/10 text-cyan-300 px-4 py-2 text-sm font-semibold border border-cyan-400/12">Autofill</button></div>
-                    <textarea id="bracketNames" rows="10" class="bq-field min-h-[15rem] resize-y" placeholder="Team Agent&#10;Team Lacy">Team Agent
-Team A
-Team B
-Team C
-Team D
-Team E
-Team F
-Team G</textarea>
-                    <div class="mt-4 flex flex-wrap gap-3"><button id="bracketGenerateBtn" class="rounded-[1rem] bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-5 py-3.5 font-semibold shadow-[0_18px_40px_rgba(14,165,233,.26)]">Generate Bracket</button><button id="bracketShuffleBtn" class="rounded-[1rem] bg-white/8 text-white px-5 py-3.5 font-semibold border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,.04)]">Shuffle Seeds</button></div>
+
+                <!-- Teams List -->
+                <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400">Team Names</label>
+                        <button id="bracketAutofillBtn" class="text-[11px] uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Autofill</button>
+                    </div>
+                    <textarea id="bracketNames" rows="8" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono text-sm resize-y focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" placeholder="Enter teams (one per line)">Team Alpha
+Team Bravo
+Team Charlie
+Team Delta
+Team Echo
+Team Foxtrot
+Team Golf
+Team Hotel</textarea>
+                    
+                    <div class="flex gap-3 mt-4">
+                        <button id="bracketGenerateBtn" class="flex-[2] bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3.5 rounded-xl shadow-[0_8px_20px_rgba(59,130,246,0.25)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.35)] transition-all transform hover:-translate-y-0.5">Generate Bracket</button>
+                        <button id="bracketShuffleBtn" class="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Shuffle</button>
+                    </div>
                 </div>
-                <div id="bracketOverview" class="grid grid-cols-2 gap-3"></div>
-                <div class="bq-card"><div class="flex items-center justify-between gap-3"><div><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Bracket Status</p><p id="bracketStatusLabel" class="mt-2 text-xl font-black">In Progress</p></div><p id="bracketProgressText" class="text-sm font-semibold text-slate-300">57%</p></div><div class="bq-bar mt-4"><span id="bracketProgressFill" style="width:57%;"></span></div></div>
             </div>
         </aside>
-        <section class="bq-board">
-            <div class="bq-board-top"><div class="bq-board-head"><p class="text-[11px] tracking-[0.28em] uppercase text-cyan-300 font-semibold">Single Elimination</p><h3 id="bracketBoardTitle" class="mt-2 text-3xl font-black">Valorant Tourney</h3><p id="bracketBoardMeta" class="mt-2 text-sm text-slate-300">8 teams, randomized seeds, opening matches scheduled automatically.</p></div><div class="bq-board-stats"><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Bracket Size</p><p id="bracketBoardSize" class="mt-2 text-2xl font-black">8</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Matches</p><p id="bracketBoardMatches" class="mt-2 text-2xl font-black">7</p></div></div></div>
-            <div class="bq-canvas"><div id="bracketCanvas" class="bq-rounds"></div></div>
-            <div class="bq-sched-wrap"><div class="flex flex-wrap items-center justify-between gap-4"><div><p class="text-[11px] uppercase tracking-[0.22em] text-cyan-300">Schedule Feed</p><h4 class="mt-1 text-xl font-black text-white">Randomized Match Schedule</h4></div><p id="bracketScheduleMeta" class="text-sm text-slate-400">Generated from team list and match slot length</p></div><div id="bracketSchedule" class="mt-4 grid lg:grid-cols-2 gap-3"></div></div>
+
+        <!-- Main Board -->
+        <section class="bg-white dark:bg-[#0b1121] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden min-h-[700px] relative">
+            <!-- Background Decoration -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+                <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4"></div>
+            </div>
+
+            <!-- Header -->
+            <div class="p-6 md:p-8 border-b border-slate-200/60 dark:border-slate-800/60 flex flex-wrap justify-between items-end gap-6 relative z-10 backdrop-blur-sm">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[10px] font-black uppercase tracking-widest">Single Elimination</span>
+                    </div>
+                    <h3 id="bracketBoardTitle" class="text-3xl font-black text-slate-900 dark:text-white mt-4 tracking-tight">Tournament Title</h3>
+                    <p id="bracketBoardMeta" class="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">Bracket details will appear here</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Teams</p>
+                        <p id="bracketBoardSize" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</p>
+                    </div>
+                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Matches</p>
+                        <p id="bracketBoardMatches" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas -->
+            <div class="flex-1 overflow-auto p-6 md:p-12 custom-scrollbar relative z-10">
+                <div id="bracketCanvas" class="flex gap-12 min-w-max pb-12 pt-14">
+                    <!-- Bracket injected here via JS -->
+                </div>
+            </div>
+            
+            <!-- Schedule Section -->
+            <div class="border-t border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 p-6 md:p-8 relative z-10">
+                <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-6">Upcoming Matches</h4>
+                <div id="bracketSchedule" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Schedule injected here -->
+                </div>
+            </div>
         </section>
     </div>
+
+    <style>
+    .custom-scrollbar::-webkit-scrollbar { height: 12px; width: 12px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(148, 163, 184, 0.7); }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(71, 85, 105, 0.5); }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(71, 85, 105, 0.8); }
+    </style>
+
     <script>
         (() => {
-            const H=88,G=22,byId=(id)=>document.getElementById(id);
-            const namesEl=byId("bracketNames"), teamCountEl=byId("bracketTeamCount"), sizeEl=byId("bracketSize"), dateEl=byId("bracketDate"), timeEl=byId("bracketTime"), intervalEl=byId("bracketInterval"), statusEl=byId("bracketStatus"), titleEl=byId("bracketTitle");
-            const canvas=byId("bracketCanvas"), scheduleEl=byId("bracketSchedule"), overviewEl=byId("bracketOverview");
-            const boardTitleEl=byId("bracketBoardTitle"), boardMetaEl=byId("bracketBoardMeta"), boardSizeEl=byId("bracketBoardSize"), boardMatchesEl=byId("bracketBoardMatches");
-            const statusLabelEl=byId("bracketStatusLabel"), progressTextEl=byId("bracketProgressText"), progressFillEl=byId("bracketProgressFill"), scheduleMetaEl=byId("bracketScheduleMeta");
-            const statusMap={open:["Open",18],"check-in":["Check-in",36],"in-progress":["In Progress",57],complete:["Complete",100]};
-            dateEl.valueAsDate=new Date();
-            const getTeams=()=>namesEl.value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
-            const shuffle=(list)=>{const copy=list.slice();for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}return copy;};
-            const slotTime=(d)=>d.toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
-            const startAt=()=>new Date(`${dateEl.value||new Date().toISOString().slice(0,10)}T${timeEl.value||"18:00"}:00`);
-            const bracketSize=(count)=>sizeEl.value==="auto"?Math.pow(2,Math.ceil(Math.log2(Math.max(2,count)))):Math.max(parseInt(sizeEl.value,10)||2,count);
-            const roundTitle=(i,total)=>i===total-1?"Final":i===total-2&&total>2?"Semifinal":i===total-3?"Quarterfinal":`Round ${i+1}`;
-            function build(rawTeams){const limit=bracketSize(rawTeams.length), seeded=shuffle(rawTeams).slice(0,limit).map((name,index)=>({seed:index+1,name})); while(seeded.length<limit) seeded.push({seed:seeded.length+1,name:"BYE",bye:true}); const rounds=[], schedule=[]; let current=seeded, now=startAt(), id=1; while(current.length>1){const round=[], next=[]; for(let i=0;i<current.length;i+=2){const top=current[i], bottom=current[i+1], adv=top?.bye?bottom:bottom?.bye?top:null; round.push({id,time:slotTime(now),top:{seed:top?.seed??"",name:top?.name??"TBD",bye:!!top?.bye,win:adv===top},bottom:{seed:bottom?.seed??"",name:bottom?.name??"TBD",bye:!!bottom?.bye,win:adv===bottom}}); schedule.push({id,time:slotTime(now),round:rounds.length+1,top:top?.name??"TBD",bottom:bottom?.name??"TBD"}); next.push({seed:adv?.seed??Math.min(top?.seed??99,bottom?.seed??99),name:adv?.name??`Winner M${id}`}); now=new Date(now.getTime()+(parseInt(intervalEl.value,10)||30)*60000); id++; } rounds.push(round); current=next; } return {rounds,schedule,size:seeded.length,matches:schedule.length}; }
-            function renderStatus(){const c=statusMap[statusEl.value]||statusMap["in-progress"]; statusLabelEl.textContent=c[0]; progressTextEl.textContent=`${c[1]}%`; progressFillEl.style.width=`${c[1]}%`;}
-            function renderOverview(plan,count){overviewEl.innerHTML=`<div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Teams</p><p class="mt-2 text-2xl font-black">${count}</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Rounds</p><p class="mt-2 text-2xl font-black">${plan.rounds.length}</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">Byes</p><p class="mt-2 text-2xl font-black">${Math.max(0,plan.size-count)}</p></div><div class="bq-stat"><p class="text-[11px] uppercase tracking-[0.22em] text-slate-400">First Match</p><p class="mt-2 text-xl font-black">${plan.schedule[0]?.time||"TBD"}</p></div>`;}
-            function renderBoard(plan,count){canvas.innerHTML=""; plan.rounds.forEach((round,ri)=>{const spacing=(H+G)*Math.pow(2,ri), gap=Math.max(G,spacing-H), offset=ri===0?0:((H+G)*Math.pow(2,ri-1))/2, span=(H+gap)/2; const col=document.createElement("section"); col.className="bq-round"; col.style.paddingTop=`${offset}px`; col.style.gap=`${gap}px`; col.innerHTML=`<div class="bq-stage"><p class="text-[11px] uppercase tracking-[0.22em] text-cyan-300">Stage ${ri+1}</p><h4 class="mt-1 text-xl font-black text-white">${roundTitle(ri,plan.rounds.length)}</h4></div>`; round.forEach((match,mi)=>{const final=ri===plan.rounds.length-1; const row=(team)=>`<div class="bq-row ${team.win?"win":""} ${team.bye||String(team.name).startsWith("Winner M")?"dim":""}"><span class="bq-seed">${team.seed}</span><span class="bq-name">${team.name}</span><span class="bq-score">${team.win?"ADV":""}</span></div>`; const wrap=document.createElement("article"); wrap.className="bq-match"; wrap.style.setProperty("--span",`${span}px`); wrap.innerHTML=`<span class="bq-pill">M${match.id} - ${match.time}</span><div class="bq-box">${row(match.top)}${row(match.bottom)}</div>${final?"":'<span class="bq-h"></span>'}${final?"":mi%2===0?'<span class="bq-v down"></span>':'<span class="bq-v up"></span>'}`; col.appendChild(wrap);}); canvas.appendChild(col);}); boardTitleEl.textContent=titleEl.value.trim()||"Tournament Bracket"; boardMetaEl.textContent=`${count} teams, randomized seeds, opening matches scheduled automatically.`; boardSizeEl.textContent=String(plan.size); boardMatchesEl.textContent=String(plan.matches); }
-            function renderSchedule(plan){scheduleEl.innerHTML=plan.schedule.map(m=>`<article class="bq-sched"><p class="text-[11px] uppercase tracking-[0.22em] text-cyan-300">Round ${m.round} - Match ${m.id}</p><h5 class="mt-1 text-base font-black text-white">${m.top} <span class="text-slate-500">vs</span> ${m.bottom}</h5><p class="mt-2 text-sm font-semibold text-slate-300">${m.time}</p></article>`).join(""); scheduleMetaEl.textContent=`${plan.matches} matches built from randomized seeds and your time slot length.`;}
-            function generate(){const count=Math.max(2,parseInt(teamCountEl.value,10)||2), teams=getTeams().slice(0,count); if(teams.length<2){canvas.innerHTML='<div class="bq-sched text-slate-300">Add at least two team names to generate the bracket.</div>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Tournament Bracket Generator online free without email, Tournament Bracket Generator no watermark fast for mobile, best Tournament Bracket Generator high quality software pc mac, Tournament Bracket Generator unlimited file size free 2026, how to use Tournament Bracket Generator easily without app install, secure Tournament Bracket Generator safe for business confidential files, Tournament Bracket Generator unblocked for school chromebook.</p>
-    </div>'; scheduleEl.innerHTML=""; overviewEl.innerHTML=""; boardTitleEl.textContent="Tournament Bracket"; boardMetaEl.textContent="Add more teams to render the bracket board."; boardSizeEl.textContent="0"; boardMatchesEl.textContent="0"; renderStatus(); return;} const plan=build(teams); renderOverview(plan,teams.length); renderBoard(plan,teams.length); renderSchedule(plan); renderStatus();}
-            byId("bracketAutofillBtn").addEventListener("click",()=>{const count=Math.max(2,parseInt(teamCountEl.value,10)||2); namesEl.value=Array.from({length:count},(_,i)=>`Team ${i+1}`).join("\n"); generate();});
-            byId("bracketShuffleBtn").addEventListener("click",()=>{namesEl.value=shuffle(getTeams()).join("\n"); generate();});
-            byId("bracketGenerateBtn").addEventListener("click",generate);
-            [teamCountEl,sizeEl,dateEl,timeEl,intervalEl,statusEl].forEach(el=>el.addEventListener("input",generate));
-            titleEl.addEventListener("input",generate);
+            const byId = (id) => document.getElementById(id);
+            const namesEl = byId("bracketNames"), teamCountEl = byId("bracketTeamCount"), sizeEl = byId("bracketSize"), dateEl = byId("bracketDate"), timeEl = byId("bracketTime"), intervalEl = byId("bracketInterval"), titleEl = byId("bracketTitle");
+            const canvas = byId("bracketCanvas"), scheduleEl = byId("bracketSchedule");
+            const boardTitleEl = byId("bracketBoardTitle"), boardMetaEl = byId("bracketBoardMeta"), boardSizeEl = byId("bracketBoardSize"), boardMatchesEl = byId("bracketBoardMatches");
+            
+            // Set default date to today
+            dateEl.valueAsDate = new Date();
+            
+            const getTeams = () => namesEl.value.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+            const shuffle = (list) => { const copy = list.slice(); for(let i=copy.length-1; i>0; i--) { const j = Math.floor(Math.random() * (i + 1)); [copy[i], copy[j]] = [copy[j], copy[i]]; } return copy; };
+            const slotTime = (d) => d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+            const startAt = () => new Date(`${dateEl.value || new Date().toISOString().slice(0, 10)}T${timeEl.value || "18:00"}:00`);
+            const bracketSize = (count) => sizeEl.value === "auto" ? Math.pow(2, Math.ceil(Math.log2(Math.max(2, count)))) : Math.max(parseInt(sizeEl.value, 10) || 2, count);
+            const roundTitle = (i, total) => i === total - 1 ? "Finals" : i === total - 2 && total > 2 ? "Semifinals" : i === total - 3 ? "Quarterfinals" : `Round ${i + 1}`;
+            
+            function getSeedOrder(size) {
+                if (size <= 1) return [1];
+                let order = [1, 2];
+                let currentSize = 2;
+                while (currentSize < size) {
+                    currentSize *= 2;
+                    let nextOrder = [];
+                    for (let i = 0; i < order.length; i++) {
+                        nextOrder.push(order[i]);
+                        nextOrder.push(currentSize + 1 - order[i]);
+                    }
+                    order = nextOrder;
+                }
+                return order;
+            }
+
+            function build(rawTeams) {
+                const limit = bracketSize(rawTeams.length);
+                const shuffled = shuffle(rawTeams);
+                const teams = [];
+                
+                // Seed assignment
+                for (let i = 0; i < limit; i++) {
+                    if (i < shuffled.length) {
+                        teams.push({ seed: i + 1, name: shuffled[i], bye: false });
+                    } else {
+                        teams.push({ seed: i + 1, name: "BYE", bye: true });
+                    }
+                }
+                
+                // Place into bracket structure using seed algorithm
+                const order = getSeedOrder(limit);
+                let current = order.map(seed => teams.find(t => t.seed === seed));
+                
+                const rounds = [];
+                const schedule = [];
+                let now = startAt();
+                let id = 1;
+                
+                while (current.length > 1) {
+                    const round = [];
+                    const next = [];
+                    
+                    for (let i = 0; i < current.length; i += 2) {
+                        const top = current[i];
+                        const bottom = current[i + 1];
+                        
+                        let adv = null;
+                        if (top.bye && !bottom.bye) adv = bottom;
+                        else if (!top.bye && bottom.bye) adv = top;
+                        else if (top.bye && bottom.bye) adv = top; // Fallback
+                        
+                        const match = {
+                            id,
+                            time: adv ? "TBD" : slotTime(now), // BYE matches don't need real times
+                            top: { seed: top.seed || "", name: top.name || "TBD", bye: top.bye, win: adv === top },
+                            bottom: { seed: bottom.seed || "", name: bottom.name || "TBD", bye: bottom.bye, win: adv === bottom },
+                            hasWinner: !!adv
+                        };
+                        
+                        round.push(match);
+                        
+                        if (!top.bye && !bottom.bye) {
+                            schedule.push({
+                                id,
+                                time: slotTime(now),
+                                round: rounds.length + 1,
+                                top: top.name || "TBD",
+                                bottom: bottom.name || "TBD"
+                            });
+                            now = new Date(now.getTime() + (parseInt(intervalEl.value, 10) || 30) * 60000);
+                        }
+                        
+                        next.push({
+                            seed: adv ? adv.seed : Math.min(top.seed || 99, bottom.seed || 99),
+                            name: adv ? adv.name : `Winner M${id}`,
+                            bye: adv ? adv.bye : false
+                        });
+                        
+                        id++;
+                    }
+                    
+                    rounds.push(round);
+                    current = next;
+                }
+                
+                return { rounds, schedule, size: limit, matches: schedule.length };
+            }
+
+            function renderBoard(plan) {
+                canvas.innerHTML = "";
+                
+                const H = 96; // Match card height
+                const G = 24; // Base gap
+                const baseSpacing = H + G; // 120px
+                const totalHeight = (plan.size / 2) * baseSpacing;
+                
+                plan.rounds.forEach((round, ri) => {
+                    const isFinal = ri === plan.rounds.length - 1;
+                    const isFirst = ri === 0;
+                    
+                    const col = document.createElement("div");
+                    col.className = "relative flex-shrink-0 w-[240px]";
+                    col.style.height = `${totalHeight}px`;
+                    
+                    const stageHeader = document.createElement("div");
+                    stageHeader.className = "absolute w-full text-center -top-12 left-0";
+                    stageHeader.innerHTML = `<p class="text-xs font-black text-blue-500 uppercase tracking-widest">${roundTitle(ri, plan.rounds.length)}</p>`;
+                    col.appendChild(stageHeader);
+                    
+                    round.forEach((match, mi) => {
+                        const centerY = mi * (Math.pow(2, ri) * baseSpacing) + (Math.pow(2, ri) - 1) * baseSpacing / 2 + H / 2;
+                        const topY = centerY - H / 2;
+                        
+                        const card = document.createElement("div");
+                        card.className = "absolute left-0 w-full";
+                        card.style.top = `${topY}px`;
+                        card.style.height = `${H}px`;
+                        
+                        let linesHTML = '';
+                        if (!isFirst) {
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -left-[24px] w-[24px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
+                        }
+                        if (!isFinal) {
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -right-[24px] w-[24px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
+                        }
+                        if (!isFinal && mi % 2 === 0) {
+                            const distToSibling = Math.pow(2, ri) * baseSpacing;
+                            linesHTML += `<div class="absolute top-[50%] -right-[24px] w-[2px] bg-slate-300 dark:bg-slate-700" style="height: ${distToSibling}px"></div>`;
+                        }
+                        
+                        const row = (team, isTop) => `
+                            <div class="flex-1 flex items-center px-3 ${isTop ? 'border-b border-slate-100 dark:border-slate-700/60' : ''} ${team.win ? 'bg-blue-50/60 dark:bg-blue-500/10' : ''} ${team.bye || team.name.startsWith('Winner M') ? 'opacity-50' : ''}">
+                                <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 w-5">${team.seed}</span>
+                                <span class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate flex-1 ${team.win ? 'text-blue-700 dark:text-blue-400' : ''}">${team.name}</span>
+                                ${team.win ? `<svg class="w-4 h-4 text-blue-500 ml-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>` : ''}
+                            </div>
+                        `;
+                        
+                        const showPill = !match.top.bye && !match.bottom.bye;
+                        
+                        card.innerHTML = `
+                            ${linesHTML}
+                            <div class="w-full h-full bg-white dark:bg-slate-800/90 border ${match.hasWinner ? 'border-blue-500/50 shadow-[0_4px_20px_rgba(59,130,246,0.1)]' : 'border-slate-200 dark:border-slate-700 shadow-sm'} rounded-xl flex flex-col overflow-hidden relative z-10 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                                ${row(match.top, true)}
+                                ${row(match.bottom, false)}
+                            </div>
+                            ${showPill ? `<div class="absolute -top-3 left-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[9px] font-black text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-full z-20 shadow-sm uppercase tracking-wider">M${match.id} • ${match.time}</div>` : `<div class="absolute -top-3 left-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-[9px] font-black text-slate-400 dark:text-slate-500 px-2.5 py-1 rounded-full z-20 uppercase tracking-wider">M${match.id}</div>`}
+                        `;
+                        col.appendChild(card);
+                    });
+                    
+                    canvas.appendChild(col);
+                });
+                
+                boardTitleEl.textContent = titleEl.value.trim() || "Tournament Bracket";
+                boardMetaEl.textContent = `${plan.size} slot bracket, seeded randomly. opening matches scheduled from start time.`;
+                boardSizeEl.textContent = String(plan.size);
+                boardMatchesEl.textContent = String(plan.matches);
+            }
+
+            function renderSchedule(plan) {
+                if (plan.schedule.length === 0) {
+                    scheduleEl.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-slate-800/30 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 border-dashed">No actual matches scheduled (all byes).</div>`;
+                    return;
+                }
+                
+                scheduleEl.innerHTML = plan.schedule.map(m => `
+                    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-2xl shadow-sm transition-all hover:border-blue-300 dark:hover:border-blue-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-blue-500">R${m.round} - M${m.id}</span>
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded-md">${m.time}</span>
+                        </div>
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">${m.top}</div>
+                        <div class="text-xs font-black text-slate-400 my-0.5 uppercase tracking-widest">vs</div>
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">${m.bottom}</div>
+                    </div>
+                `).join("");
+            }
+
+            function generate() {
+                const count = Math.max(2, parseInt(teamCountEl.value, 10) || 2);
+                const teams = getTeams().slice(0, count);
+                
+                if (teams.length < 2) {
+                    canvas.innerHTML = '<div class="py-12 px-6 text-center text-slate-500 dark:text-slate-400 w-full font-medium">Add at least two team names to generate the bracket.</div>';
+                    scheduleEl.innerHTML = "";
+                    boardTitleEl.textContent = "Tournament Bracket";
+                    boardMetaEl.textContent = "Awaiting teams.";
+                    boardSizeEl.textContent = "0";
+                    boardMatchesEl.textContent = "0";
+                    return;
+                }
+                
+                const plan = build(teams);
+                renderBoard(plan);
+                renderSchedule(plan);
+            }
+
+            byId("bracketAutofillBtn").addEventListener("click", () => {
+                const count = Math.max(2, parseInt(teamCountEl.value, 10) || 2);
+                namesEl.value = Array.from({length: count}, (_, i) => `Team ${String.fromCharCode(65 + (i % 26))}${i >= 26 ? Math.floor(i/26) : ''}`).join("\n");
+                generate();
+            });
+            
+            byId("bracketShuffleBtn").addEventListener("click", () => {
+                namesEl.value = shuffle(getTeams()).join("\n");
+                generate();
+            });
+            
+            byId("bracketGenerateBtn").addEventListener("click", generate);
+            
+            [teamCountEl, sizeEl, dateEl, timeEl, intervalEl].forEach(el => el.addEventListener("input", generate));
+            titleEl.addEventListener("input", generate);
+            
+            // Initial render
             generate();
         })();
     </script>
