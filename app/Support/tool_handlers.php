@@ -3398,6 +3398,382 @@ function getClipToGifHTML() {
 HTML;
 }
 
+function getTournamentBracketGeneratorHTML() {
+    return <<<'HTML'
+    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[360px_1fr] gap-6">
+        <!-- Sidebar -->
+        <aside class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-sm xl:sticky xl:top-[6.4rem] xl:max-h-[calc(100vh-7.4rem)] overflow-y-auto custom-scrollbar">
+            <p class="text-[11px] tracking-[0.32em] uppercase text-blue-500 font-bold">Gaming Tools</p>
+            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
+            <p class="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">Generate a properly seeded single-elimination bracket with stream-ready aesthetics.</p>
+            
+            <div class="mt-8 space-y-6">
+                <!-- Basic Info -->
+                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Tournament Name</label>
+                        <input id="bracketTitle" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="Championship Tourney">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Total Teams</label>
+                            <input id="bracketTeamCount" type="number" min="2" max="64" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="8">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Bracket Size</label>
+                            <select id="bracketSize" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                                <option value="auto">Auto Fit</option>
+                                <option value="4">4 Teams</option>
+                                <option value="8" selected>8 Teams</option>
+                                <option value="16">16 Teams</option>
+                                <option value="32">32 Teams</option>
+                                <option value="64">64 Teams</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scheduling -->
+                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Start Date</label>
+                            <input id="bracketDate" type="date" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">First Match</label>
+                            <input id="bracketTime" type="time" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="18:00">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Match Slot Interval</label>
+                        <select id="bracketInterval" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                            <option value="15">15 Minutes</option>
+                            <option value="30" selected>30 Minutes</option>
+                            <option value="45">45 Minutes</option>
+                            <option value="60">1 Hour</option>
+                            <option value="90">1.5 Hours</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Teams List -->
+                <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400">Team Names</label>
+                        <button id="bracketAutofillBtn" class="text-[11px] uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Autofill</button>
+                    </div>
+                    <textarea id="bracketNames" rows="8" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono text-sm resize-y focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" placeholder="Enter teams (one per line)">Team Alpha
+Team Bravo
+Team Charlie
+Team Delta
+Team Echo
+Team Foxtrot
+Team Golf
+Team Hotel</textarea>
+                    
+                    <div class="flex gap-3 mt-4">
+                        <button id="bracketGenerateBtn" class="flex-[2] bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3.5 rounded-xl shadow-[0_8px_20px_rgba(59,130,246,0.25)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.35)] transition-all transform hover:-translate-y-0.5">Generate Bracket</button>
+                        <button id="bracketShuffleBtn" class="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Shuffle</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Board -->
+        <section class="bg-white dark:bg-[#0b1121] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden min-h-[700px] relative">
+            <!-- Background Decoration -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+                <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4"></div>
+            </div>
+
+            <!-- Header -->
+            <div class="p-6 md:p-8 border-b border-slate-200/60 dark:border-slate-800/60 flex flex-wrap justify-between items-end gap-6 relative z-10 backdrop-blur-sm">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[10px] font-black uppercase tracking-widest">Single Elimination</span>
+                    </div>
+                    <h3 id="bracketBoardTitle" class="text-3xl font-black text-slate-900 dark:text-white mt-4 tracking-tight">Tournament Title</h3>
+                    <p id="bracketBoardMeta" class="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">Bracket details will appear here</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Teams</p>
+                        <p id="bracketBoardSize" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</p>
+                    </div>
+                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Matches</p>
+                        <p id="bracketBoardMatches" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas -->
+            <div class="flex-1 overflow-auto p-6 md:p-12 custom-scrollbar relative z-10">
+                <div id="bracketCanvas" class="flex gap-12 min-w-max pb-12 pt-14">
+                    <!-- Bracket injected here via JS -->
+                </div>
+            </div>
+            
+            <!-- Schedule Section -->
+            <div class="border-t border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 p-6 md:p-8 relative z-10">
+                <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-6">Upcoming Matches</h4>
+                <div id="bracketSchedule" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Schedule injected here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <style>
+    .custom-scrollbar::-webkit-scrollbar { height: 12px; width: 12px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(148, 163, 184, 0.7); }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(71, 85, 105, 0.5); }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(71, 85, 105, 0.8); }
+    </style>
+
+    <script>
+        (() => {
+            const byId = (id) => document.getElementById(id);
+            const namesEl = byId("bracketNames"), teamCountEl = byId("bracketTeamCount"), sizeEl = byId("bracketSize"), dateEl = byId("bracketDate"), timeEl = byId("bracketTime"), intervalEl = byId("bracketInterval"), titleEl = byId("bracketTitle");
+            const canvas = byId("bracketCanvas"), scheduleEl = byId("bracketSchedule");
+            const boardTitleEl = byId("bracketBoardTitle"), boardMetaEl = byId("bracketBoardMeta"), boardSizeEl = byId("bracketBoardSize"), boardMatchesEl = byId("bracketBoardMatches");
+            
+            // Set default date to today
+            dateEl.valueAsDate = new Date();
+            
+            const getTeams = () => namesEl.value.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+            const shuffle = (list) => { const copy = list.slice(); for(let i=copy.length-1; i>0; i--) { const j = Math.floor(Math.random() * (i + 1)); [copy[i], copy[j]] = [copy[j], copy[i]]; } return copy; };
+            const slotTime = (d) => d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+            const startAt = () => new Date(`${dateEl.value || new Date().toISOString().slice(0, 10)}T${timeEl.value || "18:00"}:00`);
+            const bracketSize = (count) => sizeEl.value === "auto" ? Math.pow(2, Math.ceil(Math.log2(Math.max(2, count)))) : Math.max(parseInt(sizeEl.value, 10) || 2, count);
+            const roundTitle = (i, total) => i === total - 1 ? "Finals" : i === total - 2 && total > 2 ? "Semifinals" : i === total - 3 ? "Quarterfinals" : `Round ${i + 1}`;
+            
+            function getSeedOrder(size) {
+                if (size <= 1) return [1];
+                let order = [1, 2];
+                let currentSize = 2;
+                while (currentSize < size) {
+                    currentSize *= 2;
+                    let nextOrder = [];
+                    for (let i = 0; i < order.length; i++) {
+                        nextOrder.push(order[i]);
+                        nextOrder.push(currentSize + 1 - order[i]);
+                    }
+                    order = nextOrder;
+                }
+                return order;
+            }
+
+            function build(rawTeams) {
+                const limit = bracketSize(rawTeams.length);
+                const shuffled = shuffle(rawTeams);
+                const teams = [];
+                
+                // Seed assignment
+                for (let i = 0; i < limit; i++) {
+                    if (i < shuffled.length) {
+                        teams.push({ seed: i + 1, name: shuffled[i], bye: false });
+                    } else {
+                        teams.push({ seed: i + 1, name: "BYE", bye: true });
+                    }
+                }
+                
+                // Place into bracket structure using seed algorithm
+                const order = getSeedOrder(limit);
+                let current = order.map(seed => teams.find(t => t.seed === seed));
+                
+                const rounds = [];
+                const schedule = [];
+                let now = startAt();
+                let id = 1;
+                
+                while (current.length > 1) {
+                    const round = [];
+                    const next = [];
+                    
+                    for (let i = 0; i < current.length; i += 2) {
+                        const top = current[i];
+                        const bottom = current[i + 1];
+                        
+                        let adv = null;
+                        if (top.bye && !bottom.bye) adv = bottom;
+                        else if (!top.bye && bottom.bye) adv = top;
+                        else if (top.bye && bottom.bye) adv = top; // Fallback
+                        
+                        const match = {
+                            id,
+                            time: adv ? "TBD" : slotTime(now), // BYE matches don't need real times
+                            top: { seed: top.seed || "", name: top.name || "TBD", bye: top.bye, win: adv === top },
+                            bottom: { seed: bottom.seed || "", name: bottom.name || "TBD", bye: bottom.bye, win: adv === bottom },
+                            hasWinner: !!adv
+                        };
+                        
+                        round.push(match);
+                        
+                        if (!top.bye && !bottom.bye) {
+                            schedule.push({
+                                id,
+                                time: slotTime(now),
+                                round: rounds.length + 1,
+                                top: top.name || "TBD",
+                                bottom: bottom.name || "TBD"
+                            });
+                            now = new Date(now.getTime() + (parseInt(intervalEl.value, 10) || 30) * 60000);
+                        }
+                        
+                        next.push({
+                            seed: adv ? adv.seed : Math.min(top.seed || 99, bottom.seed || 99),
+                            name: adv ? adv.name : `Winner M${id}`,
+                            bye: adv ? adv.bye : false
+                        });
+                        
+                        id++;
+                    }
+                    
+                    rounds.push(round);
+                    current = next;
+                }
+                
+                return { rounds, schedule, size: limit, matches: schedule.length };
+            }
+
+            function renderBoard(plan) {
+                canvas.innerHTML = "";
+                
+                const H = 96; // Match card height
+                const G = 24; // Base gap
+                const baseSpacing = H + G; // 120px
+                const totalHeight = (plan.size / 2) * baseSpacing;
+                
+                plan.rounds.forEach((round, ri) => {
+                    const isFinal = ri === plan.rounds.length - 1;
+                    const isFirst = ri === 0;
+                    
+                    const col = document.createElement("div");
+                    col.className = "relative flex-shrink-0 w-[240px]";
+                    col.style.height = `${totalHeight}px`;
+                    
+                    const stageHeader = document.createElement("div");
+                    stageHeader.className = "absolute w-full text-center -top-12 left-0";
+                    stageHeader.innerHTML = `<p class="text-xs font-black text-blue-500 uppercase tracking-widest">${roundTitle(ri, plan.rounds.length)}</p>`;
+                    col.appendChild(stageHeader);
+                    
+                    round.forEach((match, mi) => {
+                        const centerY = mi * (Math.pow(2, ri) * baseSpacing) + (Math.pow(2, ri) - 1) * baseSpacing / 2 + H / 2;
+                        const topY = centerY - H / 2;
+                        
+                        const card = document.createElement("div");
+                        card.className = "absolute left-0 w-full";
+                        card.style.top = `${topY}px`;
+                        card.style.height = `${H}px`;
+                        
+                        let linesHTML = '';
+                        if (!isFirst) {
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -left-[24px] w-[24px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
+                        }
+                        if (!isFinal) {
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -right-[24px] w-[24px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
+                        }
+                        if (!isFinal && mi % 2 === 0) {
+                            const distToSibling = Math.pow(2, ri) * baseSpacing;
+                            linesHTML += `<div class="absolute top-[50%] -right-[24px] w-[2px] bg-slate-300 dark:bg-slate-700" style="height: ${distToSibling}px"></div>`;
+                        }
+                        
+                        const row = (team, isTop) => `
+                            <div class="flex-1 flex items-center px-3 ${isTop ? 'border-b border-slate-100 dark:border-slate-700/60' : ''} ${team.win ? 'bg-blue-50/60 dark:bg-blue-500/10' : ''} ${team.bye || team.name.startsWith('Winner M') ? 'opacity-50' : ''}">
+                                <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 w-5">${team.seed}</span>
+                                <span class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate flex-1 ${team.win ? 'text-blue-700 dark:text-blue-400' : ''}">${team.name}</span>
+                                ${team.win ? `<svg class="w-4 h-4 text-blue-500 ml-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>` : ''}
+                            </div>
+                        `;
+                        
+                        const showPill = !match.top.bye && !match.bottom.bye;
+                        
+                        card.innerHTML = `
+                            ${linesHTML}
+                            <div class="w-full h-full bg-white dark:bg-slate-800/90 border ${match.hasWinner ? 'border-blue-500/50 shadow-[0_4px_20px_rgba(59,130,246,0.1)]' : 'border-slate-200 dark:border-slate-700 shadow-sm'} rounded-xl flex flex-col overflow-hidden relative z-10 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                                ${row(match.top, true)}
+                                ${row(match.bottom, false)}
+                            </div>
+                            ${showPill ? `<div class="absolute -top-3 left-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[9px] font-black text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-full z-20 shadow-sm uppercase tracking-wider">M${match.id} • ${match.time}</div>` : `<div class="absolute -top-3 left-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-[9px] font-black text-slate-400 dark:text-slate-500 px-2.5 py-1 rounded-full z-20 uppercase tracking-wider">M${match.id}</div>`}
+                        `;
+                        col.appendChild(card);
+                    });
+                    
+                    canvas.appendChild(col);
+                });
+                
+                boardTitleEl.textContent = titleEl.value.trim() || "Tournament Bracket";
+                boardMetaEl.textContent = `${plan.size} slot bracket, seeded randomly. opening matches scheduled from start time.`;
+                boardSizeEl.textContent = String(plan.size);
+                boardMatchesEl.textContent = String(plan.matches);
+            }
+
+            function renderSchedule(plan) {
+                if (plan.schedule.length === 0) {
+                    scheduleEl.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-slate-800/30 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 border-dashed">No actual matches scheduled (all byes).</div>`;
+                    return;
+                }
+                
+                scheduleEl.innerHTML = plan.schedule.map(m => `
+                    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-2xl shadow-sm transition-all hover:border-blue-300 dark:hover:border-blue-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-blue-500">R${m.round} - M${m.id}</span>
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded-md">${m.time}</span>
+                        </div>
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">${m.top}</div>
+                        <div class="text-xs font-black text-slate-400 my-0.5 uppercase tracking-widest">vs</div>
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">${m.bottom}</div>
+                    </div>
+                `).join("");
+            }
+
+            function generate() {
+                const count = Math.max(2, parseInt(teamCountEl.value, 10) || 2);
+                const teams = getTeams().slice(0, count);
+                
+                if (teams.length < 2) {
+                    canvas.innerHTML = '<div class="py-12 px-6 text-center text-slate-500 dark:text-slate-400 w-full font-medium">Add at least two team names to generate the bracket.</div>';
+                    scheduleEl.innerHTML = "";
+                    boardTitleEl.textContent = "Tournament Bracket";
+                    boardMetaEl.textContent = "Awaiting teams.";
+                    boardSizeEl.textContent = "0";
+                    boardMatchesEl.textContent = "0";
+                    return;
+                }
+                
+                const plan = build(teams);
+                renderBoard(plan);
+                renderSchedule(plan);
+            }
+
+            byId("bracketAutofillBtn").addEventListener("click", () => {
+                const count = Math.max(2, parseInt(teamCountEl.value, 10) || 2);
+                namesEl.value = Array.from({length: count}, (_, i) => `Team ${String.fromCharCode(65 + (i % 26))}${i >= 26 ? Math.floor(i/26) : ''}`).join("\n");
+                generate();
+            });
+            
+            byId("bracketShuffleBtn").addEventListener("click", () => {
+                namesEl.value = shuffle(getTeams()).join("\n");
+                generate();
+            });
+            
+            byId("bracketGenerateBtn").addEventListener("click", generate);
+            
+            [teamCountEl, sizeEl, dateEl, timeEl, intervalEl].forEach(el => el.addEventListener("input", generate));
+            titleEl.addEventListener("input", generate);
+            
+            // Initial render
+            generate();
+        })();
+    </script>
+HTML;
+}
 function getSpinWheelHTML() {
     return <<<'HTML'
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[0.95fr_1.05fr] gap-6">
