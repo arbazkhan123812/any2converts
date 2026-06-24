@@ -3416,47 +3416,7 @@ function getTournamentBracketGeneratorHTML() {
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Total Teams</label>
-                            <input id="bracketTeamCount" type="number" min="2" max="64" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="8">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Bracket Size</label>
-                            <select id="bracketSize" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
-                                <option value="auto">Auto Fit</option>
-                                <option value="4">4 Teams</option>
-                                <option value="8" selected>8 Teams</option>
-                                <option value="16">16 Teams</option>
-                                <option value="32">32 Teams</option>
-                                <option value="64">64 Teams</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Scheduling -->
-                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Start Date</label>
-                            <input id="bracketDate" type="date" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">First Match</label>
-                            <input id="bracketTime" type="time" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="18:00">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Match Slot Interval</label>
-                        <select id="bracketInterval" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
-                            <option value="15">15 Minutes</option>
-                            <option value="30" selected>30 Minutes</option>
-                            <option value="45">45 Minutes</option>
-                            <option value="60">1 Hour</option>
-                            <option value="90">1.5 Hours</option>
-                        </select>
-                    </div>
-                </div>
 
                 <!-- Teams List -->
                 <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
