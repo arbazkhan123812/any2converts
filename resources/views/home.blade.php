@@ -120,7 +120,6 @@ $tools = [
             ['id' => 'ai_image_generator', 'name' => 'AI Image Generator', 'icon' => 'ai_image_generator', 'desc' => 'Create images from prompts'],
             ['id' => 'ocr_tool', 'name' => 'OCR Tool', 'icon' => 'ocr_tool', 'desc' => 'Extract text from images'],
             ['id' => 'scan_to_pdf', 'name' => 'Scan to PDF', 'icon' => 'img_to_pdf', 'desc' => 'Convert captured pages into a PDF'],
-            ['id' => 'youtube_downloader', 'name' => 'YouTube Video Downloader', 'icon' => 'youtube_downloader', 'desc' => 'Download YouTube videos in MP4 and MP3 formats'],
         ]
     ],
     'conversion' => [
