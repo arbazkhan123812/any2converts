@@ -3400,29 +3400,31 @@ HTML;
 
 function getTournamentBracketGeneratorHTML() {
     return <<<'HTML'
-    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[360px_1fr] gap-6">
+    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[380px_1fr] gap-8">
         <!-- Sidebar -->
-        <aside class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-sm xl:sticky xl:top-[6.4rem] xl:max-h-[calc(100vh-7.4rem)] overflow-y-auto custom-scrollbar">
-            <p class="text-[11px] tracking-[0.32em] uppercase text-blue-500 font-bold">Gaming Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
-            <p class="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">Generate a properly seeded single-elimination bracket with stream-ready aesthetics.</p>
+        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-7 shadow-sm xl:sticky xl:top-[6.4rem] xl:max-h-[calc(100vh-7.4rem)] overflow-y-auto custom-scrollbar flex flex-col">
+            <div>
+                <p class="text-[10px] tracking-[0.25em] uppercase text-indigo-500 font-bold mb-1">Gaming Tools</p>
+                <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Generate a seeded single-elimination bracket with stream-ready aesthetics.</p>
+            </div>
             
-            <div class="mt-8 space-y-6">
+            <div class="mt-8 space-y-6 flex-1">
                 <!-- Basic Info -->
-                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                <div class="space-y-4">
                     <div>
-                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Tournament Name</label>
-                        <input id="bracketTitle" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="Championship Tourney">
+                        <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400 mb-2">Tournament Name</label>
+                        <input id="bracketTitle" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" value="Championship Tourney">
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Total Teams</label>
-                            <input id="bracketTeamCount" type="number" min="2" max="64" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="8">
+                            <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400 mb-2">Total Teams</label>
+                            <input id="bracketTeamCount" type="number" min="2" max="64" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" value="8">
                         </div>
                         <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Bracket Size</label>
-                            <select id="bracketSize" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                            <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400 mb-2">Bracket Size</label>
+                            <select id="bracketSize" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all">
                                 <option value="auto">Auto Fit</option>
                                 <option value="4">4 Teams</option>
                                 <option value="8" selected>8 Teams</option>
@@ -3434,21 +3436,23 @@ function getTournamentBracketGeneratorHTML() {
                     </div>
                 </div>
 
+                <div class="h-px w-full bg-slate-100 dark:bg-slate-800"></div>
+
                 <!-- Scheduling -->
-                <div class="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Start Date</label>
-                            <input id="bracketDate" type="date" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                            <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400 mb-2">Start Date</label>
+                            <input id="bracketDate" type="date" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">First Match</label>
-                            <input id="bracketTime" type="time" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" value="18:00">
+                            <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400 mb-2">First Match</label>
+                            <input id="bracketTime" type="time" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" value="18:00">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400 mb-2">Match Slot Interval</label>
-                        <select id="bracketInterval" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500/50 outline-none transition-all">
+                        <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400 mb-2">Match Slot Interval</label>
+                        <select id="bracketInterval" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all">
                             <option value="15">15 Minutes</option>
                             <option value="30" selected>30 Minutes</option>
                             <option value="45">45 Minutes</option>
@@ -3458,13 +3462,15 @@ function getTournamentBracketGeneratorHTML() {
                     </div>
                 </div>
 
+                <div class="h-px w-full bg-slate-100 dark:bg-slate-800"></div>
+
                 <!-- Teams List -->
-                <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/50">
+                <div class="flex flex-col flex-1 pb-4">
                     <div class="flex justify-between items-center mb-3">
-                        <label class="block text-[11px] uppercase tracking-[0.1em] font-bold text-slate-500 dark:text-slate-400">Team Names</label>
-                        <button id="bracketAutofillBtn" class="text-[11px] uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Autofill</button>
+                        <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400">Team Names</label>
+                        <button id="bracketAutofillBtn" class="text-[10px] uppercase tracking-wider font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">Autofill Defaults</button>
                     </div>
-                    <textarea id="bracketNames" rows="8" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono text-sm resize-y focus:ring-2 focus:ring-blue-500/50 outline-none transition-all" placeholder="Enter teams (one per line)">Team Alpha
+                    <textarea id="bracketNames" rows="6" class="w-full flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-mono text-sm resize-y focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" placeholder="Enter teams (one per line)">Team Alpha
 Team Bravo
 Team Charlie
 Team Delta
@@ -3472,54 +3478,63 @@ Team Echo
 Team Foxtrot
 Team Golf
 Team Hotel</textarea>
-                    
-                    <div class="flex gap-3 mt-4">
-                        <button id="bracketGenerateBtn" class="flex-[2] bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3.5 rounded-xl shadow-[0_8px_20px_rgba(59,130,246,0.25)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.35)] transition-all transform hover:-translate-y-0.5">Generate Bracket</button>
-                        <button id="bracketShuffleBtn" class="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all">Shuffle</button>
-                    </div>
                 </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-4 flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button id="bracketGenerateBtn" class="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Generate
+                </button>
+                <button id="bracketShuffleBtn" class="flex-1 bg-white dark:bg-[#1C1C28] hover:bg-slate-50 dark:hover:bg-[#252535] text-slate-700 dark:text-slate-300 font-bold py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all flex items-center justify-center gap-2" title="Shuffle Seeds">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
             </div>
         </aside>
 
         <!-- Main Board -->
-        <section class="bg-white dark:bg-[#0b1121] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden min-h-[700px] relative">
+        <section class="bg-slate-50 dark:bg-[#08080C] rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden min-h-[700px] relative shadow-sm">
             <!-- Background Decoration -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
-                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
-                <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4"></div>
+                <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3"></div>
+                <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4"></div>
             </div>
 
             <!-- Header -->
-            <div class="p-6 md:p-8 border-b border-slate-200/60 dark:border-slate-800/60 flex flex-wrap justify-between items-end gap-6 relative z-10 backdrop-blur-sm">
+            <div class="p-6 md:p-8 border-b border-slate-200 dark:border-slate-800/60 flex flex-wrap justify-between items-end gap-6 relative z-10 backdrop-blur-sm">
                 <div>
-                    <div class="flex items-center gap-3">
-                        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[10px] font-black uppercase tracking-widest">Single Elimination</span>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest border border-indigo-200 dark:border-indigo-800/50">Single Elimination</span>
                     </div>
-                    <h3 id="bracketBoardTitle" class="text-3xl font-black text-slate-900 dark:text-white mt-4 tracking-tight">Tournament Title</h3>
+                    <h3 id="bracketBoardTitle" class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Tournament Title</h3>
                     <p id="bracketBoardMeta" class="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">Bracket details will appear here</p>
                 </div>
                 <div class="flex gap-3">
-                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                    <div class="px-6 py-4 bg-white dark:bg-[#111118] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Teams</p>
-                        <p id="bracketBoardSize" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</p>
+                        <p id="bracketBoardSize" class="text-3xl font-black text-slate-900 dark:text-white leading-none">0</p>
                     </div>
-                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                    <div class="px-6 py-4 bg-white dark:bg-[#111118] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Matches</p>
-                        <p id="bracketBoardMatches" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</p>
+                        <p id="bracketBoardMatches" class="text-3xl font-black text-slate-900 dark:text-white leading-none">0</p>
                     </div>
                 </div>
             </div>
 
             <!-- Canvas -->
             <div class="flex-1 overflow-auto p-6 md:p-12 custom-scrollbar relative z-10">
-                <div id="bracketCanvas" class="flex gap-12 min-w-max pb-12 pt-14">
+                <div id="bracketCanvas" class="flex gap-14 min-w-max pb-12 pt-14">
                     <!-- Bracket injected here via JS -->
                 </div>
             </div>
             
             <!-- Schedule Section -->
-            <div class="border-t border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 p-6 md:p-8 relative z-10">
-                <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-6">Upcoming Matches</h4>
+            <div class="border-t border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#111118]/80 backdrop-blur-md p-6 md:p-8 relative z-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-indigo-500"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest">Upcoming Matches</h4>
+                </div>
                 <div id="bracketSchedule" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     <!-- Schedule injected here -->
                 </div>
