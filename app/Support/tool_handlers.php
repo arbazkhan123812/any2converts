@@ -6530,30 +6530,104 @@ function getPasswordGenHTML() {
 
 function getWordCounterHTML() {
     return '
-    <div class="space-y-6">
-        <textarea id="wordCountText" class="w-full h-64 p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600" placeholder="Type or paste your text here..."></textarea>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="text-center p-4 bg-gray-100 dark:bg-gray-700 rounded-xl"><span class="text-2xl font-bold" id="wordCount">0</span><br>Words</div>
-            <div class="text-center p-4 bg-gray-100 dark:bg-gray-700 rounded-xl"><span class="text-2xl font-bold" id="charCount">0</span><br>Characters</div>
-            <div class="text-center p-4 bg-gray-100 dark:bg-gray-700 rounded-xl"><span class="text-2xl font-bold" id="sentenceCount">0</span><br>Sentences</div>
-            <div class="text-center p-4 bg-gray-100 dark:bg-gray-700 rounded-xl"><span class="text-2xl font-bold" id="paraCount">0</span><br>Paragraphs</div>
+    <div class="space-y-8 animate-fade-in-up">
+        <!-- Text Area with Toolbar -->
+        <div class="relative group">
+            <textarea id="wordCountText" class="w-full h-72 p-6 bg-white dark:bg-[#16161F] text-gray-900 dark:text-gray-100 rounded-2xl border border-gray-200 dark:border-gray-700/50 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all resize-y text-lg placeholder-gray-400 dark:placeholder-gray-500" placeholder="Type or paste your text here to begin counting..."></textarea>
+            
+            <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button id="copyTextBtn" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1C1C28] border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#252535] transition shadow-sm" title="Copy Text">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+                    Copy
+                </button>
+                <button id="clearTextBtn" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1C1C28] border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-red-800 transition shadow-sm" title="Clear Text">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Clear
+                </button>
+            </div>
         </div>
-        <button id="clearTextBtn" class="w-full bg-gray-600 text-white py-3 rounded-xl font-semibold hover:bg-gray-700 transition">Clear Text</button>
+
+        <!-- Primary Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="p-6 bg-white dark:bg-[#16161F] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mb-1 tracking-tight" id="wordCount">0</span>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Words</span>
+            </div>
+            <div class="p-6 bg-white dark:bg-[#16161F] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 mb-1 tracking-tight" id="charCount">0</span>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Characters</span>
+            </div>
+            <div class="p-6 bg-white dark:bg-[#16161F] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span class="text-3xl font-extrabold text-purple-600 dark:text-purple-400 mb-1 tracking-tight" id="sentenceCount">0</span>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sentences</span>
+            </div>
+            <div class="p-6 bg-white dark:bg-[#16161F] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span class="text-3xl font-extrabold text-pink-600 dark:text-pink-400 mb-1 tracking-tight" id="paraCount">0</span>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Paragraphs</span>
+            </div>
+        </div>
+
+        <!-- Secondary Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center justify-between p-5 bg-white dark:bg-[#16161F] border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Reading Time</p>
+                        <p class="text-xs font-medium text-gray-400 dark:text-gray-500">Based on 238 wpm</p>
+                    </div>
+                </div>
+                <span class="text-xl font-bold text-gray-900 dark:text-white" id="readingTime">0 min</span>
+            </div>
+            <div class="flex items-center justify-between p-5 bg-white dark:bg-[#16161F] border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Speaking Time</p>
+                        <p class="text-xs font-medium text-gray-400 dark:text-gray-500">Based on 130 wpm</p>
+                    </div>
+                </div>
+                <span class="text-xl font-bold text-gray-900 dark:text-white" id="speakingTime">0 min</span>
+            </div>
+        </div>
     </div>
+
     <script>
         const textarea = document.getElementById("wordCountText");
         
+        function formatTime(minutes) {
+            if (minutes < 1) {
+                const seconds = Math.ceil(minutes * 60);
+                return seconds + " sec";
+            }
+            return Math.ceil(minutes) + " min";
+        }
+
         function updateCounts() {
             const text = textarea.value;
             const words = text.trim() ? text.trim().split(/\\s+/).length : 0;
             const chars = text.length;
             const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-            const paragraphs = text.split(/\\n\\n+/).filter(p => p.trim().length > 0).length;
+            const paragraphs = text.split(/\\n\\s*\\n/).filter(p => p.trim().length > 0).length;
             
-            document.getElementById("wordCount").innerText = words;
-            document.getElementById("charCount").innerText = chars;
-            document.getElementById("sentenceCount").innerText = sentences;
-            document.getElementById("paraCount").innerText = paragraphs || (text.trim() ? 1 : 0);
+            document.getElementById("wordCount").innerText = words.toLocaleString();
+            document.getElementById("charCount").innerText = chars.toLocaleString();
+            document.getElementById("sentenceCount").innerText = sentences.toLocaleString();
+            document.getElementById("paraCount").innerText = (paragraphs || (text.trim() ? 1 : 0)).toLocaleString();
+
+            const readMinutes = words / 238;
+            const speakMinutes = words / 130;
+            
+            document.getElementById("readingTime").innerText = words > 0 ? formatTime(readMinutes) : "0 min";
+            document.getElementById("speakingTime").innerText = words > 0 ? formatTime(speakMinutes) : "0 min";
         }
         
         textarea.addEventListener("input", updateCounts);
@@ -6561,10 +6635,24 @@ function getWordCounterHTML() {
         
         document.getElementById("clearTextBtn").addEventListener("click", function() {
             textarea.value = "";
+            textarea.focus();
             updateCounts();
         });
+
+        document.getElementById("copyTextBtn").addEventListener("click", function() {
+            if (!textarea.value.trim()) return;
+            navigator.clipboard.writeText(textarea.value).then(() => {
+                const originalText = this.innerHTML;
+                this.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Copied!`;
+                this.classList.add("text-green-600", "dark:text-green-400", "border-green-200", "dark:border-green-800", "bg-green-50", "dark:bg-green-900/20");
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove("text-green-600", "dark:text-green-400", "border-green-200", "dark:border-green-800", "bg-green-50", "dark:bg-green-900/20");
+                }, 2000);
+            });
+        });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
         <p><strong>Related Searches:</strong> convert Word Counter online free without email, Word Counter no watermark fast for mobile, best Word Counter high quality software pc mac, Word Counter unlimited file size free 2026, how to use Word Counter easily without app install, secure Word Counter safe for business confidential files, Word Counter unblocked for school chromebook.</p>
     </div>';
 }
