@@ -3402,7 +3402,7 @@ function getTournamentBracketGeneratorHTML() {
     return <<<'HTML'
     <div class="max-w-[95rem] w-full mx-auto grid lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)] items-start gap-6 h-full overflow-y-auto custom-scrollbar p-4 md:p-6">
         <!-- Sidebar -->
-        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col min-w-0 h-fit sticky top-0 xl:top-4 z-20">
+        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col min-w-0 h-fit lg:sticky lg:top-4 z-20">
             <div>
                 <p class="text-[10px] tracking-[0.25em] uppercase text-indigo-500 font-bold mb-1">Gaming Tools</p>
                 <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
