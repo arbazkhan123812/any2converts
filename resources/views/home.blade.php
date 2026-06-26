@@ -2057,7 +2057,7 @@ function openTool(toolId) {
     const modalBox = modal.querySelector('.modal-box');
     const title   = document.getElementById('modalTitle');
     const content = document.getElementById('modalContent');
-    const isEditorTool = toolId === 'edit_pdf' || toolId === 'sign_pdf';
+    const isEditorTool = toolId === 'edit_pdf' || toolId === 'sign_pdf' || toolId === 'tournament_bracket_generator';
 
     if (modalBox) {
         modalBox.classList.toggle('modal-box-editor', isEditorTool);

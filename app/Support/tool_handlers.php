@@ -3400,7 +3400,7 @@ HTML;
 
 function getTournamentBracketGeneratorHTML() {
     return <<<'HTML'
-    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[380px_1fr] gap-8">
+    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[380px_1fr] gap-8 h-full overflow-y-auto custom-scrollbar p-2">
         <!-- Sidebar -->
         <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-7 shadow-sm xl:sticky xl:top-[6.4rem] xl:max-h-[calc(100vh-7.4rem)] overflow-y-auto custom-scrollbar flex flex-col">
             <div>
