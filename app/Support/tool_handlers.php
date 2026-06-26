@@ -6345,59 +6345,111 @@ function getJsonToCsvHTML() {
 }
 
 function getCsvToJsonHTML() {
-    return '
-    <div class="space-y-6">
-        <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
-            <div class="font-semibold text-blue-900 dark:text-blue-100">Paste CSV or upload a file</div>
-            <p class="mt-1 text-sm text-blue-800 dark:text-blue-200">Upload a `.csv` file or paste CSV text below to convert it into JSON.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- CSV Input Column -->
+        <div class="flex flex-col space-y-4">
+            <div class="flex justify-between items-center">
+                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">CSV Data</label>
+                <label for="csvFileInput" class="cursor-pointer text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1.5 rounded-full border border-indigo-100 dark:border-indigo-500/20">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    Upload File
+                </label>
+                <input type="file" id="csvFileInput" accept=".csv,text/csv" class="hidden">
+            </div>
+            <textarea id="csvInput" class="w-full flex-1 min-h-[340px] p-5 bg-slate-50 dark:bg-[#0f111a] text-slate-900 dark:text-slate-100 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-sm focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all resize-y shadow-inner custom-scrollbar" placeholder="id,name,role,status&#10;1,John Doe,Admin,Active&#10;2,Jane Smith,User,Pending&#10;3,Bob Johnson,Editor,Active"></textarea>
         </div>
-        <input type="file" id="csvFileInput" accept=".csv,text/csv" class="w-full p-3 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-600">
-        <textarea id="csvInput" class="w-full h-64 p-4 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 rounded-xl font-mono text-sm border border-gray-200 dark:border-gray-600" placeholder="name,age\\nJohn,30\\nJane,25"></textarea>
-        <button id="csvToJsonBtn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition">Convert to JSON</button>
-        <div id="jsonResult" class="hidden mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-xl">
-            <h4 class="font-bold mb-2">JSON Preview:</h4>
-            <pre id="jsonPreview" class="text-xs overflow-x-auto whitespace-pre-wrap"></pre>
-            <button id="downloadJsonBtn" class="mt-3 bg-green-600 text-white px-4 py-2 rounded-lg text-sm hidden">Download JSON</button>
+
+        <!-- JSON Output Column -->
+        <div class="flex flex-col space-y-4">
+            <div class="flex justify-between items-center h-8">
+                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">JSON Output</label>
+                <div class="flex gap-2">
+                    <button id="copyJsonBtn" class="hidden text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700" title="Copy to clipboard">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        Copy
+                    </button>
+                    <button id="downloadJsonBtn" class="hidden text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 transition flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-100 dark:border-emerald-500/20" title="Download .json file">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download
+                    </button>
+                </div>
+            </div>
+            <div class="relative flex-1 min-h-[340px] rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0f111a] shadow-inner overflow-hidden group">
+                <pre id="jsonPreview" class="absolute inset-0 p-5 overflow-auto custom-scrollbar text-sm font-mono text-slate-800 dark:text-slate-300 whitespace-pre"><span class="opacity-40 italic text-slate-500">Converted JSON will appear here...</span></pre>
+            </div>
         </div>
     </div>
+
+    <div class="mt-8 flex justify-center border-t border-slate-100 dark:border-slate-800/80 pt-8">
+        <button id="csvToJsonBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-2xl font-black tracking-wide shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all transform hover:-translate-y-1 flex items-center gap-3">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+            CONVERT TO JSON
+        </button>
+    </div>
+
     <script>
         let currentJSON = "";
+        
+        const csvInput = document.getElementById("csvInput");
+        const jsonPreview = document.getElementById("jsonPreview");
+        const downloadBtn = document.getElementById("downloadJsonBtn");
+        const copyBtn = document.getElementById("copyJsonBtn");
+
         document.getElementById("csvFileInput").addEventListener("change", function() {
             const file = this.files && this.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById("csvInput").value = e.target.result || "";
+                csvInput.value = e.target.result || "";
             };
             reader.readAsText(file);
         });
         
         document.getElementById("csvToJsonBtn").addEventListener("click", function() {
             try {
-                const csv = document.getElementById("csvInput").value;
-                const lines = csv.trim().split("\\n");
-                const headers = lines[0].split(",");
+                const csv = csvInput.value;
+                if (!csv.trim()) {
+                    jsonPreview.innerHTML = '<span class="text-red-500">Please enter CSV data.</span>';
+                    return;
+                }
+                // Handle different line endings and split
+                const lines = csv.trim().split(/\\r?\\n/);
+                if (lines.length < 2) {
+                    jsonPreview.innerHTML = '<span class="text-amber-500 dark:text-amber-400">CSV needs at least a header row and one data row.</span>';
+                    return;
+                }
+                
+                // Parse headers carefully (simple split by comma, could be improved to handle quotes)
+                const headers = lines[0].split(",").map(h => h.trim());
                 const json = [];
                 
                 for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue; // skip empty lines
                     const values = lines[i].split(",");
                     const obj = {};
                     headers.forEach((header, idx) => {
-                        obj[header.trim()] = values[idx] ? values[idx].trim() : "";
+                        obj[header] = values[idx] ? values[idx].trim() : "";
                     });
                     json.push(obj);
                 }
                 
                 currentJSON = JSON.stringify(json, null, 2);
-                document.getElementById("jsonPreview").innerText = currentJSON.slice(0, 500) + (currentJSON.length > 500 ? "..." : "");
-                document.getElementById("jsonResult").classList.remove("hidden");
-                document.getElementById("downloadJsonBtn").classList.remove("hidden");
+                
+                // Add basic syntax highlighting
+                const highlighted = currentJSON
+                    .replace(/"([^"]+)":/g, '<span class="text-indigo-600 dark:text-indigo-400">"$1"</span>:')
+                    .replace(/: "([^"]*)"/g, ': <span class="text-emerald-600 dark:text-emerald-400">"$1"</span>');
+                    
+                jsonPreview.innerHTML = highlighted;
+                
+                downloadBtn.classList.remove("hidden");
+                copyBtn.classList.remove("hidden");
             } catch(e) {
-                alert("Invalid CSV: " + e.message);
+                jsonPreview.innerHTML = '<span class="text-red-500">Error parsing CSV: ' + e.message + '</span>';
             }
         });
         
-        document.getElementById("downloadJsonBtn").addEventListener("click", function() {
+        downloadBtn.addEventListener("click", function() {
             const blob = new Blob([currentJSON], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -6405,6 +6457,18 @@ function getCsvToJsonHTML() {
             a.download = "converted.json";
             a.click();
             URL.revokeObjectURL(url);
+        });
+
+        copyBtn.addEventListener("click", function() {
+            navigator.clipboard.writeText(currentJSON).then(() => {
+                const originalHtml = this.innerHTML;
+                this.innerHTML = '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Copied!';
+                this.classList.add("text-emerald-600", "dark:text-emerald-400");
+                setTimeout(() => {
+                    this.innerHTML = originalHtml;
+                    this.classList.remove("text-emerald-600", "dark:text-emerald-400");
+                }, 2000);
+            });
         });
     </script>
     <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-[9px] text-gray-400/30 hover:text-gray-400/80 transition-opacity select-none text-justify" style="line-height: 1.4;">
