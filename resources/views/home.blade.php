@@ -1616,6 +1616,7 @@ if ($isToolPage) {
     ?>
 
     <?php
+    if (empty($initialToolId)):
     foreach ($tools as $catKey => $category):
         $cc = $catColors[$catKey];
     ?>
@@ -1638,7 +1639,6 @@ if ($isToolPage) {
                 $iconSvg = $iconSvgs[$tool['icon']] ?? $iconSvgs['pdf_to_word'];
             ?>
             <?php $tool_slug = $tool_slugs[$tool['id']] ?? $tool['id']; ?>
-            <!-- Note: href modified to use openTool locally to prevent redirection if JS is enabled -->
             <a
                 href="/<?= htmlspecialchars($tool_slug) ?>"
                 class="tool-card stagger-in"
@@ -1646,7 +1646,6 @@ if ($isToolPage) {
                 data-tool-name="<?= htmlspecialchars(strtolower($tool['name'])) ?>"
                 data-tool-desc="<?= htmlspecialchars(strtolower($tool['desc'])) ?>"
                 data-tool-category="<?= htmlspecialchars($catKey) ?>"
-                onclick="event.preventDefault(); openTool('<?= htmlspecialchars($tool['id']) ?>');"
                 style="animation-delay:<?= $i * 40 ?>ms; text-decoration:none; display:block;"
             >
                 <!-- Arrow -->
@@ -1668,6 +1667,7 @@ if ($isToolPage) {
     </section>
     <?php
     endforeach;
+    endif;
     ?>
 
     <!-- ── Why section ── -->
