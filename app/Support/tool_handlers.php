@@ -3888,54 +3888,125 @@ HTML;
 
 function getRandomNamePickerHTML() {
     return <<<'HTML'
-    <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
-        <div class="rounded-[34px] border border-emerald-200/60 dark:border-emerald-500/15 bg-gradient-to-br from-white via-emerald-50/70 to-teal-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(16,185,129,0.12)] p-6 md:p-8">
-            <p class="text-[11px] tracking-[0.34em] uppercase text-emerald-500 font-semibold">Fun Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Random Name Picker</h2>
-            <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Paste names for giveaways, classrooms, lobbies, or team selection.</p>
-            <textarea id="pickerNames" rows="12" class="mt-6 w-full rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-4 py-4 text-slate-900 dark:text-white" placeholder="Ali&#10;Sara&#10;Umair&#10;Hassan">Ali
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Left: Input -->
+        <div class="flex flex-col h-full rounded-[2rem] border border-emerald-200/60 dark:border-emerald-500/15 bg-gradient-to-br from-white via-emerald-50/50 to-teal-50/40 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-sm p-5 md:p-6">
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white">Random Name Picker</h2>
+            <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Paste names for giveaways, classrooms, lobbies, or team selection. One name per line.</p>
+            <textarea id="pickerNames" class="mt-4 flex-1 min-h-[220px] w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 px-4 py-4 text-sm text-slate-900 dark:text-white custom-scrollbar focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all resize-y" placeholder="Ali&#10;Sara&#10;Umair&#10;Hassan">Ali
 Sara
 Umair
 Hassan
 Ayesha</textarea>
-            <div class="mt-6 flex flex-wrap gap-3">
-                <button id="pickerPickBtn" class="rounded-[28px] bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-4 font-semibold shadow-[0_20px_45px_rgba(16,185,129,0.28)]">Pick Random Name</button>
-                <button id="pickerRemoveBtn" class="rounded-[28px] bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 font-semibold">Remove Winner</button>
-            </div>
         </div>
-        <div class="grid gap-4">
-            <div class="rounded-[34px] border border-slate-200 dark:border-slate-800 bg-slate-950 p-6 text-white shadow-[0_24px_80px_rgba(15,23,42,0.35)]">
-                <p class="text-xs uppercase tracking-[0.22em] text-emerald-300">Selected Name</p>
-                <div id="pickerWinner" class="mt-3 text-5xl font-black">No pick yet</div>
+        
+        <!-- Right: Actions & Output -->
+        <div class="flex flex-col gap-4">
+            <!-- Winner Card -->
+            <div class="flex-1 min-h-[160px] rounded-[2rem] border border-slate-200 dark:border-slate-800 bg-slate-950 p-6 flex flex-col items-center justify-center text-center shadow-md relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <p class="text-[10px] uppercase tracking-[0.2em] text-emerald-400 font-bold mb-3 z-10">Selected Name</p>
+                <div id="pickerWinner" class="text-3xl md:text-4xl font-black text-white break-words w-full px-2 z-10 transition-colors">No pick yet</div>
             </div>
-            <div class="rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 p-5">
-                <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Remaining Count</p>
-                <p id="pickerCount" class="mt-3 text-3xl font-black text-slate-900 dark:text-white">0</p>
+            
+            <!-- Controls -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-4 flex flex-col items-center justify-center">
+                    <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Total Names</p>
+                    <p id="pickerCount" class="text-2xl font-black text-slate-900 dark:text-white mt-1">0</p>
+                </div>
+                <button id="pickerRemoveBtn" class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 hover:border-red-200 dark:hover:border-red-800 transition flex flex-col items-center justify-center p-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-center leading-tight">Remove Winner</span>
+                </button>
             </div>
+            
+            <!-- Pick Button -->
+            <button id="pickerPickBtn" class="mt-2 w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-4 font-black tracking-wide shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                PICK RANDOM NAME
+            </button>
         </div>
     </div>
     <script>
         (() => {
-            const textarea = document.getElementById("pickerNames"), winnerEl = document.getElementById("pickerWinner"), countEl = document.getElementById("pickerCount");
+            const textarea = document.getElementById("pickerNames");
+            const winnerEl = document.getElementById("pickerWinner");
+            const countEl = document.getElementById("pickerCount");
+            const pickBtn = document.getElementById("pickerPickBtn");
+            const removeBtn = document.getElementById("pickerRemoveBtn");
+            
             let lastWinner = "";
+            let isPicking = false;
+            
             function getNames() { return textarea.value.split(/\r?\n/).map(v => v.trim()).filter(Boolean); }
             function syncCount() { countEl.textContent = String(getNames().length); }
-            document.getElementById("pickerPickBtn").addEventListener("click", () => {
+            function syncButtons() { 
+                removeBtn.disabled = !lastWinner || isPicking;
+                pickBtn.disabled = isPicking || getNames().length === 0;
+            }
+            
+            pickBtn.addEventListener("click", () => {
+                if (isPicking) return;
                 const names = getNames();
                 if (!names.length) return;
-                lastWinner = names[Math.floor(Math.random() * names.length)];
-                winnerEl.textContent = lastWinner;
+                
+                isPicking = true;
+                syncButtons();
+                
+                // Spin animation effect
+                let spinCount = 0;
+                const spinInterval = setInterval(() => {
+                    winnerEl.textContent = names[Math.floor(Math.random() * names.length)];
+                    winnerEl.classList.add("text-emerald-400");
+                    spinCount++;
+                    if (spinCount > 15) {
+                        clearInterval(spinInterval);
+                        lastWinner = names[Math.floor(Math.random() * names.length)];
+                        winnerEl.textContent = lastWinner;
+                        winnerEl.classList.remove("text-emerald-400");
+                        
+                        // Highlight animation
+                        winnerEl.animate([
+                            { transform: 'scale(1)', color: '#fff' },
+                            { transform: 'scale(1.1)', color: '#34d399' },
+                            { transform: 'scale(1)', color: '#fff' }
+                        ], { duration: 500, easing: 'ease-out' });
+                        
+                        isPicking = false;
+                        syncButtons();
+                    }
+                }, 50);
             });
-            document.getElementById("pickerRemoveBtn").addEventListener("click", () => {
-                if (!lastWinner) return;
-                const names = getNames().filter(name => name !== lastWinner);
-                textarea.value = names.join("\n");
-                lastWinner = "";
-                winnerEl.textContent = "Removed last winner";
+            
+            removeBtn.addEventListener("click", () => {
+                if (!lastWinner || isPicking) return;
+                const names = getNames();
+                const index = names.indexOf(lastWinner);
+                if (index > -1) {
+                    names.splice(index, 1);
+                    textarea.value = names.join("\n");
+                    lastWinner = "";
+                    winnerEl.textContent = "Removed winner";
+                    winnerEl.classList.add("text-slate-500", "text-2xl");
+                    setTimeout(() => {
+                        winnerEl.classList.remove("text-slate-500", "text-2xl");
+                        if (winnerEl.textContent === "Removed winner") {
+                            winnerEl.textContent = "No pick yet";
+                        }
+                    }, 1500);
+                    syncCount();
+                    syncButtons();
+                }
+            });
+            
+            textarea.addEventListener("input", () => {
                 syncCount();
+                syncButtons();
             });
-            textarea.addEventListener("input", syncCount);
+            
             syncCount();
+            syncButtons();
         })();
     </script>
 HTML;
