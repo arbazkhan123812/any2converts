@@ -6345,7 +6345,8 @@ function getJsonToCsvHTML() {
 }
 
 function getCsvToJsonHTML() {
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    return '
+      <div class="flex flex-col space-y-6">
         <!-- CSV Input Column -->
         <div class="flex flex-col space-y-4">
             <div class="flex justify-between items-center">
