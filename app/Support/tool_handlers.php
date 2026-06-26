@@ -3400,16 +3400,16 @@ HTML;
 
 function getTournamentBracketGeneratorHTML() {
     return <<<'HTML'
-    <div class="max-w-[95rem] mx-auto grid xl:grid-cols-[380px_1fr] gap-8 h-full overflow-y-auto custom-scrollbar p-2">
+    <div class="max-w-[95rem] w-full mx-auto grid lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)] gap-6 h-full overflow-y-auto custom-scrollbar p-4 md:p-6">
         <!-- Sidebar -->
-        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-7 shadow-sm xl:sticky xl:top-[6.4rem] xl:max-h-[calc(100vh-7.4rem)] overflow-y-auto custom-scrollbar flex flex-col">
+        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col min-w-0">
             <div>
                 <p class="text-[10px] tracking-[0.25em] uppercase text-indigo-500 font-bold mb-1">Gaming Tools</p>
                 <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
                 <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Generate a seeded single-elimination bracket with stream-ready aesthetics.</p>
             </div>
             
-            <div class="mt-8 space-y-6 flex-1">
+            <div class="mt-6 space-y-6 flex-1">
                 <!-- Basic Info -->
                 <div class="space-y-4">
                     <div>
@@ -3465,12 +3465,12 @@ function getTournamentBracketGeneratorHTML() {
                 <div class="h-px w-full bg-slate-100 dark:bg-slate-800"></div>
 
                 <!-- Teams List -->
-                <div class="flex flex-col flex-1 pb-4">
+                <div class="flex flex-col flex-1 pb-2">
                     <div class="flex justify-between items-center mb-3">
                         <label class="block text-xs uppercase tracking-[0.08em] font-bold text-slate-500 dark:text-slate-400">Team Names</label>
                         <button id="bracketAutofillBtn" class="text-[10px] uppercase tracking-wider font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">Autofill Defaults</button>
                     </div>
-                    <textarea id="bracketNames" rows="6" class="w-full flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-mono text-sm resize-y focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" placeholder="Enter teams (one per line)">Team Alpha
+                    <textarea id="bracketNames" rows="5" class="w-full flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-mono text-sm resize-y focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" placeholder="Enter teams (one per line)">Team Alpha
 Team Bravo
 Team Charlie
 Team Delta
@@ -3494,7 +3494,7 @@ Team Hotel</textarea>
         </aside>
 
         <!-- Main Board -->
-        <section class="bg-slate-50 dark:bg-[#08080C] rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden min-h-[700px] relative shadow-sm">
+        <section class="bg-slate-50 dark:bg-[#08080C] rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden min-h-[600px] relative shadow-sm min-w-0">
             <!-- Background Decoration -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
                 <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3"></div>
