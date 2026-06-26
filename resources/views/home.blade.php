@@ -2061,6 +2061,11 @@ function openTool(toolId) {
 
     if (modalBox) {
         modalBox.classList.toggle('modal-box-editor', isEditorTool);
+        if (toolId === 'tournament_bracket_generator') {
+            modalBox.style.maxWidth = '1280px';
+        } else {
+            modalBox.style.maxWidth = '';
+        }
     }
     content.style.padding = isEditorTool ? '0' : '24px';
 
