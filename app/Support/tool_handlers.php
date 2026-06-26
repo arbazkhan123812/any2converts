@@ -3523,14 +3523,14 @@ Team Hotel</textarea>
             </div>
 
             <!-- Canvas -->
-            <div class="flex-1 overflow-auto p-6 md:p-12 custom-scrollbar relative z-10">
+            <div class="flex-1 overflow-auto p-6 md:p-12 custom-scrollbar relative z-10 min-h-[550px]">
                 <div id="bracketCanvas" class="flex gap-14 min-w-max pb-12 pt-14">
                     <!-- Bracket injected here via JS -->
                 </div>
             </div>
             
             <!-- Schedule Section -->
-            <div class="border-t border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#111118]/80 backdrop-blur-md p-6 md:p-8 relative z-10">
+            <div class="border-t border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#111118]/80 backdrop-blur-md p-6 md:p-8 relative z-10 mt-auto">
                 <div class="flex items-center gap-3 mb-6">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-indigo-500"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest">Upcoming Matches</h4>
@@ -3675,7 +3675,7 @@ Team Hotel</textarea>
                     
                     const stageHeader = document.createElement("div");
                     stageHeader.className = "absolute w-full text-center -top-12 left-0";
-                    stageHeader.innerHTML = `<p class="text-xs font-black text-blue-500 uppercase tracking-widest">${roundTitle(ri, plan.rounds.length)}</p>`;
+                    stageHeader.innerHTML = `<p class="text-xs font-black text-indigo-500 uppercase tracking-widest">${roundTitle(ri, plan.rounds.length)}</p>`;
                     col.appendChild(stageHeader);
                     
                     round.forEach((match, mi) => {
@@ -3689,21 +3689,21 @@ Team Hotel</textarea>
                         
                         let linesHTML = '';
                         if (!isFirst) {
-                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -left-[24px] w-[24px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -left-[28px] w-[28px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
                         }
                         if (!isFinal) {
-                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -right-[24px] w-[24px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -right-[28px] w-[28px] h-[2px] bg-slate-300 dark:bg-slate-700"></div>`;
                         }
                         if (!isFinal && mi % 2 === 0) {
                             const distToSibling = Math.pow(2, ri) * baseSpacing;
-                            linesHTML += `<div class="absolute top-[50%] -right-[24px] w-[2px] bg-slate-300 dark:bg-slate-700" style="height: ${distToSibling}px"></div>`;
+                            linesHTML += `<div class="absolute top-[calc(50%-1px)] -right-[28px] w-[2px] bg-slate-300 dark:bg-slate-700" style="height: ${distToSibling + 2}px"></div>`;
                         }
                         
                         const row = (team, isTop) => `
-                            <div class="flex-1 flex items-center px-3 ${isTop ? 'border-b border-slate-100 dark:border-slate-700/60' : ''} ${team.win ? 'bg-blue-50/60 dark:bg-blue-500/10' : ''} ${team.bye || team.name.startsWith('Winner M') ? 'opacity-50' : ''}">
+                            <div class="flex-1 flex items-center px-3 ${isTop ? 'border-b border-slate-100 dark:border-slate-700/60' : ''} ${team.win ? 'bg-indigo-50/60 dark:bg-indigo-500/10' : ''} ${team.bye || team.name.startsWith('Winner M') ? 'opacity-50' : ''}">
                                 <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 w-5">${team.seed}</span>
-                                <span class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate flex-1 ${team.win ? 'text-blue-700 dark:text-blue-400' : ''}">${team.name}</span>
-                                ${team.win ? `<svg class="w-4 h-4 text-blue-500 ml-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>` : ''}
+                                <span class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate flex-1 ${team.win ? 'text-indigo-700 dark:text-indigo-400' : ''}">${team.name}</span>
+                                ${team.win ? `<svg class="w-4 h-4 text-indigo-500 ml-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>` : ''}
                             </div>
                         `;
                         
@@ -3711,7 +3711,7 @@ Team Hotel</textarea>
                         
                         card.innerHTML = `
                             ${linesHTML}
-                            <div class="w-full h-full bg-white dark:bg-slate-800/90 border ${match.hasWinner ? 'border-blue-500/50 shadow-[0_4px_20px_rgba(59,130,246,0.1)]' : 'border-slate-200 dark:border-slate-700 shadow-sm'} rounded-xl flex flex-col overflow-hidden relative z-10 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                            <div class="w-full h-full bg-white dark:bg-slate-800/90 border ${match.hasWinner ? 'border-indigo-500/50 shadow-[0_4px_20px_rgba(99,102,241,0.1)]' : 'border-slate-200 dark:border-slate-700 shadow-sm'} rounded-xl flex flex-col overflow-hidden relative z-10 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                                 ${row(match.top, true)}
                                 ${row(match.bottom, false)}
                             </div>
