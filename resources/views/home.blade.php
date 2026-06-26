@@ -1978,10 +1978,9 @@ const toolSlugMap = {
 function redirectToToolPage(toolId) {
     if (window.any2convertInitialTool === toolId) return false;
     const slug = toolSlugMap[toolId];
-    if (slug) {
-        window.history.pushState({tool: toolId}, '', `/${slug}`);
-    }
-    return false; // Never redirect, open modal instantly!
+    if (!slug) return false;
+    window.location.href = `/${encodeURIComponent(slug)}`;
+    return true;
 }
 
 function isKnownToolId(toolId) {
@@ -2106,22 +2105,6 @@ function closeToolModal(event) {
     document.getElementById('modalContent').innerHTML = '';
     document.getElementById('modalContent').style.padding = '24px';
     document.body.style.overflow = '';
-    
-    if (window.location.pathname !== '/') {
-        window.history.pushState({}, '', '/');
-    }
-    
-    // Reset filters to show all tools cards again
-    const searchInput = document.getElementById('toolSearchInput');
-    if (searchInput) {
-        searchInput.value = '';
-        const allBtn = document.querySelector('[data-tool-filter="all"]');
-        if (allBtn) {
-            allBtn.click();
-        } else {
-            searchInput.dispatchEvent(new Event('input'));
-        }
-    }
 }
 
 function getToolName(toolId) {
