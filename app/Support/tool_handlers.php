@@ -3400,9 +3400,9 @@ HTML;
 
 function getTournamentBracketGeneratorHTML() {
     return <<<'HTML'
-    <div class="max-w-[95rem] w-full mx-auto grid lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)] gap-6 h-full overflow-y-auto custom-scrollbar p-4 md:p-6">
+    <div class="max-w-[95rem] w-full mx-auto grid lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)] items-start gap-6 h-full overflow-y-auto custom-scrollbar p-4 md:p-6">
         <!-- Sidebar -->
-        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col min-w-0">
+        <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col min-w-0 h-fit sticky top-0 xl:top-4 z-20">
             <div>
                 <p class="text-[10px] tracking-[0.25em] uppercase text-indigo-500 font-bold mb-1">Gaming Tools</p>
                 <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
@@ -3498,17 +3498,13 @@ Team Hotel</textarea>
             <!-- Background Decoration -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
                 <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3"></div>
-                <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4"></div>
             </div>
 
             <!-- Header -->
-            <div class="p-6 md:p-8 border-b border-slate-200 dark:border-slate-800/60 flex flex-wrap justify-between items-end gap-6 relative z-10 backdrop-blur-sm">
+            <div class="px-6 md:px-12 py-8 border-b border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#111118]/80 backdrop-blur-md relative z-10 flex flex-wrap gap-6 items-end justify-between">
                 <div>
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest border border-indigo-200 dark:border-indigo-800/50">Single Elimination</span>
-                    </div>
-                    <h3 id="bracketBoardTitle" class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Tournament Title</h3>
-                    <p id="bracketBoardMeta" class="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">Bracket details will appear here</p>
+                    <h3 id="bracketBoardTitle" class="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Championship Tourney</h3>
+                    <p id="bracketBoardMeta" class="mt-2 text-sm text-slate-500 dark:text-slate-400 font-medium">8 slot bracket, seeded randomly. opening matches scheduled from start time.</p>
                 </div>
                 <div class="flex gap-3">
                     <div class="px-6 py-4 bg-white dark:bg-[#111118] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -3523,7 +3519,7 @@ Team Hotel</textarea>
             </div>
 
             <!-- Canvas -->
-            <div class="flex-1 overflow-auto p-6 md:p-12 custom-scrollbar relative z-10 min-h-[550px]">
+            <div class="w-full overflow-x-auto overflow-y-hidden p-6 md:p-12 custom-scrollbar relative z-10">
                 <div id="bracketCanvas" class="flex gap-14 min-w-max pb-12 pt-14">
                     <!-- Bracket injected here via JS -->
                 </div>
