@@ -2272,6 +2272,13 @@ document.addEventListener('keydown', e => {
     .footer-grid { grid-template-columns: 1fr !important; }
 }
 </style>
+<!-- StartupBase Badge (Hidden for Verification) -->
+<div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">
+    <a href="https://startupbase.io/products/any2convert-com?utm_source=startupbase&utm_medium=badge&utm_campaign=featured-badge-dark" target="_blank" rel="noopener noreferrer">
+      <img src="https://statics.startupbase.io/site/badges/featured-on-sb-dark.svg" alt="Featured on StartupBase" height="55" style="height:55px;width:auto;" />
+    </a>
+</div>
+
 <!-- SEO Homepage Keywords -->
 <div class="fixed bottom-0 left-0 right-0 p-1 text-[9px] text-gray-400/20 hover:text-gray-400/80 transition-opacity select-none z-[-1] text-justify" aria-hidden="true" style="line-height: 1.2;">
     anyconv, any conversion, any converter, any2convert, any 2 convert, any to convert, free online converter tools anyconv alternative, anyconversion online free without email, any2convert image pdf calculator word ocr tool, best anyconv tools free alternative no signup, fast any2convert utility, any converter no watermark online, any conversion online free tool, any2convert ocr scanner, any2convert generator, anyconvert web tools, any converter fast secure privacy safe local processing.
