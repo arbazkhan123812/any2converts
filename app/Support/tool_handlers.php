@@ -6414,7 +6414,7 @@ function getCsvToJsonHTML() {
                     return;
                 }
                 // Handle different line endings and split
-                const lines = csv.trim().split(/\\r?\\n/);
+                const lines = csv.trim().split(/\r?\n/);
                 if (lines.length < 2) {
                     jsonPreview.innerHTML = '<span class="text-amber-500 dark:text-amber-400">CSV needs at least a header row and one data row.</span>';
                     return;
