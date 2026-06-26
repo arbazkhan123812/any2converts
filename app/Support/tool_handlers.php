@@ -9729,8 +9729,8 @@ function getOcrToolHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Ocr Tool online free without email, Ocr Tool no watermark fast for mobile, best Ocr Tool high quality software pc mac, Ocr Tool unlimited file size free 2026, how to use Ocr Tool easily without app install, secure Ocr Tool safe for business confidential files, Ocr Tool unblocked for school chromebook.</p>
+    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-[9px] text-gray-400/30 hover:text-gray-400/80 transition-opacity select-none text-justify" style="line-height: 1.4;">
+        <p><strong>Related Keywords & Intent:</strong> online ocr tool, ocr text recognition, free ocr image to text converter, extract text from image online free, photo to text converter, any2convert ocr, any2 convert image scanner, tesseract ocr online free browser based, best ocr software for mac windows pc android ios mobile, ocr scanned pdf to text online, image to word doc ocr, convert jpg jpeg png to editable text, png text extractor tool, web based ocr no signup no email without watermark, secure privacy safe offline ocr alternative local processing, scan handwriting to text online, screenshot reader ocr, copy text from image browser extension alternative, high quality accurate ocr multiple languages, urdu arabic english hindi spanish ocr, best any2 convert ocr text recognition free 2026, ocre optical character recognition free, image text parser api alternative, unblocked ocr for school chromebook, image to docx excel ocr online, fast ocr no server upload.</p>
     </div>';
 }
 
