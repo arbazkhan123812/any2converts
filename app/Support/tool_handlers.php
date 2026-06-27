@@ -12559,7 +12559,6 @@ function getSignPdfHTML() {
     </script>
 HTML;
 }
-}
 
 function getCropPdfHTML() {
     return '
