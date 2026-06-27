@@ -12538,6 +12538,9 @@ function getSignPdfHTML() {
             @media(max-width:850px){
                 .a2c-sign-shell{display:flex;flex-direction:column;overflow-y:auto;height:100%;width:100%;}
                 .a2c-sign-body{display:flex;flex-direction:column;height:auto;overflow:visible;}
+                .a2c-sign-side{order:1;}
+                .a2c-sign-props{order:2;}
+                .a2c-sign-main{order:3;}
                 .a2c-sign-side,.a2c-sign-props{height:auto;border-right:0;border-bottom:1px solid #e2e8f0;border-left:0;padding:16px;}
                 .a2c-sign-props{border-top:1px solid #e2e8f0;border-bottom:0;}
                 .dark .a2c-sign-side,.dark .a2c-sign-props{border-color:#1e293b;}
