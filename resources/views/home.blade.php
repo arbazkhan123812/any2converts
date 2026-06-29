@@ -1343,6 +1343,26 @@ if ($isToolPage) {
             box-shadow: 0 18px 38px rgba(0,0,0,0.24);
         }
     </style>
+    <?php if (isset($websiteSchema)): ?>
+    <script type="application/ld+json">
+        <?= json_encode($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+    </script>
+    <?php endif; ?>
+    <?php if (isset($organizationSchema)): ?>
+    <script type="application/ld+json">
+        <?= json_encode($organizationSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+    </script>
+    <?php endif; ?>
+    <?php if (!$isToolPage && isset($collectionPageSchema)): ?>
+    <script type="application/ld+json">
+        <?= json_encode($collectionPageSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+    </script>
+    <?php endif; ?>
+    <?php if (!$isToolPage && isset($itemListSchema)): ?>
+    <script type="application/ld+json">
+        <?= json_encode($itemListSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+    </script>
+    <?php endif; ?>
 </head>
 <body>
 
@@ -1426,8 +1446,8 @@ if ($isToolPage) {
             <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?><br>
             <em>Free online tool.</em>
             <?php else: ?>
-            Convert. Compress.<br>
-            <em>Protect your files.</em>
+            Free Online PDF, Image &<br>
+            <em>Utility Tools.</em>
             <?php endif; ?>
         </h1>
 
