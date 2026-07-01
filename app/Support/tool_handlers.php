@@ -7209,7 +7209,7 @@ function getBackgroundRemoverHTML() {
             await new Promise(res => { bgOriginalImage.onload = res; });
 
             try {
-                // Attempt AI Neural Background Removal
+                // Attempt AI Neural Background Removal with strict timeout & publicPath
                 let aiFunc = null;
                 if (window.imglyRemoveBackground && window.imglyRemoveBackground.removeBackground) {
                     aiFunc = window.imglyRemoveBackground.removeBackground;
@@ -7225,17 +7225,27 @@ function getBackgroundRemoverHTML() {
 
                 if (!aiFunc) throw new Error("AI engine not available");
 
-                bgProgressBar.style.width = "40%";
-                bgProcessingStatus.innerText = "Running AI background segmentation (precise edge detection)...";
+                bgProgressBar.style.width = "30%";
+                bgProcessingStatus.innerText = "Downloading AI model & isolating subject (please wait)...";
 
-                const resultBlob = await aiFunc(file, {
+                const aiPromise = aiFunc(file, {
+                    publicPath: "https://static.imgly.com/@imgly/background-removal-data/1.5.8/dist/",
                     progress: (key, current, total) => {
                         if (total > 0) {
-                            const pct = Math.min(95, Math.max(40, Math.round((current / total) * 95)));
+                            const pct = Math.min(95, Math.max(30, Math.round((current / total) * 95)));
                             bgProgressBar.style.width = pct + "%";
+                            if (key && total > 1000000) {
+                                bgProcessingStatus.innerText = `Downloading AI model (${Math.round(current/1048576)}MB / ${Math.round(total/1048576)}MB)...`;
+                            }
                         }
                     }
                 });
+
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error("AI engine timeout")), 10000);
+                });
+
+                const resultBlob = await Promise.race([aiPromise, timeoutPromise]);
 
                 const aiImg = new Image();
                 aiImg.src = URL.createObjectURL(resultBlob);
@@ -7249,10 +7259,10 @@ function getBackgroundRemoverHTML() {
                 bgRemovedCanvas = canvas;
 
             } catch (err) {
-                console.warn("AI removal failed or offline, using smart edge fallback:", err);
-                bgProgressBar.style.width = "70%";
+                console.warn("AI removal timed out or offline, switching to instant smart canvas segmentation:", err);
+                bgProgressBar.style.width = "75%";
                 bgProcessingStatus.innerText = "Polishing subject outline and removing background...";
-                await new Promise(r => setTimeout(r, 100)); // allow UI update
+                await new Promise(r => setTimeout(r, 50)); // allow UI update
                 bgRemovedCanvas = removeBgSmartCanvas(bgOriginalImage);
             }
 
