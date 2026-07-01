@@ -6924,7 +6924,6 @@ function getImageCompressorHTML() {
 
 function getBackgroundRemoverHTML() {
     return '
-    <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.8/dist/index.browser.min.js"></script>
     <div class="space-y-6">
         <!-- Hero Upload Area (Zero Sliders!) -->
         <div id="bgHeroUpload" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-3xl p-10 text-center hover:border-blue-500 dark:hover:border-blue-400 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-950/20 dark:to-transparent transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-md" onclick="document.getElementById(\'bgRemoverInput\').click()">
