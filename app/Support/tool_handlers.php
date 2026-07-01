@@ -7133,18 +7133,19 @@ function getBackgroundRemoverHTML() {
                 }
                 const bgR = rSum / count, bgG = gSum / count, bgB = bSum / count;
                 
-                function colorDist(r1, g1, b1, r2, g2, b2) {
+                function colorDist(r1, g1, b1, r2, g2, b2, x, y) {
                     // Perceptual luma-weighted color distance
                     const dr = r1 - r2, dg = g1 - g2, db = b1 - b2;
                     let dist = Math.sqrt(0.3 * dr*dr + 0.59 * dg*dg + 0.11 * db*db);
-                    // Drop-shadow recognition on light/white backgrounds
-                    if (bgR > 180 && bgG > 180 && bgB > 180) {
-                        const luma1 = 0.3*r1 + 0.59*g1 + 0.11*b1;
-                        const luma2 = 0.3*r2 + 0.59*g2 + 0.11*b2;
-                        const chroma1 = Math.max(r1, g1, b1) - Math.min(r1, g1, b1);
-                        // If pixel is darker (shadow) but has low chroma (neutral gray), treat as background shadow!
-                        if (luma1 < luma2 && chroma1 < 25 && luma1 > 70) {
-                            dist *= 0.45; // significantly reduce distance for neutral drop shadows!
+                    
+                    // Radial Subject Protection: never erase objects in the center of the frame even if white-on-white!
+                    if (typeof x !== "undefined" && typeof y !== "undefined") {
+                        const dxC = Math.abs(x - width / 2) / (width / 2);
+                        const dyC = Math.abs(y - height / 2) / (height / 2);
+                        const centerDist = Math.max(dxC, dyC); // 0 at center, 1 at border
+                        if (centerDist < 0.7) {
+                            // Multiply distance by up to 3.5x in the central 70% of the image
+                            dist *= (1 + (0.7 - centerDist) * 3.5);
                         }
                     }
                     return dist;
@@ -7155,15 +7156,15 @@ function getBackgroundRemoverHTML() {
                 alphaMap.fill(1.0);
                 
                 const queue = [];
-                const tolerance = 30;
-                const fadeRange = 16;
+                const tolerance = 22;
+                const fadeRange = 12;
                 
                 function tryPush(x, y) {
                     if (x < 0 || y < 0 || x >= width || y >= height) return;
                     const pos = y * width + x;
                     if (visited[pos]) return;
                     const idx = pos * 4;
-                    const dist = colorDist(data[idx], data[idx+1], data[idx+2], bgR, bgG, bgB);
+                    const dist = colorDist(data[idx], data[idx+1], data[idx+2], bgR, bgG, bgB, x, y);
                     if (dist <= tolerance + fadeRange) {
                         visited[pos] = 1;
                         queue.push(pos);
@@ -7179,7 +7180,7 @@ function getBackgroundRemoverHTML() {
                     const x = pos % width;
                     const y = Math.floor(pos / width);
                     const idx = pos * 4;
-                    const dist = colorDist(data[idx], data[idx+1], data[idx+2], bgR, bgG, bgB);
+                    const dist = colorDist(data[idx], data[idx+1], data[idx+2], bgR, bgG, bgB, x, y);
                     
                     if (dist <= tolerance) {
                         alphaMap[pos] = 0.0;
@@ -7188,7 +7189,7 @@ function getBackgroundRemoverHTML() {
                         alphaMap[pos] = Math.min(1.0, Math.max(0.0, ratio));
                     }
                     
-                    if (dist <= tolerance + 6) {
+                    if (dist <= tolerance + 4) {
                         tryPush(x + 1, y);
                         tryPush(x - 1, y);
                         tryPush(x, y + 1);
@@ -7315,10 +7316,10 @@ function getBackgroundRemoverHTML() {
                         aiFunc = window.imglyRemoveBackground.removeBackground;
                     } else {
                         try {
-                            const mod = await import("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.8/+esm");
+                            const mod = await import("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm");
                             aiFunc = mod.default || mod.removeBackground;
                         } catch (e) {
-                            const mod2 = await import("https://esm.sh/@imgly/background-removal@1.5.8");
+                            const mod2 = await import("https://esm.sh/@imgly/background-removal@1.7.0");
                             aiFunc = mod2.default || mod2.removeBackground;
                         }
                     }
@@ -7329,7 +7330,7 @@ function getBackgroundRemoverHTML() {
                     bgProcessingStatus.innerText = "Downloading AI model & isolating subject (please wait)...";
 
                     const aiPromise = aiFunc(file, {
-                        publicPath: "https://static.imgly.com/@imgly/background-removal-data/1.5.8/dist/",
+                        publicPath: "https://unpkg.com/@imgly/background-removal-data@1.4.5/dist/",
                         progress: (key, current, total) => {
                             if (total > 0) {
                                 const pct = Math.min(95, Math.max(30, Math.round((current / total) * 95)));
