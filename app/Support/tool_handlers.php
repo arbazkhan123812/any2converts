@@ -7103,35 +7103,6 @@ function getBackgroundRemoverHTML() {
             bgOriginalImage = null;
         });
 
-        // Smart Canvas Fallback (High precision edge flood fill without erasing subject)
-        function removeBgSmartCanvas(img) {
-            const maxSide = 2000;
-            const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
-            const width = Math.max(1, Math.round(img.width * scale));
-            const height = Math.max(1, Math.round(img.height * scale));
-            
-            const canvas = document.createElement("canvas");
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext("2d", { willReadFrequently: true });
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const data = imageData.data;
-            const len = width * height;
-            
-            // Sample perimeter border to compute true background color
-            let rSum = 0, gSum = 0, bSum = 0, count = 0;
-            const step = Math.max(1, Math.floor(Math.min(width, height) / 40));
-            for (let x = 0; x < width; x += step) {
-                let i1 = (x) * 4, i2 = ((height - 1) * width + x) * 4;
-                rSum += data[i1] + data[i2]; gSum += data[i1+1] + data[i2+1]; bSum += data[i1+2] + data[i2+2]; count += 2;
-            }
-            for (let y = 0; y < height; y += step) {
-                let i1 = (y * width) * 4, i2 = (y * width + width - 1) * 4;
-                rSum += data[i1] + data[i2]; gSum += data[i1+1] + data[i2+1]; bSum += data[i1+2] + data[i2+2]; count += 2;
-            }
-            const bgR = rSum / count, bgG = gSum / count, bgB = bSum / count;
             // Smart Canvas Fallback (High precision edge flood fill with drop-shadow removal)
             function removeBgSmartCanvas(img) {
                 const maxSide = 2000;
