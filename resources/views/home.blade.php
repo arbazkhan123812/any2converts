@@ -525,13 +525,89 @@ if ($isToolPage) {
         }
     }
 
-    $toolPageContent = [
-        'headline' => 'Detailed guidance for ' . $currentToolName,
-        'paragraphs' => [
-            $currentToolName . ' on Any2Convert is a free online tool that helps you ' . lcfirst($currentToolDescription) . '. It is built for browser-first workflows so you can complete the task without installing extra software or opening multiple apps.',
-            'Use this page when you need to ' . $useCasePhrase . '. The tool interface is focused on the job, with just the right options to turn your selected file, image, or data into the output you need.',
-            'This page is useful for people searching for ' . $searchPhrase . ' and other related queries. It is designed to answer the key questions around using this tool, while still delivering the fast online tools any2convert.com is known for.',
+    $overviewText = $currentToolName . " converts and processes your files instantly in your browser. Whether you need to " . lcfirst($currentToolDescription) . " or manage digital content on the go, our free online utility delivers clean, professional results in seconds — no software installation required.\n\nSimply select your input, choose your preferred settings, and download your processed file immediately. Designed for speed and privacy, this tool works seamlessly across all devices including mobile phones, tablets, and desktop computers.";
+    
+    $step1 = "Upload or input your source file/text into the box above.";
+    $step2 = "Choose your desired options and click the conversion/processing button.";
+    $step3 = "Download your finished file or copy the instant result directly.";
+
+    $faqs = [
+        [
+            'q' => "What is " . $currentToolName . "?",
+            'a' => $currentToolName . " is an all-in-one free online tool designed to help you " . lcfirst($currentToolDescription) . " quickly and safely directly in your web browser."
         ],
+        [
+            'q' => "Is " . $currentToolName . " completely free to use?",
+            'a' => "Yes, 100% free! There are no hidden fees, no subscriptions required, no watermarks added, and no email signup needed."
+        ],
+        [
+            'q' => "Is my data and file privacy protected?",
+            'a' => "Absolutely. Any2Convert prioritizes on-device browser processing whenever possible. Your files are processed securely and are never stored or inspected on our servers."
+        ],
+        [
+            'q' => "Can I use this tool on my mobile phone or tablet?",
+            'a' => "Yes! Our platform is completely responsive and works flawlessly on iPhone, iPad, Android smartphones, Mac, Windows, and Chromebooks without installing any app."
+        ],
+        [
+            'q' => "Are there any file size or usage limits?",
+            'a' => "You can process standard documents and media files up to 50MB completely free with unlimited daily usage for normal tasks."
+        ]
+    ];
+
+    if ($initialToolId === 'ocr_pdf' || $initialToolId === 'ocr_tool') {
+        $overviewText = "OCR PDF tool converts scanned PDF files and image-based PDFs into searchable, editable text. Whether you have a scanned document, a photo of a receipt, or an image-only PDF, our free OCR tool extracts all text instantly — no software installation needed.\n\nSimply upload your PDF, click convert, and download your extracted text within seconds. Works on all devices including mobile phones, tablets, and computers.";
+        $step1 = "Upload your scanned PDF file or image into the tool.";
+        $step2 = "Click the \"Extract Text\" or start OCR processing button.";
+        $step3 = "Download or copy your extracted text within seconds.";
+        $faqs = [
+            [
+                'q' => "What is OCR PDF?",
+                'a' => "OCR (Optical Character Recognition) reads text from scanned or image-based PDFs that cannot be copied normally."
+            ],
+            [
+                'q' => "Is this OCR tool completely free?",
+                'a' => "Yes, 100% free. No signup, no watermark, no hidden charges."
+            ],
+            [
+                'q' => "What languages does OCR support?",
+                'a' => "English and major international languages are supported."
+            ],
+            [
+                'q' => "Is my PDF file safe?",
+                'a' => "Files are processed instantly and never stored on our servers."
+            ],
+            [
+                'q' => "What is the maximum file size?",
+                'a' => "You can upload PDF files up to 50MB."
+            ],
+            [
+                'q' => "Why can't I copy text from my PDF?",
+                'a' => "If your PDF was scanned or created from photos, it contains images not text. OCR converts those images into real copyable text."
+            ]
+        ];
+    } elseif ($initialToolId === 'pdf_to_word') {
+        $overviewText = "Our online PDF to Word converter accurately transforms non-editable PDF documents into clean, fully editable Microsoft Word (DOCX) files. Whether you are editing a resume, updating a business contract, or modifying assignment text, our tool preserves original formatting, tables, and layouts without requiring expensive desktop software.\n\nSimply drag and drop your PDF, initiate conversion, and download your editable Word document in seconds. 100% free, secure, and compatible with all operating systems.";
+        $step1 = "Upload or drag-and-drop your PDF document into the conversion area.";
+        $step2 = "Click \"Convert to Word\" to start high-precision text and layout extraction.";
+        $step3 = "Download your editable DOCX Word file instantly onto your device.";
+    } elseif ($initialToolId === 'bg_remover' || $initialToolId === 'background-remover') {
+        $overviewText = "Our AI Background Remover automatically isolates subjects and erases backgrounds from photos in one click. Whether you need a transparent PNG for e-commerce product listings, social media graphics, portrait photos, or car banners, our deep-learning engine cuts edges with 100% pixel precision.\n\nNo manual tracing, lasso selection, or confusing sliders required. Simply upload your JPG, PNG, or WEBP photo and let our artificial intelligence generate a clean transparent background instantly.";
+        $step1 = "Upload your product, portrait, or animal photo into the tool.";
+        $step2 = "Our AI neural network automatically detects the subject and strips the background.";
+        $step3 = "Download your high-resolution PNG image with a transparent background.";
+    } elseif ($initialToolId === 'image_compressor') {
+        $overviewText = "Our smart Image Compressor reduces file sizes of JPG, PNG, and WEBP photos by up to 80% without sacrificing visual clarity. Perfect for web developers, bloggers, e-commerce sellers, and students needing to shrink images for faster website loading or email attachment limits.\n\nAll image compression runs locally inside your browser using advanced lossy and lossless algorithms, ensuring zero upload delays and complete privacy for your personal photos.";
+        $step1 = "Select one or multiple images (JPG, PNG, WEBP) to compress.";
+        $step2 = "Adjust your preferred quality slider or let our smart engine auto-optimize.";
+        $step3 = "Download your compressed, lightweight images instantly.";
+    }
+
+    $toolPageContent = [
+        'overview' => $overviewText,
+        'step1' => $step1,
+        'step2' => $step2,
+        'step3' => $step3,
+        'faqs' => $faqs
     ];
     $seoKeywords = implode(', ', $toolPageKeywords);
 }
@@ -1509,54 +1585,80 @@ if ($isToolPage) {
             <?= htmlspecialchars($currentToolDescription, ENT_QUOTES) ?>
         </p>
     </section>
-    <section style="margin:0 auto 56px;max-width:920px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
-        <article class="detail-card" style="padding:24px;">
-            <h3 style="margin:0 0 10px;font-size:1.05rem;color:var(--text-primary);">About this <?= htmlspecialchars($currentToolCategory, ENT_QUOTES) ?> tool</h3>
-            <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
-                <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?> is built for quick browser-based work on Any2Convert. <?= htmlspecialchars($currentToolDescription, ENT_QUOTES) ?> Use it when you need a focused utility without installing desktop software, creating a complex workflow, or switching between multiple apps for a simple file or data task.
-            </p>
-        </article>
-        <article class="detail-card" style="padding:24px;">
-            <h3 style="margin:0 0 10px;font-size:1.05rem;color:var(--text-primary);">How it works</h3>
-            <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
-                Open the tool, add the file or text requested by the form, choose the available options, and generate your result. The interface is designed for everyday conversions, edits, checks, and calculations, so you can complete the task from the same page and download or copy the finished output when the tool provides it.
-            </p>
-        </article>
-        <article class="detail-card" style="padding:24px;">
-            <h3 style="margin:0 0 10px;font-size:1.05rem;color:var(--text-primary);">Privacy and file handling</h3>
-            <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
-                Any2Convert keeps many tasks local in your browser whenever the feature supports it. That means common PDF, image, text, calculator, and converter actions can often run on your own device, reducing unnecessary uploads and helping you work faster with private documents, drafts, screenshots, and utility data.
-            </p>
-        </article>
-    </section>
 
-    <section style="margin-bottom:56px;max-width:920px;margin-left:auto;margin-right:auto;">
-        <div style="margin-bottom:28px;">
-            <h2 class="section-heading">More about <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?></h2>
-            <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.75;">
-                <?= htmlspecialchars($toolPageContent['paragraphs'][0] ?? '', ENT_QUOTES) ?>
+    <!-- Overview Banner -->
+    <section style="margin:0 auto 48px;max-width:920px;">
+        <div style="background:linear-gradient(135deg, rgba(59,130,246,0.06) 0%, rgba(139,92,246,0.06) 100%);border:1px solid rgba(59,130,246,0.18);border-radius:24px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,0.02);">
+            <h3 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin:0 0 14px;display:flex;align-items:center;gap:10px;">
+                <span style="font-size:1.5rem;">✨</span> About <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?>
+            </h3>
+            <p style="color:var(--text-secondary);line-height:1.8;font-size:1.02rem;white-space:pre-line;margin:0;">
+                <?= htmlspecialchars($toolPageContent['overview'] ?? '', ENT_QUOTES) ?>
             </p>
         </div>
-        <div style="display:grid;grid-template-columns:1fr;gap:18px;">
-            <div style="padding:24px;border:1px solid rgba(15,23,42,0.08);border-radius:24px;background:var(--bg-surface);">
-                <h3 style="margin:0 0 10px;font-size:1rem;color:var(--text-primary);">How to use this tool</h3>
-                <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
-                    <?= htmlspecialchars($toolPageContent['paragraphs'][1] ?? '', ENT_QUOTES) ?>
+    </section>
+
+    <!-- 3 Steps Guide -->
+    <section style="margin:0 auto 56px;max-width:920px;">
+        <h3 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin:0 0 24px;text-align:center;">
+            🚀 How to Use <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?> in 3 Simple Steps
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
+            <div class="detail-card" style="padding:26px;border-radius:20px;position:relative;background:var(--bg-surface);border:1px solid rgba(15,23,42,0.08);transition:transform 0.2s,box-shadow 0.2s;">
+                <div style="display:inline-block;padding:4px 12px;border-radius:20px;background:rgba(59,130,246,0.1);color:var(--blue);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Step 1</div>
+                <h4 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);margin:0 0 10px;">Upload or Input</h4>
+                <p style="margin:0;color:var(--text-secondary);font-size:0.94rem;line-height:1.65;">
+                    <?= htmlspecialchars($toolPageContent['step1'] ?? '', ENT_QUOTES) ?>
                 </p>
             </div>
-            <div style="padding:24px;border:1px solid rgba(15,23,42,0.08);border-radius:24px;background:var(--bg-surface);">
-                <h3 style="margin:0 0 10px;font-size:1rem;color:var(--text-primary);">When to use it</h3>
-                <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
-                    <?= htmlspecialchars($toolPageContent['paragraphs'][2] ?? '', ENT_QUOTES) ?>
+            <div class="detail-card" style="padding:26px;border-radius:20px;position:relative;background:var(--bg-surface);border:1px solid rgba(15,23,42,0.08);transition:transform 0.2s,box-shadow 0.2s;">
+                <div style="display:inline-block;padding:4px 12px;border-radius:20px;background:rgba(139,92,246,0.1);color:var(--violet);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Step 2</div>
+                <h4 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);margin:0 0 10px;">Start Processing</h4>
+                <p style="margin:0;color:var(--text-secondary);font-size:0.94rem;line-height:1.65;">
+                    <?= htmlspecialchars($toolPageContent['step2'] ?? '', ENT_QUOTES) ?>
                 </p>
             </div>
-            <div style="padding:24px;border:1px solid rgba(15,23,42,0.08);border-radius:24px;background:var(--bg-surface);">
-                <h3 style="margin:0 0 10px;font-size:1rem;color:var(--text-primary);">Common search phrases for this page</h3>
-                <ul style="margin:0;padding-left:18px;color:var(--text-secondary);line-height:1.75;font-size:0.92rem;">
-                    <?php foreach ($toolPageKeywords as $keyword): ?>
-                        <li><?= htmlspecialchars($keyword, ENT_QUOTES) ?></li>
-                    <?php endforeach; ?>
-                </ul>
+            <div class="detail-card" style="padding:26px;border-radius:20px;position:relative;background:var(--bg-surface);border:1px solid rgba(15,23,42,0.08);transition:transform 0.2s,box-shadow 0.2s;">
+                <div style="display:inline-block;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.1);color:var(--green);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Step 3</div>
+                <h4 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);margin:0 0 10px;">Download & Copy</h4>
+                <p style="margin:0;color:var(--text-secondary);font-size:0.94rem;line-height:1.65;">
+                    <?= htmlspecialchars($toolPageContent['step3'] ?? '', ENT_QUOTES) ?>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section style="margin:0 auto 56px;max-width:920px;">
+        <h3 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin:0 0 24px;text-align:center;">
+            ❓ Frequently Asked Questions (FAQ)
+        </h3>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+            <?php foreach (($toolPageContent['faqs'] ?? []) as $faq): ?>
+            <div style="padding:24px 28px;border:1px solid rgba(15,23,42,0.08);border-radius:20px;background:var(--bg-surface);box-shadow:0 2px 10px rgba(0,0,0,0.015);">
+                <h4 style="margin:0 0 10px;font-size:1.06rem;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:10px;">
+                    <span style="color:var(--blue);font-weight:800;font-size:1.15rem;">Q:</span> <?= htmlspecialchars($faq['q'], ENT_QUOTES) ?>
+                </h4>
+                <p style="margin:0;color:var(--text-secondary);line-height:1.75;font-size:0.96rem;padding-left:24px;border-left:2px solid var(--border);">
+                    <span style="font-weight:600;color:var(--text-primary);">A:</span> <?= htmlspecialchars($faq['a'], ENT_QUOTES) ?>
+                </p>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <!-- Keywords Tag Cloud -->
+    <section style="margin:0 auto 56px;max-width:920px;">
+        <div style="padding:26px;border:1px solid rgba(15,23,42,0.08);border-radius:20px;background:var(--bg-surface);">
+            <h4 style="margin:0 0 16px;font-size:1.02rem;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px;">
+                <span>🔍</span> Popular Search Queries & Keywords
+            </h4>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                <?php foreach ($toolPageKeywords as $keyword): ?>
+                    <span style="display:inline-block;padding:6px 16px;border-radius:30px;background:var(--bg-base);border:1px solid var(--border);color:var(--text-secondary);font-size:0.86rem;line-height:1.4;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)';">
+                        <?= htmlspecialchars($keyword, ENT_QUOTES) ?>
+                    </span>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
