@@ -595,25 +595,26 @@ if ($isToolPage) {
 
         /* ── Nav pill ── */
         .nav-pill {
-            display: inline-flex; align-items: center; gap: 6px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
             padding: 7px 16px;
-            border-radius: 8px;
+            border-radius: 50px !important;
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-secondary);
             border: 1px solid transparent;
             transition: all 0.2s ease;
             cursor: pointer; text-decoration: none;
+            white-space: nowrap; flex-shrink: 0;
         }
         .nav-pill:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); border-color: var(--border); }
 
         /* ── Primary button ── */
         .btn-primary {
-            display: inline-flex; align-items: center; gap: 8px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             padding: 9px 20px;
             background: var(--accent);
             color: #fff;
-            border-radius: 9px;
+            border-radius: 50px !important;
             font-size: 0.875rem;
             font-weight: 600;
             letter-spacing: -0.01em;
@@ -621,6 +622,7 @@ if ($isToolPage) {
             transition: all 0.2s ease;
             position: relative; overflow: hidden;
             box-shadow: 0 0 0 0 var(--accent-glow);
+            white-space: nowrap; flex-shrink: 0;
         }
         .btn-primary::after {
             content: '';
@@ -637,17 +639,18 @@ if ($isToolPage) {
 
         /* ── Ghost button ── */
         .btn-ghost {
-            display: inline-flex; align-items: center; gap: 8px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             padding: 9px 20px;
             background: transparent;
             color: var(--text-secondary);
-            border-radius: 9px;
+            border-radius: 50px !important;
             font-size: 0.875rem;
             font-weight: 500;
             border: 1px solid var(--border);
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
+            white-space: nowrap; flex-shrink: 0;
         }
         .btn-ghost:hover { color: var(--text-primary); border-color: var(--border-hover); background: rgba(255,255,255,0.04); }
 
@@ -1129,6 +1132,8 @@ if ($isToolPage) {
         @media (max-width: 640px) {
             .hero-title { font-size: 2rem; }
             .hero-sub { font-size: 0.95rem; }
+            .nav-pill { padding: 6px 10px !important; font-size: 0.78rem !important; gap: 4px !important; border-radius: 50px !important; white-space: nowrap !important; }
+            .btn-primary { padding: 6px 12px !important; font-size: 0.78rem !important; gap: 4px !important; border-radius: 50px !important; white-space: nowrap !important; }
         }
         @media (max-width: 900px) {
             body::before { display: none; }
@@ -1357,7 +1362,7 @@ if ($isToolPage) {
                     </div>
                 <?php else: ?>
                     <a href="/login" class="nav-pill">Sign in</a>
-                    <a href="/register" class="btn-primary" style="text-decoration:none;font-size:0.84rem;padding:8px 18px;">
+                    <a href="/register" class="btn-primary" style="text-decoration:none;">
                         Get started free
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
