@@ -885,7 +885,7 @@ function getGenericUnitConverterHTML(array $config): string
     return '
     <div class="space-y-6">
         <div>
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">' . $title . '</h2>
+            
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">' . $description . '</p>
         </div>
         <div id="unitConverterPresets" class="flex flex-wrap gap-2"></div>
@@ -1900,13 +1900,8 @@ function getAtsResumeCheckerHTML() {
     return <<<'HTML'
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[1.05fr_0.95fr] gap-6">
         <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 shadow-xl p-6 md:p-7 space-y-5">
-            <div style="">
-                <h2 class="text-3xl font-black text-slate-900 dark:text-white">ATS Resume Checker Free Online</h2>
-                <p>Use this ATS resume checker to scan your resume, improve ATS resume keywords, and check your ATS resume score against a job description.</p>
-                <p>Find missing ATS resume keywords, test your ATS resume format, and use this free ATS resume checker online before you apply.</p>
-                <p>If you want to know what is an ATS resume, what is ATS resume scanning, or how an ATS resume scanner works, this tool gives you a fast ATS resume test in your browser.</p>
-            </div>
-            <div class="flex items-start justify-between gap-4"><div><p class="text-[11px] tracking-[0.34em] uppercase text-fuchsia-500 font-semibold">ATS Resume Tool</p><h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">ATS Resume Checker</h2><p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Use this free ATS resume checker to compare your resume with a job description, scan ATS resume keywords, and improve your ATS resume score.</p></div><div class="w-14 h-14 rounded-2xl bg-fuchsia-500/15 text-fuchsia-500 flex items-center justify-center"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/></svg></div></div>
+            
+            <div class="flex items-start justify-between gap-4"><div><p class="text-[11px] tracking-[0.34em] uppercase text-fuchsia-500 font-semibold">ATS Resume Tool</p><p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Use this free ATS resume checker to compare your resume with a job description, scan ATS resume keywords, and improve your ATS resume score.</p></div><div class="w-14 h-14 rounded-2xl bg-fuchsia-500/15 text-fuchsia-500 flex items-center justify-center"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/></svg></div></div>
             <div class="grid md:grid-cols-2 gap-4">
                 <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Paste Resume</span><textarea id="atsResume" rows="16" class="mt-2 w-full rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-slate-900 dark:text-white" placeholder="Paste your ATS resume, ATS resume template, experience, education, and skills..."></textarea></label>
                 <label class="block"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Paste Job Description</span><textarea id="atsJob" rows="16" class="mt-2 w-full rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-slate-900 dark:text-white" placeholder="Paste the target role requirements, ATS resume keywords, skills, and responsibilities..."></textarea></label>
@@ -1938,9 +1933,7 @@ function getAtsResumeCheckerHTML() {
                 scoreEl.textContent = total; barEl.style.width = total + "%";
                 summaryEl.textContent = total >= 80 ? "Strong match. Fine-tune the missing keywords and measurable impact." : total >= 60 ? "Decent match. Add missing terms and sharpen role-specific experience." : "Low match. Rework your summary, skills, and impact bullets around the job description.";
                 keywordsEl.innerHTML = missing.length ? missing.map((word) => `<span class="px-3 py-2 rounded-full bg-rose-500/10 text-rose-500 text-sm font-semibold">${word}</span>`).join("") : '<span class="px-3 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-semibold">No major keyword gaps found</span>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Ats Resume Checker online free without email, Ats Resume Checker no watermark fast for mobile, best Ats Resume Checker high quality software pc mac, Ats Resume Checker unlimited file size free 2026, how to use Ats Resume Checker easily without app install, secure Ats Resume Checker safe for business confidential files, Ats Resume Checker unblocked for school chromebook.</p>
-    </div>';
+    ';
                 const tips = [foundSections.length < sections.length ? `Add missing sections: ${sections.filter((section) => !foundSections.includes(section)).join(", ")}.` : "Core resume sections are present.", missing.length ? `Work these terms naturally into your resume: ${missing.slice(0, 5).join(", ")}.` : "Keyword alignment looks strong for the top terms.", /\d/.test(resume) ? "You already use measurable numbers. Keep that impact language." : "Add numbers like revenue, response time, users, or conversion gains.", /(built|led|managed|launched|improved|optimized|delivered|designed)/i.test(resume) ? "Action verbs are present. Nice." : "Start bullets with action verbs like built, led, improved, or optimized."];
                 tipsEl.innerHTML = tips.map((tip) => `<li class="rounded-2xl bg-slate-100 dark:bg-slate-900 px-4 py-3">${tip}</li>`).join("");
                 statusEl.textContent = `Checked ${topKeywords.length} key terms and ${foundSections.length}/${sections.length} major sections.`;
@@ -2017,9 +2010,7 @@ function getSocialImageResizerHTML() {
             </div>
         </div>
         
-        <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-            <p><strong>Related Searches:</strong> social image resizer online free, resize image for instagram without crop, resize photo for youtube thumbnail, resize image for facebook cover fast, resize image for twitter x post best quality.</p>
-        </div>
+        
     </div>
 
     <script>
@@ -2161,7 +2152,7 @@ function getJwtDecoderHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-amber-500 font-semibold">Developer Tool</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">JWT Decoder</h2>
+                    
                     <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Decode header and payload locally in your browser. No token leaves your device.</p>
                 </div>
                 <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center">
@@ -2278,9 +2269,7 @@ function getBankStatementToExcelHTML() {
             </div>
         </div>
         
-        <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-            <p><strong>Related Searches:</strong> convert Bank Statement To Excel online free without email, Bank Statement To Excel no watermark fast for mobile, best Bank Statement To Excel high quality software pc mac, Bank Statement To Excel unlimited file size free 2026, how to use Bank Statement To Excel easily without app install, secure Bank Statement To Excel safe for business confidential files, Bank Statement To Excel unblocked for school chromebook.</p>
-        </div>
+        
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
@@ -2439,7 +2428,7 @@ function getGrammarCheckerHTML() {
     <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
         <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 shadow-xl p-6 md:p-7 space-y-5">
             <p class="text-[11px] tracking-[0.34em] uppercase text-violet-500 font-semibold">Writing Tool</p>
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Grammar Checker</h2>
+            
             <textarea id="grammarInput" rows="16" class="w-full rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-slate-900 dark:text-white" placeholder="Paste your text here"></textarea>
             <div class="flex flex-wrap gap-3"><button id="grammarCheckBtn" class="rounded-2xl bg-violet-600 text-white px-5 py-3 font-semibold">Check Grammar</button><button id="grammarDemoBtn" class="rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white px-5 py-3 font-semibold">Load Demo</button><p id="grammarStatus" class="text-sm text-slate-500 dark:text-slate-400 self-center">Basic fixes include casing, punctuation, spacing, and repeated marks.</p></div>
         </div>
@@ -2461,9 +2450,7 @@ function getGrammarCheckerHTML() {
                 if (text && !/[.!?]$/.test(text.trim())) { text = text.trim() + "."; notes.push("Added ending punctuation."); }
                 output.value = text;
                 suggestions.innerHTML = notes.length ? notes.map((note) => `<li class="rounded-2xl bg-slate-100 dark:bg-slate-900 px-4 py-3">${note}</li>`).join("") : '<li class="rounded-2xl bg-emerald-500/10 text-emerald-500 px-4 py-3">No obvious quick-fix issues found.</li>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Grammar Checker online free without email, Grammar Checker no watermark fast for mobile, best Grammar Checker high quality software pc mac, Grammar Checker unlimited file size free 2026, how to use Grammar Checker easily without app install, secure Grammar Checker safe for business confidential files, Grammar Checker unblocked for school chromebook.</p>
-    </div>';
+    ';
                 status.textContent = notes.length ? `${notes.length} quick grammar improvements applied.` : "Text already looks clean.";
             }
             document.getElementById("grammarCheckBtn").addEventListener("click", runCheck);
@@ -2478,7 +2465,7 @@ function getParaphraseToolHTML() {
     <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_1fr] gap-6">
         <div class="rounded-[32px] border border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/75 shadow-xl p-6 md:p-7 space-y-5">
             <p class="text-[11px] tracking-[0.34em] uppercase text-sky-500 font-semibold">Writing Tool</p>
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Paraphrase Tool</h2>
+            
             <textarea id="paraphraseInput" rows="16" class="w-full rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-slate-900 dark:text-white" placeholder="Paste your paragraph here"></textarea>
             <div class="flex flex-wrap gap-3"><button id="paraphraseBtn" class="rounded-2xl bg-sky-600 text-white px-5 py-3 font-semibold">Paraphrase Text</button><button id="paraphraseDemoBtn" class="rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white px-5 py-3 font-semibold">Load Demo</button><p id="paraphraseStatus" class="text-sm text-slate-500 dark:text-slate-400 self-center">Creates a cleaner alternative phrasing locally in the browser.</p></div>
         </div>
@@ -2522,7 +2509,7 @@ function getPercentageCalculatorHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-amber-500 font-semibold">Calculator Suite</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Percentage Calculator</h2>
+                    
                     <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-xl">Use it for discounts, growth rates, exam scores, margins, and everyday comparisons without messy mental math.</p>
                 </div>
                 <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-500 items-center justify-center">
@@ -2605,7 +2592,7 @@ function getLoanCalculatorHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-emerald-500 font-semibold">Calculator Suite</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Loan EMI Calculator</h2>
+                    
                     <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-xl">Estimate monthly payments, interest cost, and total repayment with a cleaner finance-style layout.</p>
                 </div>
                 <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-500 items-center justify-center">
@@ -2691,7 +2678,7 @@ function getBmiCalculatorHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-rose-500 font-semibold">Calculator Suite</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">BMI Calculator</h2>
+                    
                     <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-xl">Check body mass index with multiple unit options and a cleaner health-focused layout.</p>
                 </div>
                 <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-rose-500/15 text-rose-500 items-center justify-center">
@@ -2850,7 +2837,7 @@ function getAgeCalculatorHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-indigo-500 font-semibold">Calculator Suite</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Age Calculator</h2>
+                    
                     <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-xl">Check current age from date of birth with a cleaner result layout for forms, records, and quick calculations.</p>
                 </div>
                 <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-indigo-500/15 text-indigo-500 items-center justify-center">
@@ -2899,7 +2886,7 @@ function getSensitivityConverterHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-cyan-500 font-semibold">Gaming Tools</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Sensitivity Converter</h2>
+                    
                     <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-xl">Convert mouse sensitivity between shooter titles, then optionally compare stretched-resolution visual feel for setups like 4:3 stretched versus native 16:9.</p>
                 </div>
                 <div class="hidden sm:flex w-14 h-14 rounded-2xl bg-cyan-500/15 text-cyan-500 items-center justify-center">
@@ -3053,7 +3040,7 @@ function getReactionTimeTestHTML() {
     <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
         <div class="rounded-[34px] border border-lime-200/60 dark:border-lime-500/15 bg-gradient-to-br from-white via-lime-50/70 to-emerald-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(132,204,22,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-lime-500 font-semibold">Gaming Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Reaction Time Test</h2>
+            
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Wait for the panel to turn green, then click as fast as you can.</p>
             <button id="reactionStartBtn" class="mt-6 rounded-[28px] bg-gradient-to-r from-lime-500 to-emerald-500 text-slate-950 px-6 py-4 font-semibold shadow-[0_20px_45px_rgba(132,204,22,0.28)]">Start Test</button>
             <div id="reactionPad" class="mt-6 rounded-[34px] border border-slate-200 dark:border-slate-800 bg-rose-500/90 min-h-[280px] flex items-center justify-center text-center text-white text-2xl font-black select-none cursor-pointer">Click Start</div>
@@ -3090,9 +3077,7 @@ function getReactionTimeTestHTML() {
                     }))
                     .catch(() => {
                         leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Reaction Time Test online free without email, Reaction Time Test no watermark fast for mobile, best Reaction Time Test high quality software pc mac, Reaction Time Test unlimited file size free 2026, how to use Reaction Time Test easily without app install, secure Reaction Time Test safe for business confidential files, Reaction Time Test unblocked for school chromebook.</p>
-    </div>';
+    ';
                     });
             }
             function saveScore(result) {
@@ -3155,7 +3140,7 @@ function getCpsTestHTML() {
     <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
         <div class="rounded-[34px] border border-fuchsia-200/60 dark:border-fuchsia-500/15 bg-gradient-to-br from-white via-fuchsia-50/70 to-pink-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(217,70,239,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-fuchsia-500 font-semibold">Gaming Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">CPS Test</h2>
+            
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Click as fast as you can for 5 seconds to measure clicks per second.</p>
             <button id="cpsStartBtn" class="mt-6 rounded-[28px] bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white px-6 py-4 font-semibold shadow-[0_20px_45px_rgba(217,70,239,0.28)]">Start Test</button>
             <div id="cpsPad" class="mt-6 rounded-[34px] border border-slate-200 dark:border-slate-800 bg-fuchsia-600 min-h-[280px] flex items-center justify-center text-center text-white text-2xl font-black select-none cursor-pointer">Click to Start</div>
@@ -3189,9 +3174,7 @@ function getCpsTestHTML() {
                     }))
                     .catch(() => {
                         leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Cps Test online free without email, Cps Test no watermark fast for mobile, best Cps Test high quality software pc mac, Cps Test unlimited file size free 2026, how to use Cps Test easily without app install, secure Cps Test safe for business confidential files, Cps Test unblocked for school chromebook.</p>
-    </div>';
+    ';
                     });
             }
             function saveScore(cps, totalClicks) {
@@ -3249,7 +3232,7 @@ function getGamerTagGeneratorHTML() {
     <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
         <div class="rounded-[34px] border border-violet-200/60 dark:border-violet-500/15 bg-gradient-to-br from-white via-violet-50/70 to-indigo-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(139,92,246,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-violet-500 font-semibold">Gaming Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Gamer Tag Generator</h2>
+            
             <div class="mt-6 grid md:grid-cols-2 gap-4">
                 <label class="block rounded-[28px] border border-white/60 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 p-4"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Style</span><select id="tagStyle" class="mt-3 w-full rounded-[24px] border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-base font-semibold text-slate-900 dark:text-white"><option value="clean">Clean</option><option value="edgy">Edgy</option><option value="cute">Cute</option><option value="pro">Pro</option></select></label>
                 <label class="block rounded-[28px] border border-white/60 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 p-4"><span class="text-xs uppercase tracking-[0.22em] text-slate-500">Keyword</span><input id="tagKeyword" class="mt-3 w-full rounded-[24px] border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-4 py-4 text-base font-semibold text-slate-900 dark:text-white" placeholder="shadow"></label>
@@ -3292,7 +3275,7 @@ function getClipToGifHTML() {
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
         <div class="rounded-[34px] border border-pink-200/60 dark:border-pink-500/15 bg-gradient-to-br from-white via-pink-50/70 to-rose-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(236,72,153,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-pink-500 font-semibold">Gaming Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Clip to GIF</h2>
+            
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Turn a short gaming clip into a GIF using local FFmpeg processing in the browser.</p>
             <input id="clipGifInput" type="file" accept="video/*" class="mt-6 block w-full rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-4 py-4 text-slate-900 dark:text-white">
             <div class="mt-5 grid md:grid-cols-4 gap-4">
@@ -3405,7 +3388,7 @@ function getTournamentBracketGeneratorHTML() {
         <aside class="bg-white dark:bg-[#111118] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col min-w-0 h-fit lg:sticky lg:top-4 z-20">
             <div>
                 <p class="text-[10px] tracking-[0.25em] uppercase text-indigo-500 font-bold mb-1">Gaming Tools</p>
-                <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Bracket HQ</h2>
+                
                 <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Generate a seeded single-elimination bracket with stream-ready aesthetics.</p>
             </div>
             
@@ -3790,7 +3773,7 @@ function getSpinWheelHTML() {
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[0.95fr_1.05fr] gap-6">
         <div class="rounded-[34px] border border-fuchsia-200/60 dark:border-fuchsia-500/15 bg-gradient-to-br from-white via-fuchsia-50/70 to-violet-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(217,70,239,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-fuchsia-500 font-semibold">Fun Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Spin the Wheel</h2>
+            
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Add your options, spin the wheel, and let chance pick the winner.</p>
             <textarea id="wheelOptions" rows="10" class="mt-6 w-full rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-4 py-4 text-slate-900 dark:text-white" placeholder="Pizza&#10;Burger&#10;Pasta&#10;Sushi">Pizza
 Burger
@@ -3891,7 +3874,7 @@ function getRandomNamePickerHTML() {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Left: Input -->
         <div class="flex flex-col h-full rounded-[2rem] border border-emerald-200/60 dark:border-emerald-500/15 bg-gradient-to-br from-white via-emerald-50/50 to-teal-50/40 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-sm p-5 md:p-6">
-            <h2 class="text-2xl font-black text-slate-900 dark:text-white">Random Name Picker</h2>
+            
             <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Paste names for giveaways, classrooms, lobbies, or team selection. One name per line.</p>
             <textarea id="pickerNames" class="mt-4 flex-1 min-h-[220px] w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 px-4 py-4 text-sm text-slate-900 dark:text-white custom-scrollbar focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all resize-y" placeholder="Ali&#10;Sara&#10;Umair&#10;Hassan">Ali
 Sara
@@ -4017,7 +4000,7 @@ function getTypingSpeedTestHTML() {
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[1.05fr_0.95fr] gap-6">
         <div class="rounded-[34px] border border-orange-200/60 dark:border-orange-500/15 bg-gradient-to-br from-white via-orange-50/70 to-amber-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(249,115,22,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-orange-500 font-semibold">Fun Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Typing Speed Test</h2>
+            
             <p id="typingPrompt" class="mt-6 rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-5 py-5 text-lg leading-8 text-slate-900 dark:text-white"></p>
             <textarea id="typingInput" rows="7" class="mt-6 w-full rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-4 py-4 text-slate-900 dark:text-white" placeholder="Start typing here..."></textarea>
             <div class="mt-6 flex flex-wrap gap-3">
@@ -4062,9 +4045,7 @@ function getTypingSpeedTestHTML() {
                     }))
                     .catch(() => {
                         leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Typing Speed Test online free without email, Typing Speed Test no watermark fast for mobile, best Typing Speed Test high quality software pc mac, Typing Speed Test unlimited file size free 2026, how to use Typing Speed Test easily without app install, secure Typing Speed Test safe for business confidential files, Typing Speed Test unblocked for school chromebook.</p>
-    </div>';
+    ';
                     });
             }
             function saveRun(wpm, accuracy, elapsedSeconds) {
@@ -4124,7 +4105,7 @@ function getMemeCaptionGeneratorHTML() {
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[0.95fr_1.05fr] gap-6">
         <div class="rounded-[34px] border border-sky-200/60 dark:border-sky-500/15 bg-gradient-to-br from-white via-sky-50/70 to-blue-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(14,165,233,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-sky-500 font-semibold">Fun Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Meme Caption Generator</h2>
+            
             <input id="memeImageInput" type="file" accept="image/*" class="mt-6 block w-full rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-4 py-4 text-slate-900 dark:text-white">
             <div class="mt-5 grid gap-4">
                 <input id="memeTopText" class="w-full rounded-[24px] border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/70 px-4 py-4 text-slate-900 dark:text-white" placeholder="TOP TEXT">
@@ -4187,7 +4168,7 @@ function getTruthOrDareGeneratorHTML() {
     <div class="max-w-5xl mx-auto grid xl:grid-cols-[1fr_0.95fr] gap-6">
         <div class="rounded-[34px] border border-rose-200/60 dark:border-rose-500/15 bg-gradient-to-br from-white via-rose-50/70 to-pink-50/60 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(244,63,94,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-rose-500 font-semibold">Fun Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Truth or Dare Generator</h2>
+            
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Need an instant party prompt? Generate fun truths and dares in one click.</p>
             <div class="mt-6 flex flex-wrap gap-3">
                 <button id="truthBtn" class="rounded-[28px] bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-4 font-semibold shadow-[0_20px_45px_rgba(244,63,94,0.28)]">Truth</button>
@@ -4245,7 +4226,7 @@ function getMemoryMatchGameHTML() {
     <div class="max-w-6xl mx-auto grid xl:grid-cols-[0.92fr_1.08fr] gap-6">
         <div class="rounded-[34px] border border-fuchsia-200/70 dark:border-fuchsia-500/15 bg-gradient-to-br from-white via-fuchsia-50/70 to-indigo-50/70 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 shadow-[0_24px_80px_rgba(217,70,239,0.12)] p-6 md:p-8">
             <p class="text-[11px] tracking-[0.34em] uppercase text-fuchsia-500 font-semibold">Fun Tools</p>
-            <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">Memory Match Game</h2>
+            
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Flip cards, match pairs, and try to finish the board in the fewest moves. Every restart shuffles the deck again.</p>
 
             <div class="mt-6 grid sm:grid-cols-2 gap-4">
@@ -4371,9 +4352,7 @@ function getMemoryMatchGameHTML() {
                     }))
                     .catch(() => {
                         leaderboardEl.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 px-4 py-5 text-sm text-slate-500 dark:text-slate-400">Could not load the leaderboard right now.</div>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Memory Match Game online free without email, Memory Match Game no watermark fast for mobile, best Memory Match Game high quality software pc mac, Memory Match Game unlimited file size free 2026, how to use Memory Match Game easily without app install, secure Memory Match Game safe for business confidential files, Memory Match Game unblocked for school chromebook.</p>
-    </div>';
+    ';
                     });
             }
 
@@ -4535,10 +4514,7 @@ function getImageToPdfHTML() {
     return '
     <div class="space-y-6" role="main" aria-label="Image to PDF Converter Tool">
         
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Image to PDF Converter - Convert Image to PDF Online Free</h2>
-            <p>Use our free image to pdf converter to add image to pdf without uploading files. Best tool to convert an image to pdf for free download.</p>
-        </div>
+        
 
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" 
              onclick="document.getElementById(\'imgToPdfInput\').click()" 
@@ -4554,7 +4530,7 @@ function getImageToPdfHTML() {
                 </svg>
             </div>
 
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Image to PDF Converter</h2>
+            
             <p class="font-medium mt-1">Click to select images (JPG, PNG, WEBP)</p>
             <p class="text-sm text-gray-500 mt-2">100% Client-Side | Convert image to pdf free</p>
         </div>
@@ -4636,9 +4612,7 @@ function getImageToPdfHTML() {
             doc.save("Any2Convert-image-to-pdf.pdf");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Image To Pdf online free without email, Image To Pdf no watermark fast for mobile, best Image To Pdf high quality software pc mac, Image To Pdf unlimited file size free 2026, how to use Image To Pdf easily without app install, secure Image To Pdf safe for business confidential files, Image To Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
  function getPdfToImageHTML() {
 
@@ -4646,16 +4620,13 @@ function getImageToPdfHTML() {
 
     <div class="space-y-6">
 
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">PDF to Image Converter - Convert PDF to Image Online Free</h2>
-            <p>Best free pdf to image converter to convert pdf to image file. High quality pdf to image free tool online.</p>
-        </div>
+        
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'pdfToImgInput\').click()">
 
             <input type="file" id="pdfToImgInput" class="hidden" accept=".pdf">
 
             <div class="mb-3 flex justify-center text-blue-500"><svg width="76" height="54" viewBox="0 0 76 54" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9h17l6 6v24a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"></path><path d="M25 9v8h8"></path><path d="M36 27h12"></path><path d="m43 21 6 6-6 6"></path><rect x="51" y="14" width="20" height="18" rx="3"></rect><circle cx="58" cy="21" r="1.5"></circle><path d="M71 28l-6-6-9 9"></path></svg></div>
-<h2 class="text-lg font-semibold">PDF to Image Converter</h2>
+
             <p class="font-medium">Select PDF to convert to images</p>
             <p class="text-sm text-gray-500 mt-2">Convert pdf to image online free | High-quality JPG</p>
             <p class="text-sm text-gray-900 mt-2">Each page will be converted to high-quality JPG</p>
@@ -4769,22 +4740,19 @@ function getImageToPdfHTML() {
         });
 
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Image online free without email, Pdf To Image no watermark fast for mobile, best Pdf To Image high quality software pc mac, Pdf To Image unlimited file size free 2026, how to use Pdf To Image easily without app install, secure Pdf To Image safe for business confidential files, Pdf To Image unblocked for school chromebook.</p>
-    </div>';
+    ';
 
 }
 function getPdfToWordHTML() {
     return '
     <div class="space-y-6">
             <div class="text-gray-900" style="font-size: 1px;">
-                <h2 class="text-3xl font-black text-slate-900 dark:text-white">PDF to Word Converter - Convert PDF to Word Online Free</h2>
-                <p>Looking for a free pdf to word converter? Learn how to convert pdf to word doc easily. High-quality pdf to word free tool with formatting preserved.</p>
+                
             </div>
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'pdfToWordInput\').click()">
             <input type="file" id="pdfToWordInput" class="hidden" accept=".pdf">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="76" height="54" viewBox="0 0 76 54" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9h17l6 6v24a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"></path><path d="M25 9v8h8"></path><path d="M36 27h12"></path><path d="m43 21 6 6-6 6"></path><path d="M55 17h13"></path><path d="M55 24h13"></path><path d="M55 31h9"></path></svg></div>
-           <h2 class="text-lg font-semibold">PDF to Word Converter</h2>
+           
             <p class="font-medium">Select PDF file to convert PDF to Word</p>
             <p class="text-sm text-gray-900 mt-2">Convert PDF to Word Free | Extract PDF to Word DOC</p>
         </div>
@@ -5021,18 +4989,13 @@ function getPdfToWordHTML() {
             progress.classList.add("hidden");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Word online free without email, Pdf To Word no watermark fast for mobile, best Pdf To Word high quality software pc mac, Pdf To Word unlimited file size free 2026, how to use Pdf To Word easily without app install, secure Pdf To Word safe for business confidential files, Pdf To Word unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getPdfToPptHTML() {
     return '
     <div class="space-y-6">
-     <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">PDF to Word Converter - Convert PDF to PowePoint PPT Online Free</h2>
-            <p>Looking for a free pdf to PowePoint PPT converter? Learn how to convert pdf to PowePoint PPT doc easily. High-quality pdf to word free tool with formatting preserved.</p>
-        </div>
+     
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'pdfToPptInput\').click()">
             <input type="file" id="pdfToPptInput" class="hidden" accept=".pdf">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="76" height="54" viewBox="0 0 76 54" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9h17l6 6v24a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"></path><path d="M25 9v8h8"></path><path d="M36 27h12"></path><path d="m43 21 6 6-6 6"></path><path d="M56 34V22"></path><path d="M62 34V18"></path><path d="M68 34V25"></path></svg></div>
@@ -5156,23 +5119,17 @@ function getPdfToPptHTML() {
             pptProgress.classList.add("hidden");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Ppt online free without email, Pdf To Ppt no watermark fast for mobile, best Pdf To Ppt high quality software pc mac, Pdf To Ppt unlimited file size free 2026, how to use Pdf To Ppt easily without app install, secure Pdf To Ppt safe for business confidential files, Pdf To Ppt unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getPdfToExcelHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">PDF to Excel Converter Free - Convert PDF to Excel Online</h2>
-            <p>Use this free PDF to Excel converter to convert PDF to Excel, export PDF to Excel spreadsheet files, and learn how to convert a PDF to Excel without losing structure.</p>
-            <p>Convert PDF to Excel free with an online PDF to Excel converter, free PDF to Excel converter workflow, and simple steps for converting PDF to Excel spreadsheet data.</p>
-        </div>
+        
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'pdfToExcelInput\').click()">
             <input type="file" id="pdfToExcelInput" class="hidden" accept=".pdf">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="76" height="54" viewBox="0 0 76 54" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9h17l6 6v24a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"></path><path d="M25 9v8h8"></path><path d="M36 27h12"></path><path d="m43 21 6 6-6 6"></path><path d="M55 33 60 27l4 3 6-9"></path></svg></div>
-            <h2 class="text-lg font-semibold">PDF to Excel Converter</h2>
+            
             <p class="font-medium">Select PDF to convert PDF to Excel spreadsheet</p>
             <p class="text-sm text-gray-500 mt-2">Convert PDF to Excel free, export PDF to Excel, and organize tables with our online PDF to Excel converter</p>
         </div>
@@ -5542,23 +5499,17 @@ function getPdfToExcelHTML() {
             progress.classList.add("hidden");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Excel online free without email, Pdf To Excel no watermark fast for mobile, best Pdf To Excel high quality software pc mac, Pdf To Excel unlimited file size free 2026, how to use Pdf To Excel easily without app install, secure Pdf To Excel safe for business confidential files, Pdf To Excel unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getMergePdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Merge PDF Free - Merge PDF Files Online Free</h2>
-            <p>Use this free merge PDF tool to merge PDF files, merge PDF online, and learn how to merge PDF files quickly in one secure workflow.</p>
-            <p>Merge PDF online free, combine PDF pages in order, and use a free merge PDF experience for personal, school, and office documents.</p>
-        </div>
+        
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'mergePdfInput\').click()">
             <input type="file" id="mergePdfInput" class="hidden" accept=".pdf" multiple>
             <div class="mb-3 flex justify-center text-blue-500"><svg width="70" height="54" viewBox="0 0 70 54" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h14l5 5v19a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V15a3 3 0 0 1 3-3Z"></path><path d="M21 12v7h7"></path><path d="M50 12h14l5 5v19a3 3 0 0 1-3 3H50a3 3 0 0 1-3-3V15a3 3 0 0 1 3-3Z"></path><path d="M64 12v7h7"></path><path d="M36 20v14"></path><path d="M29 27h14"></path></svg></div>
-            <h2 class="text-lg font-semibold">Merge PDF Files</h2>
+            
             <p class="font-medium">Select PDF files to merge PDF online free</p>
             <p class="text-sm text-gray-500 mt-2">Merge PDF free, combine PDF pages in order, and use a simple merge PDF online tool without extra steps</p>
         </div>
@@ -5614,23 +5565,17 @@ function getMergePdfHTML() {
             progress.classList.add("hidden");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Merge Pdf online free without email, Merge Pdf no watermark fast for mobile, best Merge Pdf high quality software pc mac, Merge Pdf unlimited file size free 2026, how to use Merge Pdf easily without app install, secure Merge Pdf safe for business confidential files, Merge Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getCompressPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Compress PDF Free - Compress PDF Online</h2>
-            <p>Use this compress PDF tool to compress PDF online free, reduce PDF file size, and learn how to compress PDF file size while keeping pages readable.</p>
-            <p>Compress PDF files, compress PDF file size for free, and optimize documents on Mac, Windows, and mobile browsers.</p>
-        </div>
+        
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'compressPdfInput\').click()">
             <input type="file" id="compressPdfInput" class="hidden" accept=".pdf">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16"></path><path d="M7 7v10"></path><path d="M12 7v10"></path><path d="M17 7v10"></path><rect x="3" y="5" width="18" height="14" rx="2"></rect></svg></div>
-            <h2 class="text-lg font-semibold">Compress PDF File</h2>
+            
             <p class="font-medium">Select PDF to compress PDF file size</p>
             <p class="text-sm text-gray-500 mt-2">Compress PDF online free, reduce PDF file size, and save a smaller document for sharing</p>
         </div>
@@ -5773,19 +5718,13 @@ function getCompressPdfHTML() {
             progress.classList.add("hidden");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Compress Pdf online free without email, Compress Pdf no watermark fast for mobile, best Compress Pdf high quality software pc mac, Compress Pdf unlimited file size free 2026, how to use Compress Pdf easily without app install, secure Compress Pdf safe for business confidential files, Compress Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getProtectPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Password Protect PDF Online Free</h2>
-            <p>Use this password protect PDF tool to protect PDF files online free, add a password to a PDF file, and secure documents from opening, copying, or editing without permission.</p>
-            <p>Learn how to password protect PDF files, protect PDF from editing, and create a password protected PDF file in your browser on Mac, Windows, and mobile.</p>
-        </div>
+        
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'protectPdfInput\').click()">
             <input type="file" id="protectPdfInput" class="hidden" accept=".pdf">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 1 1 8 0v3"></path></svg></div>
@@ -5865,9 +5804,7 @@ function getProtectPdfHTML() {
             progress.classList.add("hidden");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Protect Pdf online free without email, Protect Pdf no watermark fast for mobile, best Protect Pdf high quality software pc mac, Protect Pdf unlimited file size free 2026, how to use Protect Pdf easily without app install, secure Protect Pdf safe for business confidential files, Protect Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getWordToPdfHTML() {
@@ -6007,9 +5944,7 @@ function getWordToPdfHTML() {
             return div.innerHTML;
         }
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Word To Pdf online free without email, Word To Pdf no watermark fast for mobile, best Word To Pdf high quality software pc mac, Word To Pdf unlimited file size free 2026, how to use Word To Pdf easily without app install, secure Word To Pdf safe for business confidential files, Word To Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getExcelToPdfHTML() {
@@ -6342,9 +6277,7 @@ function getPptToPdfHTML() {
             return div.innerHTML;
         }
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Ppt To Pdf online free without email, Ppt To Pdf no watermark fast for mobile, best Ppt To Pdf high quality software pc mac, Ppt To Pdf unlimited file size free 2026, how to use Ppt To Pdf easily without app install, secure Ppt To Pdf safe for business confidential files, Ppt To Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 // ... (keep the rest of the functions for JSON, CSV, QR, Password, Word Counter, Image Compressor, OCR as they are working well)
@@ -6410,9 +6343,7 @@ function getJsonToCsvHTML() {
             URL.revokeObjectURL(url);
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Json To Csv online free without email, Json To Csv no watermark fast for mobile, best Json To Csv high quality software pc mac, Json To Csv unlimited file size free 2026, how to use Json To Csv easily without app install, secure Json To Csv safe for business confidential files, Json To Csv unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getCsvToJsonHTML() {
@@ -6603,20 +6534,13 @@ function getQrGeneratorHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Qr Generator online free without email, Qr Generator no watermark fast for mobile, best Qr Generator high quality software pc mac, Qr Generator unlimited file size free 2026, how to use Qr Generator easily without app install, secure Qr Generator safe for business confidential files, Qr Generator unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getPasswordGenHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Password Generator Free Online</h2>
-            <p>Use this password generator to create a strong password, secure password, or random password generator result directly in your browser.</p>
-            <p>Generate a password with 8, 12, 14, 15, or 16 characters using this strong random password generator free tool.</p>
-            <p>If you need a password generator online, random password generator, or strong password generator for safer accounts, this tool helps instantly.</p>
-        </div>
+        
         <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
             <div class="font-semibold text-blue-900 dark:text-blue-100">Strong Password Generator</div>
             <p class="mt-1 text-sm text-blue-800 dark:text-blue-200">Create a secure password, random password, or strong password generator result with adjustable length and character types.</p>
@@ -6671,9 +6595,7 @@ function getPasswordGenHTML() {
             alert("Password copied!");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Password Gen online free without email, Password Gen no watermark fast for mobile, best Password Gen high quality software pc mac, Password Gen unlimited file size free 2026, how to use Password Gen easily without app install, secure Password Gen safe for business confidential files, Password Gen unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getWordCounterHTML() {
@@ -6800,9 +6722,7 @@ function getWordCounterHTML() {
             });
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Word Counter online free without email, Word Counter no watermark fast for mobile, best Word Counter high quality software pc mac, Word Counter unlimited file size free 2026, how to use Word Counter easily without app install, secure Word Counter safe for business confidential files, Word Counter unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getImageCompressorHTML() {
@@ -6917,9 +6837,7 @@ function getImageCompressorHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Image Compressor online free without email, Image Compressor no watermark fast for mobile, best Image Compressor high quality software pc mac, Image Compressor unlimited file size free 2026, how to use Image Compressor easily without app install, secure Image Compressor safe for business confidential files, Image Compressor unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getBackgroundRemoverHTML() {
@@ -7408,9 +7326,7 @@ function getBackgroundRemoverHTML() {
             }, "image/png");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Background Remover online free without email, Background Remover no watermark fast for mobile, best Background Remover high quality software pc mac, Background Remover unlimited file size free 2026, how to use Background Remover easily without app install, secure Background Remover safe for business confidential files, Background Remover unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getImageToDxfHTML() {
@@ -7585,9 +7501,7 @@ function getImageToDxfHTML() {
             URL.revokeObjectURL(url);
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Image To Dxf online free without email, Image To Dxf no watermark fast for mobile, best Image To Dxf high quality software pc mac, Image To Dxf unlimited file size free 2026, how to use Image To Dxf easily without app install, secure Image To Dxf safe for business confidential files, Image To Dxf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getImageToSvgHTML() {
@@ -7854,9 +7768,7 @@ function getImageToSvgHTML() {
             URL.revokeObjectURL(url);
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Image To Svg online free without email, Image To Svg no watermark fast for mobile, best Image To Svg high quality software pc mac, Image To Svg unlimited file size free 2026, how to use Image To Svg easily without app install, secure Image To Svg safe for business confidential files, Image To Svg unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getResizeImageHTML() {
@@ -8010,9 +7922,7 @@ function getResizeImageHTML() {
             URL.revokeObjectURL(url);
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Resize Image online free without email, Resize Image no watermark fast for mobile, best Resize Image high quality software pc mac, Resize Image unlimited file size free 2026, how to use Resize Image easily without app install, secure Resize Image safe for business confidential files, Resize Image unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getCropImageHTML() {
@@ -8191,9 +8101,7 @@ function getCropImageHTML() {
             URL.revokeObjectURL(url);
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Crop Image online free without email, Crop Image no watermark fast for mobile, best Crop Image high quality software pc mac, Crop Image unlimited file size free 2026, how to use Crop Image easily without app install, secure Crop Image safe for business confidential files, Crop Image unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getImageEnhancerHTML() {
@@ -8360,9 +8268,7 @@ function getImageEnhancerHTML() {
             });
         })();
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Image Enhancer online free without email, Image Enhancer no watermark fast for mobile, best Image Enhancer high quality software pc mac, Image Enhancer unlimited file size free 2026, how to use Image Enhancer easily without app install, secure Image Enhancer safe for business confidential files, Image Enhancer unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getAiImageGeneratorHTML() {
@@ -8661,9 +8567,7 @@ function getAiImageGeneratorHTML() {
             });
         })();
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Ai Image Generator online free without email, Ai Image Generator no watermark fast for mobile, best Ai Image Generator high quality software pc mac, Ai Image Generator unlimited file size free 2026, how to use Ai Image Generator easily without app install, secure Ai Image Generator safe for business confidential files, Ai Image Generator unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getImageConverterHTML() {
@@ -8799,19 +8703,13 @@ function getImageConverterHTML() {
             });
         })();
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Image Converter online free without email, Image Converter no watermark fast for mobile, best Image Converter high quality software pc mac, Image Converter unlimited file size free 2026, how to use Image Converter easily without app install, secure Image Converter safe for business confidential files, Image Converter unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getHeicConverterHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">HEIC to JPG PNG PDF Converter Online Free</h2>
-            <p>Use this HEIC to JPG converter to convert HEIC to JPG free, change HEIC to JPEG, convert HEIC to PNG, or export HEIC images as PDF directly in your browser.</p>
-            <p>Free HEIC to JPG converter, HEIC to JPEG converter, and HEIC to PNG converter for Windows, Mac, and iPhone workflows without uploading files to a server.</p>
-        </div>
+        
         <div class="rounded-2xl border border-cyan-200/70 bg-cyan-50/80 dark:bg-cyan-950/30 dark:border-cyan-900 p-4">
             <div class="font-semibold text-cyan-900 dark:text-cyan-100">HEIC Converter</div>
             <p class="mt-1 text-sm text-cyan-800 dark:text-cyan-200">Upload a HEIC image, choose JPG, JPEG, PNG, or PDF style export, preview it, and download the converted file.</p>
@@ -8944,19 +8842,13 @@ function getHeicConverterHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Heic Converter online free without email, Heic Converter no watermark fast for mobile, best Heic Converter high quality software pc mac, Heic Converter unlimited file size free 2026, how to use Heic Converter easily without app install, secure Heic Converter safe for business confidential files, Heic Converter unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getJpgConverterHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">JPG to PNG JPEG PDF Converter Online Free</h2>
-            <p>Use this JPG to PNG converter and JPG to PDF converter to convert JPG to PNG free, change JPG to PNG, convert JPG to PDF free, or export JPG files as JPEG directly in your browser.</p>
-            <p>Free JPG to PNG converter, JPG to PDF converter free, online JPG to PDF converter, and convert JPG to PNG online free workflows for Windows, Mac, iPhone, and Android browsers.</p>
-        </div>
+        
         <div class="rounded-2xl border border-emerald-200/70 bg-emerald-50/80 dark:bg-emerald-950/30 dark:border-emerald-900 p-4">
             <div class="font-semibold text-emerald-900 dark:text-emerald-100">JPG Converter</div>
             <p class="mt-1 text-sm text-emerald-800 dark:text-emerald-200">Upload a JPG or JPEG image, choose PNG, JPEG, or PDF, preview it, and download the converted file in seconds.</p>
@@ -9107,20 +8999,13 @@ function getJpgConverterHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Jpg Converter online free without email, Jpg Converter no watermark fast for mobile, best Jpg Converter high quality software pc mac, Jpg Converter unlimited file size free 2026, how to use Jpg Converter easily without app install, secure Jpg Converter safe for business confidential files, Jpg Converter unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getWebpConverterHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">WEBP to JPG PNG JPEG PDF Converter Free Online</h2>
-            <p>Use this WEBP to JPG converter to convert WEBP to JPG, WEBP to PNG, WEBP to JPEG, or WEBP to PDF quickly in your browser.</p>
-            <p>Convert WEBP to JPG free, use a WEBP to PNG converter free, or convert WEBP to PDF online free without installing software.</p>
-            <p>If you need to know how to convert WEBP to JPG, how to convert WEBP to PNG, or how to convert WEBP to PDF, upload your WEBP image, choose the output format, and download instantly.</p>
-        </div>
+        
         <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
             <div class="font-semibold text-blue-900 dark:text-blue-100">WEBP to JPG PNG PDF Converter</div>
             <p class="mt-1 text-sm text-blue-800 dark:text-blue-200">Convert WEBP to JPG, WEBP to PNG, WEBP to JPEG, or WEBP to PDF online free with fast preview and download.</p>
@@ -9271,20 +9156,13 @@ function getWebpConverterHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Webp Converter online free without email, Webp Converter no watermark fast for mobile, best Webp Converter high quality software pc mac, Webp Converter unlimited file size free 2026, how to use Webp Converter easily without app install, secure Webp Converter safe for business confidential files, Webp Converter unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getVideoToAudioHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Video to MP3 Converter Free Online</h2>
-            <p>Use this video to MP3 converter to convert video to MP3, turn video to MP3, and extract audio from MP4, MOV, WEBM, AVI, MKV, and more.</p>
-            <p>This online video to MP3 converter free tool helps you convert video to MP3 locally in your browser with no upload required.</p>
-            <p>Looking for how to convert video to MP3, iPhone video to MP3, TikTok video to MP3, or Instagram video to MP3? Upload your file, choose a format, and download the audio.</p>
-        </div>
+        
         <div class="rounded-2xl border border-indigo-200/70 bg-indigo-50/80 dark:bg-indigo-950/30 dark:border-indigo-900 p-4">
             <div class="font-semibold text-indigo-900 dark:text-indigo-100">Video to MP3 Converter</div>
             <p class="mt-1 text-sm text-indigo-800 dark:text-indigo-200">Convert video to MP3, WAV, OGG, AAC, or FLAC directly in your browser. This free video to MP3 converter works with MP4, MOV, WEBM, AVI, MKV, and more.</p>
@@ -9540,18 +9418,12 @@ function getVideoToAudioHTML() {
             });
         })();
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Video To Audio online free without email, Video To Audio no watermark fast for mobile, best Video To Audio high quality software pc mac, Video To Audio unlimited file size free 2026, how to use Video To Audio easily without app install, secure Video To Audio safe for business confidential files, Video To Audio unblocked for school chromebook.</p>
-    </div>';
+    ';
   }
 function getVideoCompressorHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Compress Video Online Free</h2>
-            <p>Compress video files online free and reduce video file size directly in your browser without uploading to a server.</p>
-            <p>Use this video compressor to shrink MP4, MOV, WEBM, AVI, MKV, and other common video files for sharing, storage, or faster uploads.</p>
-        </div>
+        
         <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
             <div class="font-semibold text-blue-900 dark:text-blue-100">Video Compressor</div>
             <p class="mt-1 text-sm text-blue-800 dark:text-blue-200">Upload a video, choose a compression level, and create a smaller MP4 file directly in your browser.</p>
@@ -9820,18 +9692,12 @@ function getVideoCompressorHTML() {
             });
         })();
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Video Compressor online free without email, Video Compressor no watermark fast for mobile, best Video Compressor high quality software pc mac, Video Compressor unlimited file size free 2026, how to use Video Compressor easily without app install, secure Video Compressor safe for business confidential files, Video Compressor unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 function getOcrToolHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Online OCR Image to Text Tool</h2>
-            <p>Free online OCR for JPG, JPEG, PNG, WEBP, screenshots, receipts, scanned pages, and document photos.</p>
-            <p>OCR meaning is optical character recognition. This OCR tool uses Tesseract OCR technology to turn images into editable text in your browser.</p>
-        </div>
+        
         
         <div class="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/40 dark:bg-emerald-900/10 p-5 flex items-start gap-4 transition hover:bg-emerald-50 dark:hover:bg-emerald-900/30">
             <div class="p-3 bg-emerald-100 dark:bg-emerald-800/80 text-emerald-600 dark:text-emerald-300 rounded-xl hidden sm:block">
@@ -10138,9 +10004,7 @@ function getPdfToWordPureJS() {
             return parts.join("");
         }
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Word online free without email, Pdf To Word no watermark fast for mobile, best Pdf To Word high quality software pc mac, Pdf To Word unlimited file size free 2026, how to use Pdf To Word easily without app install, secure Pdf To Word safe for business confidential files, Pdf To Word unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getPdfToPptPureJS() {
@@ -10206,9 +10070,7 @@ function getPdfToPptPureJS() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Ppt online free without email, Pdf To Ppt no watermark fast for mobile, best Pdf To Ppt high quality software pc mac, Pdf To Ppt unlimited file size free 2026, how to use Pdf To Ppt easily without app install, secure Pdf To Ppt safe for business confidential files, Pdf To Ppt unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getPdfToExcelPureJS() {
@@ -10279,9 +10141,7 @@ function getPdfToExcelPureJS() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Excel online free without email, Pdf To Excel no watermark fast for mobile, best Pdf To Excel high quality software pc mac, Pdf To Excel unlimited file size free 2026, how to use Pdf To Excel easily without app install, secure Pdf To Excel safe for business confidential files, Pdf To Excel unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getWordToPdfPureJS() {
@@ -10341,19 +10201,13 @@ function getWordToPdfPureJS() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Word To Pdf online free without email, Word To Pdf no watermark fast for mobile, best Word To Pdf high quality software pc mac, Word To Pdf unlimited file size free 2026, how to use Word To Pdf easily without app install, secure Word To Pdf safe for business confidential files, Word To Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getProtectPdfPureJS() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Password Protect PDF Online Free</h2>
-            <p>Use this password protect PDF tool to protect PDF files online free, add a password to a PDF file, and secure documents from easy opening or editing.</p>
-            <p>Learn how to password protect PDF files, protect PDF from editing, and create a password protected PDF file in your browser without uploading to external software.</p>
-        </div>
+        
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById(\'protectPdfInput\').click()">
             <input type="file" id="protectPdfInput" class="hidden" accept=".pdf">
             <div class="mb-3 flex justify-center text-blue-500"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 1 1 8 0v3"></path></svg></div>
@@ -10430,9 +10284,7 @@ function getProtectPdfPureJS() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Protect Pdf online free without email, Protect Pdf no watermark fast for mobile, best Protect Pdf high quality software pc mac, Protect Pdf unlimited file size free 2026, how to use Protect Pdf easily without app install, secure Protect Pdf safe for business confidential files, Protect Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getJsonToCsvPureJS() {
@@ -10460,9 +10312,7 @@ function getJsonToCsvPureJS() {
             const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "data.csv"; a.click();
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Json To Csv online free without email, Json To Csv no watermark fast for mobile, best Json To Csv high quality software pc mac, Json To Csv unlimited file size free 2026, how to use Json To Csv easily without app install, secure Json To Csv safe for business confidential files, Json To Csv unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getQrGeneratorPureJS() {
@@ -10488,9 +10338,7 @@ function getQrGeneratorPureJS() {
             });
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Qr Generator online free without email, Qr Generator no watermark fast for mobile, best Qr Generator high quality software pc mac, Qr Generator unlimited file size free 2026, how to use Qr Generator easily without app install, secure Qr Generator safe for business confidential files, Qr Generator unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getHtmlToPdfHTML() {
@@ -10518,19 +10366,14 @@ function getHtmlToPdfHTML() {
             wrapper.remove();
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Html To Pdf online free without email, Html To Pdf no watermark fast for mobile, best Html To Pdf high quality software pc mac, Html To Pdf unlimited file size free 2026, how to use Html To Pdf easily without app install, secure Html To Pdf safe for business confidential files, Html To Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getSplitPdfHTML() {
     return '
     <div class="space-y-6" role="main" aria-label="Split PDF Online Free Tool">
         
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Split PDF Online Free - Best Tool to Split PDF Files</h2>
-            <p>Learn how to split pdf pages or how to split pdf into multiple files instantly. Our split pdf free online tool is the best alternative to Adobe Acrobat split pdf.</p>
-        </div>
+        
 
         <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-500 transition cursor-pointer" 
              onclick="document.getElementById(\'splitPdfInput\').click()"
@@ -10548,7 +10391,7 @@ function getSplitPdfHTML() {
                 </svg>
             </div>
 
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Split PDF Online</h2>
+            
             <p class="font-medium mt-1">Select PDF to split into individual pages</p>
             <p class="text-sm text-gray-500 mt-2">Split pdf pages instantly | 100% Private & Free</p>
         </div>
@@ -10594,18 +10437,12 @@ function getSplitPdfHTML() {
             status.textContent = "Done. ZIP downloaded.";
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Split Pdf online free without email, Split Pdf no watermark fast for mobile, best Split Pdf high quality software pc mac, Split Pdf unlimited file size free 2026, how to use Split Pdf easily without app install, secure Split Pdf safe for business confidential files, Split Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 function getRemovePagesHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Remove Pages from PDF Free - Remove Pages from PDF Online</h2>
-            <p>Use this remove pages from PDF tool to remove pages from PDF online free, learn how to remove pages from PDF files, and clean up your document in seconds.</p>
-            <p>Remove pages from PDF free on Windows, Mac, Android, iPhone, and other devices with a simple browser-based workflow.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Remove PDF Pages</div>
@@ -10802,20 +10639,13 @@ function getRemovePagesHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Remove Pages online free without email, Remove Pages no watermark fast for mobile, best Remove Pages high quality software pc mac, Remove Pages unlimited file size free 2026, how to use Remove Pages easily without app install, secure Remove Pages safe for business confidential files, Remove Pages unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getExtractPagesHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Extract Pages from PDF Free - Extract Pages from PDF Online</h2>
-            <p>Use this tool to extract pages from PDF online free, learn how to extract pages from PDF documents, and download only the pages you need.</p>
-            <p>Extract pages from PDF free on Mac, Windows, Linux, and mobile devices with a simple visual page selector.</p>
-            <p>Use it as a split PDF tool to split PDF pages, split PDF into individual pages, split PDF into multiple files, and manage split PDF files online free.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Extract Pages from PDF</div>
@@ -11011,19 +10841,13 @@ function getExtractPagesHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Extract Pages online free without email, Extract Pages no watermark fast for mobile, best Extract Pages high quality software pc mac, Extract Pages unlimited file size free 2026, how to use Extract Pages easily without app install, secure Extract Pages safe for business confidential files, Extract Pages unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getOrganizePdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Organize PDF Online Free - Organize PDF Pages</h2>
-            <p>Use this organize PDF tool to organize PDF pages, reorder documents, and learn how to organize PDF pages online free in a visual editor.</p>
-            <p>Organize PDF files free, organize PDF files online free, and manage page order, deletion, and blank page insertion in one place.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Organize PDF Pages</div>
@@ -11315,9 +11139,7 @@ function getOrganizePdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Organize Pdf online free without email, Organize Pdf no watermark fast for mobile, best Organize Pdf high quality software pc mac, Organize Pdf unlimited file size free 2026, how to use Organize Pdf easily without app install, secure Organize Pdf safe for business confidential files, Organize Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getScanToPdfHTML() {
@@ -11349,9 +11171,7 @@ function getScanToPdfHTML() {
             doc.save("scanned.pdf");
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Scan To Pdf online free without email, Scan To Pdf no watermark fast for mobile, best Scan To Pdf high quality software pc mac, Scan To Pdf unlimited file size free 2026, how to use Scan To Pdf easily without app install, secure Scan To Pdf safe for business confidential files, Scan To Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getOptimizePdfHTML() {
@@ -11548,16 +11368,14 @@ function getOptimizePdfHTML() {
             });
         })();
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Optimize Pdf online free without email, Optimize Pdf no watermark fast for mobile, best Optimize Pdf high quality software pc mac, Optimize Pdf unlimited file size free 2026, how to use Optimize Pdf easily without app install, secure Optimize Pdf safe for business confidential files, Optimize Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getRepairPdfHTML() {
     return '
     <div class="space-y-6">
         <div>
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Repair PDF Online Free</h2>
+            
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Rebuild damaged PDF documents and fix PDF file issues directly in your browser securely.</p>
         </div>
 
@@ -11689,19 +11507,13 @@ function getRepairPdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Repair Pdf online free without email, Repair Pdf no watermark fast for mobile, best Repair Pdf high quality software pc mac, Repair Pdf unlimited file size free 2026, how to use Repair Pdf easily without app install, secure Repair Pdf safe for business confidential files, Repair Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getOcrPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">OCR PDF Online Free - Extract Text From Scanned PDF</h2>
-            <p>Use this OCR PDF tool to recognize text from scanned documents, make PDF text selectable, and run free OCR PDF conversion online in your browser.</p>
-            <p>Free OCR PDF to text, OCR PDF to Word style content, OCR PDF converter, and online OCR PDF processing for searchable scanned files on Windows, Mac, and mobile.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">OCR PDF Converter</div>
@@ -11963,19 +11775,13 @@ function getOcrPdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Ocr Pdf online free without email, Ocr Pdf no watermark fast for mobile, best Ocr Pdf high quality software pc mac, Ocr Pdf unlimited file size free 2026, how to use Ocr Pdf easily without app install, secure Ocr Pdf safe for business confidential files, Ocr Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getRotatePdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Rotate PDF Online Free - Rotate PDF Pages</h2>
-            <p>Use this rotate PDF tool to rotate PDF pages online free, permanently rotate PDF files, and save your updated document after visual page editing.</p>
-            <p>Rotate PDF file pages on Mac, Windows, and mobile browsers with per-page controls or apply one angle to all pages at once.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Rotate PDF Pages</div>
@@ -12209,19 +12015,13 @@ function getRotatePdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Rotate Pdf online free without email, Rotate Pdf no watermark fast for mobile, best Rotate Pdf high quality software pc mac, Rotate Pdf unlimited file size free 2026, how to use Rotate Pdf easily without app install, secure Rotate Pdf safe for business confidential files, Rotate Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getAddPageNumbersHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Add Page Number to PDF Online Free</h2>
-            <p>Use this tool to add page number to PDF online free, number PDF pages in your browser, and download the updated PDF file with page numbering applied.</p>
-            <p>Learn how to add page number to PDF document files on Mac, Windows, and mobile using a simple add page number to PDF free workflow.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Add Page Number to PDF</div>
@@ -12252,19 +12052,13 @@ function getAddPageNumbersHTML() {
             a.click();
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Add Page Numbers online free without email, Add Page Numbers no watermark fast for mobile, best Add Page Numbers high quality software pc mac, Add Page Numbers unlimited file size free 2026, how to use Add Page Numbers easily without app install, secure Add Page Numbers safe for business confidential files, Add Page Numbers unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getAddWatermarkHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Add Watermark to PDF Online Free</h2>
-            <p>Add watermark to PDF online free with text or image watermark placement, choose a position visually, and download the updated PDF in your browser.</p>
-            <p>Use this PDF watermark tool to add watermark to PDF files, place text or logo marks on every page, and preview the watermark before downloading.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Add Watermark to PDF</div>
@@ -12628,19 +12422,13 @@ function getAddWatermarkHTML() {
 
         watermarkType.dispatchEvent(new Event("change"));
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Add Watermark online free without email, Add Watermark no watermark fast for mobile, best Add Watermark high quality software pc mac, Add Watermark unlimited file size free 2026, how to use Add Watermark easily without app install, secure Add Watermark safe for business confidential files, Add Watermark unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getUnlockPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Unlock PDF Online Free</h2>
-            <p>Use this unlock PDF tool to unlock PDF files online free, enter the PDF password, and download an unlocked PDF document for viewing or editing.</p>
-            <p>Learn how to unlock PDF, unlock PDF for editing, and unlock PDF password protected files in your browser with a simple upload and password flow.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Unlock PDF File</div>
@@ -12756,9 +12544,7 @@ function getUnlockPdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Unlock Pdf online free without email, Unlock Pdf no watermark fast for mobile, best Unlock Pdf high quality software pc mac, Unlock Pdf unlimited file size free 2026, how to use Unlock Pdf easily without app install, secure Unlock Pdf safe for business confidential files, Unlock Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getSignPdfHTML() {
@@ -12807,11 +12593,7 @@ HTML;
 function getCropPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Crop PDF Online Free - Crop PDF Pages</h2>
-            <p>Use this crop PDF tool to crop PDF online free, choose the crop area visually, and save cropped PDF pages directly in your browser.</p>
-            <p>Learn how to crop PDF files, crop PDF pages online, and trim PDF page edges on Mac, Windows, and mobile with a visual crop box editor.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Crop PDF Pages</div>
@@ -13115,19 +12897,13 @@ function getCropPdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Crop Pdf online free without email, Crop Pdf no watermark fast for mobile, best Crop Pdf high quality software pc mac, Crop Pdf unlimited file size free 2026, how to use Crop Pdf easily without app install, secure Crop Pdf safe for business confidential files, Crop Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getComparePdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Compare PDF Online Free - Compare PDF Files Side by Side</h2>
-            <p>Use this compare PDF tool to compare PDF files online, review PDF documents side by side, and find text differences between uploaded PDF files.</p>
-            <p>Learn how to compare PDF documents, compare PDF files for differences, and compare PDF side by side directly in your browser.</p>
-        </div>
+        
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4 bg-white dark:bg-gray-900">
             <div>
                 <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">Compare PDF Documents</div>
@@ -13251,9 +13027,7 @@ function getComparePdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Compare Pdf online free without email, Compare Pdf no watermark fast for mobile, best Compare Pdf high quality software pc mac, Compare Pdf unlimited file size free 2026, how to use Compare Pdf easily without app install, secure Compare Pdf safe for business confidential files, Compare Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getAiSummarizerHTML() {
@@ -13313,19 +13087,13 @@ function getAiSummarizerHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Ai Summarizer online free without email, Ai Summarizer no watermark fast for mobile, best Ai Summarizer high quality software pc mac, Ai Summarizer unlimited file size free 2026, how to use Ai Summarizer easily without app install, secure Ai Summarizer safe for business confidential files, Ai Summarizer unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getPdfToPdfaHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Convert PDF to PDF/A Online Free</h2>
-            <p>Use this PDF to PDF/A tool to create a PDF/A style export online, improve long-term document compatibility, and rebuild PDF files for archival-focused use.</p>
-            <p>Convert PDF to PDF/A free in your browser, create an archival PDF export, and generate a cleaner PDF/A-style document for storage and sharing.</p>
-        </div>
+        
         <div class="rounded-2xl border border-blue-200/70 bg-blue-50/80 dark:bg-blue-950/30 dark:border-blue-900 p-4">
             <div class="font-semibold text-blue-900 dark:text-blue-100">PDF to PDF/A-style Export</div>
             <p class="mt-1 text-sm text-blue-800 dark:text-blue-200">Convert PDF to PDF/A-style output with cleaner archival metadata for compatibility-focused storage. This is a best-effort PDF/A-style export, not formal PDF/A certification.</p>
@@ -13362,19 +13130,13 @@ function getPdfToPdfaHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Pdf To Pdfa online free without email, Pdf To Pdfa no watermark fast for mobile, best Pdf To Pdfa high quality software pc mac, Pdf To Pdfa unlimited file size free 2026, how to use Pdf To Pdfa easily without app install, secure Pdf To Pdfa safe for business confidential files, Pdf To Pdfa unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getEditPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Edit PDF Online Free</h2>
-            <p>Use this edit PDF tool to edit PDF online free, insert text or images on PDF pages, and download the updated PDF file in your browser.</p>
-            <p>Edit PDF text, add pictures, edit PDF free online, and use a visual PDF editor workspace on Mac, Windows, and mobile browsers.</p>
-        </div>
+        
         <div class="rounded-2xl border border-indigo-200/70 bg-indigo-50/80 dark:bg-indigo-950/30 dark:border-indigo-900 p-4">
             <div class="font-semibold text-indigo-900 dark:text-indigo-100">Simple PDF editor</div>
             <p class="mt-1 text-sm text-indigo-800 dark:text-indigo-200">Upload a PDF, view one large page preview, add text or an image, then download the edited PDF.</p>
@@ -13855,11 +13617,7 @@ HTML;
 function getRedactPdfHTML() {
     return '
     <div class="space-y-6">
-        <div style="">
-            <h2 class="text-3xl font-black text-slate-900 dark:text-white">Redact PDF Online Free</h2>
-            <p>Use this redact PDF tool to redact PDF online free, hide sensitive PDF text, and download a rebuilt redacted copy directly in your browser.</p>
-            <p>Learn how to redact PDF for free, redact PDF text online, and create a free redact PDF workflow without Adobe.</p>
-        </div>
+        
         <div class="rounded-2xl border border-amber-200/70 bg-amber-50/80 dark:bg-amber-950/30 dark:border-amber-900 p-4">
             <div class="font-semibold text-amber-900 dark:text-amber-100">Redact PDF text visually</div>
             <p class="mt-1 text-sm text-amber-800 dark:text-amber-200">Enter a word or phrase, redact PDF text with black boxes, and download a rebuilt copy for stronger visual redaction.</p>
@@ -13939,9 +13697,7 @@ function getRedactPdfHTML() {
             }
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Redact Pdf online free without email, Redact Pdf no watermark fast for mobile, best Redact Pdf high quality software pc mac, Redact Pdf unlimited file size free 2026, how to use Redact Pdf easily without app install, secure Redact Pdf safe for business confidential files, Redact Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getTranslatePdfHTML() {
@@ -14030,9 +13786,7 @@ function getTranslatePdfHTML() {
                 : "Translation ready.";
         });
     </script>
-    <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 opacity-60 hover:opacity-100 transition-opacity" style="font-size: 11px; line-height: 1.6;">
-        <p><strong>Related Searches:</strong> convert Translate Pdf online free without email, Translate Pdf no watermark fast for mobile, best Translate Pdf high quality software pc mac, Translate Pdf unlimited file size free 2026, how to use Translate Pdf easily without app install, secure Translate Pdf safe for business confidential files, Translate Pdf unblocked for school chromebook.</p>
-    </div>';
+    ';
 }
 
 function getYoutubeDownloaderHTML() {
@@ -14042,7 +13796,7 @@ function getYoutubeDownloaderHTML() {
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="text-[11px] tracking-[0.34em] uppercase text-emerald-500 font-semibold">Media Tool</p>
-                    <h2 class="mt-2 text-3xl font-black text-slate-900 dark:text-white">YouTube Video Downloader</h2>
+                    
                     <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Download YouTube videos instantly in MP4 or MP3 format. Paste your link below.</p>
                 </div>
                 <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
