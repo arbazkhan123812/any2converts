@@ -398,140 +398,10 @@ if ($isToolPage) {
 
     if (empty($toolPageKeywords)) {
         $toolPageKeywords = [
-            $searchPhrase,
             'free online ' . strtolower($currentToolName),
-            'best browser-based ' . strtolower($currentToolName),
-            'use ' . strtolower($currentToolName) . ' without installing software',
+            strtolower($currentToolName) . ' online tool',
+            'browser ' . strtolower($currentToolName)
         ];
-
-        if ($initialToolId === 'pdf_to_word') {
-            $toolPageKeywords = array_merge($toolPageKeywords, [
-                'free online pdf to word converter',
-                'convert pdf to editable word docx online',
-                'best pdf to word converter online free',
-                'pdf to word docx converter with formatting',
-                'convert scanned pdf to editable word document',
-                'online pdf to word tool without software download',
-                'fast high quality pdf to word conversion',
-                'pdf to word document converter for resumes and contracts',
-            ]);
-        } elseif ($initialToolId === 'word_counter') {
-            $toolPageKeywords = array_merge($toolPageKeywords, [
-                'word calculator', 'free word counter', 'character counter online', 'kachra text tool',
-                'how many words is this', 'count my words online', 'text length calculator', 'word tally',
-                'paragraph counter', 'sentence counter', 'letter counter tool', 'words length check',
-                'essay word count checker', 'resume word counter', 'tweet character counter', 'twitter word count',
-                'instagram caption length checker', 'seo word counter tool', 'blog post word counter',
-                'count characters with spaces', 'count characters without spaces', 'word number calculator',
-                'reading time calculator text', 'text statistics analyzer', 'alphabets counter', 'how to count text',
-                'how long is my essay tool', 'book word counter', 'word limit checker online', 'count letters in a word',
-                'text size calculator', 'text character tally', 'copy paste word count', 'paste and count text',
-                'safe privacy word counter', 'fastest offline word counter online', 'word counter free no ads',
-                'random word counter tool for assignments', 'word length checker for students', 'count space as character',
-                'exact word calculator online', 'free tool to count words and characters instantly',
-                'how to count words without MS word', 'count characters for sms message', 'sms limit checker',
-                'linkedin post character counter', 'facebook post word counter', 'whatsapp status character count',
-                'title tag pixel counter', 'meta description length checker', 'keyword density counter',
-                'find word count of text', 'count words in a string', 'total words calculator', 'how many characters',
-                'count spaces in text', 'word frequency counter online', 'syllable counter tool', 'vowel counter',
-                'vowels and consonants counter', 'words per page calculator', 'word calc', 'text characters count',
-                'how to check how many words i have typed', 'word count tool for writers', 'author word tracker',
-                'novel word count tracker', 'wattpad story word counter', 'academic paper word counter',
-                'dissertation word count tool', 'thesis character counter', 'personal statement word limit checker',
-                'college essay word counter', 'common app essay word counter', 'uc application word limit checker',
-                'count words in copy pasted text', 'online notepad with word count', 'text box word counter',
-                'kachra text length checker', 'random text words counter', 'any text word calculator',
-                'count words in arabic', 'count words in hindi', 'count words in urdu', 'count words in spanish',
-                'multilingual word counter', 'unicode character counter', 'emoji counter in text',
-                'special characters counter', 'punctuation marks counter', 'line counter online',
-                'count empty lines in text', 'find and replace word counter', 'most repeated words finder',
-                'text metrics tool online free', 'word count for translation', 'transcription word counter',
-                'subtitles word counter', 'script character counter', 'screenplay word count tool',
-                'poetry line counter', 'haiku syllable counter', 'song lyrics word counter',
-                'rap lyrics word counter', 'speech word count to time', 'presentation speaking time calculator',
-                'voiceover script word counter', 'teleprompter text length calculator', 'youtube description word limit',
-                'tiktok caption character limit checker', 'pinterest pin description word count',
-                'google ads headline character counter', 'facebook ads text limit checker',
-                'amazon product description character count', 'ebay listing word counter',
-                'shopify product description word count', 'etsy listing character limit checker',
-                'app store description character counter', 'google play store description word count',
-                'github readme word counter', 'stackoverflow question character limit',
-                'reddit post title character limit', 'discord message character counter',
-                'slack message word count', 'whatsapp message character limit', 'telegram message word counter',
-                'sms 160 character counter', 'mms text length checker', 'email subject line character counter',
-                'newsletter word count tool', 'press release word counter', 'article word count checker',
-                'journalism word counter', 'copywriting text length calculator', 'seo copywriting word counter',
-                'content writing word count tool', 'freelance writer word counter', 'word count for upwork proposal',
-                'fiverr gig description character limit', 'freelancer profile word counter',
-                'linkedin summary character limit checker', 'twitter bio character counter',
-                'instagram bio word counter', 'tiktok bio character limit', 'facebook bio word count',
-                'youtube channel description character limit', 'twitch panel text counter',
-                'patreon tier description word count', 'onlyfans bio character limit',
-                'gofundme campaign story word counter', 'kickstarter project description word count',
-                'indiegogo pitch character limit', 'change.org petition text counter',
-                'wikipedia article word count', 'medium post word counter', 'substack newsletter character count',
-                'wordpress blog post word count', 'blogger post text length', 'tumblr post word counter',
-                'quora answer word count', 'yahoo answers text length', 'forum post character limit',
-                'guest post word count requirements', 'submit article word limit',
-                'abstract word counter', 'executive summary word count', 'business plan text length calculator',
-                'marketing strategy word counter', 'case study word count tool', 'white paper word counter',
-                'ebook word count tracker', 'kindle book text length', 'kdp description character limit',
-                'smashwords description word count', 'wattpad description character counter',
-                'ao3 fic word count', 'fanfiction.net word counter', 'novel writing nano wri mo word count tracker',
-                'nanowrimo daily word count calculator', 'sprint word counter', 'writing sprint text length',
-                'prompts word counter', 'daily writing habit word tracker', 'words typed today calculator',
-                'how many words did i type', 'check my word count right now', 'fast word counter for slow internet',
-                'word counter without javascript', 'simple text counter tool', 'basic word calculator',
-                'advanced text statistics tool', 'comprehensive word count analyzer', 'detailed character counter',
-                'word frequency analyzer free', 'keyword density tool free', 'seo text analyzer online',
-                'readability score calculator', 'text complexity analyzer', 'vocabulary richness calculator',
-                'lexical density tool', 'unique words counter', 'different words calculator', 'repeated words counter',
-                'longest word finder', 'shortest word finder', 'average word length calculator',
-                'average sentence length calculator', 'average paragraph length calculator',
-                'number of syllables per word calculator', 'polysyllabic words counter',
-                'monosyllabic words counter', 'action verbs counter', 'adjectives counter',
-                'adverbs counter', 'nouns counter', 'pronouns counter', 'conjunctions counter',
-                'prepositions counter', 'interjections counter', 'articles counter', 'determiners counter',
-                'passive voice checker text counter', 'active voice text analyzer',
-                'transition words counter', 'cliche finder and counter', 'redundant words counter',
-                'filler words counter', 'buzzwords counter', 'jargon counter', 'slang counter',
-                'profanity counter tool', 'swear words counter', 'curse words counter',
-                'positive words counter', 'negative words counter', 'sentiment analyzer text counter',
-                'emotional tone analyzer tool', 'formality checker text counter', 'informal text analyzer',
-                'academic writing checker word count', 'business writing analyzer text length',
-                'creative writing word counter', 'technical writing text analyzer', 'legal document word counter',
-                'medical transcription word count', 'medical report character counter',
-                'police report word counter', 'incident report text length calculator',
-                'insurance claim word counter', 'tax form text limit checker', 'government form character limit',
-                'visa application word counter', 'passport application character limit',
-                'immigration form text length', 'college application essay word limit',
-                'scholarship essay word counter', 'grant proposal word count tool',
-                'research paper word counter', 'science fair project word count',
-                'book report text length calculator', 'lab report word counter',
-                'internship application character limit', 'job application cover letter word count',
-                'motivation letter word counter', 'letter of recommendation word limit',
-                'reference letter character counter', 'thank you note word count',
-                'sympathy card text length', 'birthday wishes character limit',
-                'wedding vows word counter', 'eulogy word count to minutes',
-                'toast speech text length calculator', 'stand up comedy set word count',
-                'podcast script character counter', 'radio ad word count to seconds',
-                'tv commercial script length calculator', 'explainer video word counter',
-                'whiteboard animation script text length', 'elearning course script word count',
-                'training manual word counter', 'employee handbook text length calculator',
-                'company policy document word count', 'terms of service word counter',
-                'privacy policy text length calculator', 'cookie policy character counter',
-                'disclaimer word count tool', 'copyright notice text limit',
-                'software license agreement word counter', 'eula text length calculator',
-                'nda non disclosure agreement word count', 'contract text length checker',
-                'lease agreement word counter', 'rental application character limit',
-                'mortgage application text length', 'loan application word counter',
-                'credit card application character limit', 'bank account application text length',
-                'insurance quote request word counter', 'customer service email character limit',
-                'support ticket word count tool', 'live chat message text length',
-                'chatbot script word counter', 'ivr prompt text length calculator',
-                'voice assistant command character limit', 'alexa skill script word count'
-            ]);
-        }
     }
 
     $toolContentCatalog = file_exists(app_path('Support/tool_content_catalog.php')) ? require app_path('Support/tool_content_catalog.php') : [];
@@ -565,6 +435,11 @@ if ($isToolPage) {
             ]
         ];
     }
+
+    $faqs[] = [
+        'q' => "How can I use " . $currentToolName . " online without installing software?",
+        'a' => $currentToolName . " runs natively inside your web browser. You can process your files and data instantly on Windows, Mac, Linux, iPhone, or Android without downloading any desktop software, apps, or browser extensions."
+    ];
 
     $toolPageContent = [
         'overview' => $overviewText,
@@ -1627,21 +1502,6 @@ if ($isToolPage) {
         </div>
     </section>
 
-    <!-- Keywords Tag Cloud -->
-    <section style="margin:0 auto 56px;max-width:920px;">
-        <div style="padding:26px;border:1px solid rgba(15,23,42,0.08);border-radius:20px;background:var(--bg-surface);">
-            <h4 style="margin:0 0 16px;font-size:1.02rem;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px;">
-                <span>🔍</span> Popular Search Queries & Keywords
-            </h4>
-            <div style="display:flex;flex-wrap:wrap;gap:10px;">
-                <?php foreach ($toolPageKeywords as $keyword): ?>
-                    <span style="display:inline-block;padding:6px 16px;border-radius:30px;background:var(--bg-base);border:1px solid var(--border);color:var(--text-secondary);font-size:0.86rem;line-height:1.4;transition:border-color 0.2s,color 0.2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)';" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)';">
-                        <?= htmlspecialchars($keyword, ENT_QUOTES) ?>
-                    </span>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
     <?php endif; ?>
 
     <?php
