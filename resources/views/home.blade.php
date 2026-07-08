@@ -275,7 +275,7 @@ foreach ($tools as $category) {
 }
 
 $defaultTitle = 'Any2Convert | Free All-in-One PDF & Document Converter Suite';
-$defaultDescription = 'Free online PDF, document, image, and utility tools. Process files locally on your device with privacy-focused conversions.';
+$defaultDescription = 'Free all-in-one online suite of 80+ PDF, document converter, image, and utility tools. Fast, privacy-focused local browser processing with no software download or signup required.';
 $defaultKeywords = 'free online tools, file converter, PDF tools, image tools, calculators, converters, generators, utilities';
 
 $seoTitle = $defaultTitle;
@@ -466,6 +466,23 @@ if ($isToolPage) {
         'mainEntity' => $faqSchemaEntities
     ];
 
+    $toolUrlSlug = $tool_slugs[$initialToolId] ?? $initialToolId;
+    $webApplicationSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'WebApplication',
+        'name' => $currentToolName,
+        'url' => $siteUrl . '/' . $toolUrlSlug,
+        'description' => $seoDescription,
+        'applicationCategory' => 'UtilitiesApplication',
+        'operatingSystem' => 'All',
+        'browserRequirements' => 'Requires HTML5 support',
+        'offers' => [
+            '@type' => 'Offer',
+            'price' => '0',
+            'priceCurrency' => 'USD'
+        ]
+    ];
+
     $seoKeywords = implode(', ', $toolPageKeywords);
 }
 ?>
@@ -480,7 +497,6 @@ if ($isToolPage) {
     <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
     <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
-    <meta name="keywords" content="<?= htmlspecialchars($seoKeywords ?? '', ENT_QUOTES) ?>">
     <meta property="og:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta name="twitter:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
@@ -1306,6 +1322,11 @@ if ($isToolPage) {
         <?= json_encode($faqPageSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
     </script>
     <?php endif; ?>
+    <?php if ($isToolPage && isset($webApplicationSchema)): ?>
+    <script type="application/ld+json">
+        <?= json_encode($webApplicationSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+    </script>
+    <?php endif; ?>
 </head>
 <body>
 
@@ -1742,7 +1763,7 @@ if ($isToolPage) {
 <footer style="border-top:1px solid var(--border);background:var(--bg-surface);">
     <div style="max-width:1280px;margin:0 auto;padding:48px 20px 32px;">
 
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;" class="footer-grid">
+        <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px;" class="footer-grid">
             <div>
                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
                     <div style="width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;">
@@ -1754,12 +1775,37 @@ if ($isToolPage) {
             </div>
 
             <div>
-                <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Tools</div>
+                <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Top PDF Tools</div>
                 <div style="display:flex;flex-direction:column;gap:9px;">
                     <a href="/image-to-pdf" class="footer-link">Image to PDF</a>
                     <a href="/pdf-to-word" class="footer-link">PDF to Word</a>
                     <a href="/merge-pdf" class="footer-link">Merge PDF</a>
+                    <a href="/compress-pdf" class="footer-link">Compress PDF</a>
+                    <a href="/split-pdf" class="footer-link">Split PDF</a>
+                    <a href="/protect-pdf" class="footer-link">Protect PDF</a>
+                </div>
+            </div>
+
+            <div>
+                <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Converters</div>
+                <div style="display:flex;flex-direction:column;gap:9px;">
                     <a href="/ocr-image-to-text" class="footer-link">OCR Tool</a>
+                    <a href="/word-to-pdf" class="footer-link">Word to PDF</a>
+                    <a href="/excel-to-pdf" class="footer-link">Excel to PDF</a>
+                    <a href="/json-to-csv" class="footer-link">JSON to CSV</a>
+                    <a href="/qr-code-generator" class="footer-link">QR Code Generator</a>
+                    <a href="/background-remover" class="footer-link">Background Remover</a>
+                </div>
+            </div>
+
+            <div>
+                <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Calculators</div>
+                <div style="display:flex;flex-direction:column;gap:9px;">
+                    <a href="/loan-calculator" class="footer-link">Loan Calculator</a>
+                    <a href="/bmi-calculator" class="footer-link">BMI Calculator</a>
+                    <a href="/reaction-time-test" class="footer-link">Reaction Time Test</a>
+                    <a href="/typing-speed-test" class="footer-link">Typing Speed Test</a>
+                    <a href="/gamer-tag-generator" class="footer-link">Gamer Tag Generator</a>
                 </div>
             </div>
 
@@ -1770,12 +1816,6 @@ if ($isToolPage) {
                     <a href="/contact" class="footer-link">Contact</a>
                     <a href="/privacy" class="footer-link">Privacy Policy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                </div>
-            </div>
-
-            <div>
-                <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">Resources</div>
-                <div style="display:flex;flex-direction:column;gap:9px;">
                     <a href="/blog" class="footer-link">Blog</a>
                 </div>
             </div>
