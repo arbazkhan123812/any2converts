@@ -1310,12 +1310,12 @@ if ($isToolPage) {
 <body>
 
 <!-- ═══════════════════════════════ NAVBAR ═══════════════════════════════ -->
-<nav class="navbar sticky top-0 z-50" style="position:sticky;top:0;z-index:50;width:100%;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80rem;margin:0 auto;padding:0 1rem;">
-        <div class="flex items-center justify-between h-15 py-3" style="display:flex !important;flex-direction:row !important;align-items:center !important;justify-content:space-between !important;height:60px;padding:12px 0;width:100%;">
+<nav class="navbar sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-15 py-3">
 
             <!-- Logo -->
-            <a href="{{ route('home') }}" style="text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0;" class="flex items-center gap-2" aria-label="Any2Convert home">
+            <a href="{{ route('home') }}" style="text-decoration:none" class="flex items-center gap-2" aria-label="Any2Convert home">
                 <div style="width:30px;height:30px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                        <img src="{{ asset('any2trans.webp') }}" alt="Any2Convert logo" width="30" height="30">
                 </div>
@@ -1323,7 +1323,7 @@ if ($isToolPage) {
             </a>
 
             <!-- Right side -->
-            <div class="flex items-center gap-2" style="display:flex !important;flex-direction:row !important;align-items:center !important;gap:8px;flex-shrink:0;">
+            <div class="flex items-center gap-2">
 
                 <!-- Dark / Light mode toggle -->
                 <button id="themeToggle" onclick="toggleDarkMode()" title="Toggle dark mode" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease;flex-shrink:0;">
