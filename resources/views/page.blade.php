@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @php
-        $canonicalUrl = $canonical ?? \App\Support\Canonical::url();
-    @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="{{ $canonicalUrl }}">
-    <link rel="alternate" href="{{ $canonicalUrl }}" hreflang="en">
-    <link rel="alternate" href="{{ $canonicalUrl }}" hreflang="x-default">
-    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="alternate" href="{{ url()->current() }}" hreflang="en">
+    <link rel="alternate" href="{{ url()->current() }}" hreflang="x-default">
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description ?? '' }}">
     <meta name="keywords" content="{{ $keywords ?? '' }}">

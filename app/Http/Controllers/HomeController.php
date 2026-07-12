@@ -82,7 +82,6 @@ class HomeController extends Controller
         $item = $topics[$topic];
 
         return view('page', [
-            'canonical' => 'https://any2convert.com/highlights/' . $topic,
             'title' => $item['label'] . ' | Any2Convert Feature',
             'description' => $item['desc'],
             'keywords' => $item['keywords'] ?? '',
@@ -95,7 +94,6 @@ class HomeController extends Controller
     public function blogIndex(): View
     {
         return view('page', [
-            'canonical' => 'https://any2convert.com/blog',
             'title' => 'Any2Convert Blog for File Conversion Tips',
             'description' => 'Discover expert tips, guides, and insights on file conversion, document processing, and digital tools. Learn how to optimize your workflow with our comprehensive blog articles.',
             'keywords' => 'file conversion blog, PDF tips, document processing, digital tools, conversion guides',
@@ -137,7 +135,6 @@ class HomeController extends Controller
         $article = $articles[$slug];
 
         return view('page', [
-            'canonical' => 'https://any2convert.com/blog/' . $slug,
             'title' => $article['title'] . ' Guide | Any2Convert',
             'description' => $article['desc'],
             'keywords' => $article['keywords'] ?? '',

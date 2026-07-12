@@ -14,7 +14,6 @@ Route::post('/tools/ai-image', [ToolController::class, 'unavailable'])->name('to
 Route::post('/tools/youtube-download', [ToolController::class, 'youtubeDownload'])->name('tools.youtube');
 
 Route::view('/about', 'page', [
-    'canonical' => 'https://any2convert.com/about',
     'title' => 'About Any2Convert Free Online Tools',
     'description' => 'Learn more about Any2Convert and our comprehensive suite of free online tools designed for privacy, efficiency, and ease of use.',
     'keywords' => 'about Any2Convert, free online tools, file conversion, privacy, digital tools',
@@ -47,7 +46,6 @@ Route::view('/about', 'page', [
 ]);
 
 Route::view('/contact', 'page', [
-    'canonical' => 'https://any2convert.com/contact',
     'title' => 'Contact Any2Convert Support and Feedback',
     'description' => 'Contact us for help and feedback.',
     'keywords' => 'contact Any2Convert, support, feedback, help, customer service',
@@ -57,7 +55,6 @@ Route::view('/contact', 'page', [
 ]);
 
 Route::view('/privacy', 'page', [
-    'canonical' => 'https://any2convert.com/privacy',
     'title' => 'Privacy Policy for Any2Convert Online Tools',
     'description' => 'Read our detailed privacy policy to understand how we protect your data and prioritize your privacy when you use our free online tools.',
     'keywords' => 'privacy policy, data protection, privacy, security, terms',
@@ -94,7 +91,6 @@ Route::view('/privacy', 'page', [
 ]);
 
 Route::view('/terms', 'page', [
-    'canonical' => 'https://any2convert.com/terms',
     'title' => 'Terms of Service for Any2Convert Online Tools',
     'description' => 'Read our terms of service and usage rules.',
     'keywords' => 'terms of service, usage rules, legal, terms, conditions',
@@ -104,7 +100,6 @@ Route::view('/terms', 'page', [
 ]);
 
 Route::view('/login', 'page', [
-    'canonical' => 'https://any2convert.com/login',
     'title' => 'Login to Any2Convert Online Tool Account',
     'description' => 'Sign in to your account and access saved settings.',
     'keywords' => 'login, sign in, account, authentication, user login',
@@ -114,7 +109,6 @@ Route::view('/login', 'page', [
 ]);
 
 Route::view('/register', 'page', [
-    'canonical' => 'https://any2convert.com/register',
     'title' => 'Register for Any2Convert Online Tools',
     'description' => 'Create a free account and save your preferences.',
     'keywords' => 'register, sign up, account, free account, user registration',
@@ -177,15 +171,5 @@ Route::get('/public/highlights.php', function (Request $request) {
         : '/highlights';
     return redirect($target, 301);
 });
-
-Route::get('/public/{any}', function ($any) {
-    $clean = ltrim(preg_replace('#(/index\.php|\.php)$#i', '', '/' . $any), '/');
-    return redirect('/' . $clean, 301);
-})->where('any', '.*');
-
-Route::get('/index.php', fn() => redirect('/', 301));
-Route::get('/index.php/{any}', function ($any) {
-    return redirect('/' . ltrim($any, '/'), 301);
-})->where('any', '.*');
 
 Route::get('/{slug}', [HomeController::class, 'tool'])->name('tools.show');

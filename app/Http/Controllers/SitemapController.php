@@ -9,7 +9,7 @@ class SitemapController extends Controller
 {
     public function index(): Response
     {
-        $siteUrl = 'https://any2convert.com';
+        $siteUrl = URL::to('/');
         $slugs = require app_path('Support/tool_slugs.php');
         
         $urls = [

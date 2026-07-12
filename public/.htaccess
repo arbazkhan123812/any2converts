@@ -13,18 +13,6 @@
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Redirect www to non-www
-    RewriteCond %{HTTP_HOST} ^www\.any2convert\.com$ [NC]
-    RewriteRule ^(.*)$ https://any2convert.com/$1 [L,R=301]
-
-    # Redirect /public/... to clean URL
-    RewriteCond %{THE_REQUEST} \s/+public/([^\s?]*) [NC]
-    RewriteRule ^ https://any2convert.com/%1 [L,R=301,NE]
-
-    # Redirect /index.php to root
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php [NC]
-    RewriteRule ^index\.php$ https://any2convert.com/ [L,R=301]
-
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

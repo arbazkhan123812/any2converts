@@ -485,22 +485,18 @@ if ($isToolPage) {
 
     $seoKeywords = implode(', ', $toolPageKeywords);
 }
-$canonicalUrl = $isToolPage
-    ? 'https://any2convert.com/' . ($tool_slugs[$initialToolId] ?? $initialToolId)
-    : \App\Support\Canonical::url();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="{{ $canonicalUrl }}">
-    <link rel="alternate" href="{{ $canonicalUrl }}" hreflang="en">
-    <link rel="alternate" href="{{ $canonicalUrl }}" hreflang="x-default">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="alternate" href="{{ url()->current() }}" hreflang="en">
+    <link rel="alternate" href="{{ url()->current() }}" hreflang="x-default">
     <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
     <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
-    <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta name="twitter:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
