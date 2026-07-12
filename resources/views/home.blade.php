@@ -534,36 +534,81 @@ if ($isToolPage) {
         }
     }
 
-    $toolContentCatalog = file_exists(app_path('Support/tool_content_catalog.php')) ? require app_path('Support/tool_content_catalog.php') : [];
-    if (isset($toolContentCatalog[$initialToolId])) {
-        $overviewText = $toolContentCatalog[$initialToolId]['overview'];
-        $step1 = $toolContentCatalog[$initialToolId]['step1'];
-        $step2 = $toolContentCatalog[$initialToolId]['step2'];
-        $step3 = $toolContentCatalog[$initialToolId]['step3'];
-        $faqs = $toolContentCatalog[$initialToolId]['faqs'];
-    } else {
-        $overviewText = "Use our online " . $currentToolName . " to " . lcfirst($currentToolDescription) . " quickly and reliably. Designed for everyday digital workflows, this free browser-based utility delivers fast results without requiring software downloads, user accounts, or complex setup.\n\nWhether you are working on a desktop PC, Mac, tablet, or mobile smartphone, your files and tasks are handled with speed and privacy.";
-        $step1 = "Select your source file, text, or input parameters using the interface above.";
-        $step2 = "Adjust any optional settings according to your preferred formatting or output requirements.";
-        $step3 = "Click to process and immediately download or copy your generated result.";
+    $overviewText = $currentToolName . " converts and processes your files instantly in your browser. Whether you need to " . lcfirst($currentToolDescription) . " or manage digital content on the go, our free online utility delivers clean, professional results in seconds — no software installation required.\n\nSimply select your input, choose your preferred settings, and download your processed file immediately. Designed for speed and privacy, this tool works seamlessly across all devices including mobile phones, tablets, and desktop computers.";
+    
+    $step1 = "Upload or input your source file/text into the box above.";
+    $step2 = "Choose your desired options and click the conversion/processing button.";
+    $step3 = "Download your finished file or copy the instant result directly.";
+
+    $faqs = [
+        [
+            'q' => "What is " . $currentToolName . "?",
+            'a' => $currentToolName . " is an all-in-one free online tool designed to help you " . lcfirst($currentToolDescription) . " quickly and safely directly in your web browser."
+        ],
+        [
+            'q' => "Is " . $currentToolName . " completely free to use?",
+            'a' => "Yes, 100% free! There are no hidden fees, no subscriptions required, no watermarks added, and no email signup needed."
+        ],
+        [
+            'q' => "Is my data and file privacy protected?",
+            'a' => "Absolutely. Any2Convert prioritizes on-device browser processing whenever possible. Your files are processed securely and are never stored or inspected on our servers."
+        ],
+        [
+            'q' => "Can I use this tool on my mobile phone or tablet?",
+            'a' => "Yes! Our platform is completely responsive and works flawlessly on iPhone, iPad, Android smartphones, Mac, Windows, and Chromebooks without installing any app."
+        ],
+        [
+            'q' => "Are there any file size or usage limits?",
+            'a' => "You can process standard documents and media files up to 50MB completely free with unlimited daily usage for normal tasks."
+        ]
+    ];
+
+    if ($initialToolId === 'ocr_pdf' || $initialToolId === 'ocr_tool') {
+        $overviewText = "OCR PDF tool converts scanned PDF files and image-based PDFs into searchable, editable text. Whether you have a scanned document, a photo of a receipt, or an image-only PDF, our free OCR tool extracts all text instantly — no software installation needed.\n\nSimply upload your PDF, click convert, and download your extracted text within seconds. Works on all devices including mobile phones, tablets, and computers.";
+        $step1 = "Upload your scanned PDF file or image into the tool.";
+        $step2 = "Click the \"Extract Text\" or start OCR processing button.";
+        $step3 = "Download or copy your extracted text within seconds.";
         $faqs = [
             [
-                'q' => "What is " . $currentToolName . "?",
-                'a' => $currentToolName . " is a free online utility that allows you to " . lcfirst($currentToolDescription) . " directly in your web browser without installing desktop software."
+                'q' => "What is OCR PDF?",
+                'a' => "OCR (Optical Character Recognition) reads text from scanned or image-based PDFs that cannot be copied normally."
             ],
             [
-                'q' => "Is " . $currentToolName . " completely free to use?",
-                'a' => "Yes! You can use this tool completely free of charge. There are no hidden fees, subscriptions, or watermarks added to your output."
+                'q' => "Is this OCR tool completely free?",
+                'a' => "Yes, 100% free. No signup, no watermark, no hidden charges."
             ],
             [
-                'q' => "Is my file and data privacy protected?",
-                'a' => "Yes. Any2Convert uses browser-based local processing whenever possible, meaning your files and calculations stay on your device and are never inspected or stored on our servers."
+                'q' => "What languages does OCR support?",
+                'a' => "English and major international languages are supported."
             ],
             [
-                'q' => "Can I use this tool on my mobile phone or Chromebook?",
-                'a' => "Yes! Our platform is 100% responsive and works smoothly on iPhone, Android, Mac, Windows, and Linux browsers without downloading an app."
+                'q' => "Is my PDF file safe?",
+                'a' => "Files are processed instantly and never stored on our servers."
+            ],
+            [
+                'q' => "What is the maximum file size?",
+                'a' => "You can upload PDF files up to 50MB."
+            ],
+            [
+                'q' => "Why can't I copy text from my PDF?",
+                'a' => "If your PDF was scanned or created from photos, it contains images not text. OCR converts those images into real copyable text."
             ]
         ];
+    } elseif ($initialToolId === 'pdf_to_word') {
+        $overviewText = "Our online PDF to Word converter accurately transforms non-editable PDF documents into clean, fully editable Microsoft Word (DOCX) files. Whether you are editing a resume, updating a business contract, or modifying assignment text, our tool preserves original formatting, tables, and layouts without requiring expensive desktop software.\n\nSimply drag and drop your PDF, initiate conversion, and download your editable Word document in seconds. 100% free, secure, and compatible with all operating systems.";
+        $step1 = "Upload or drag-and-drop your PDF document into the conversion area.";
+        $step2 = "Click \"Convert to Word\" to start high-precision text and layout extraction.";
+        $step3 = "Download your editable DOCX Word file instantly onto your device.";
+    } elseif ($initialToolId === 'bg_remover' || $initialToolId === 'background-remover') {
+        $overviewText = "Our AI Background Remover automatically isolates subjects and erases backgrounds from photos in one click. Whether you need a transparent PNG for e-commerce product listings, social media graphics, portrait photos, or car banners, our deep-learning engine cuts edges with 100% pixel precision.\n\nNo manual tracing, lasso selection, or confusing sliders required. Simply upload your JPG, PNG, or WEBP photo and let our artificial intelligence generate a clean transparent background instantly.";
+        $step1 = "Upload your product, portrait, or animal photo into the tool.";
+        $step2 = "Our AI neural network automatically detects the subject and strips the background.";
+        $step3 = "Download your high-resolution PNG image with a transparent background.";
+    } elseif ($initialToolId === 'image_compressor') {
+        $overviewText = "Our smart Image Compressor reduces file sizes of JPG, PNG, and WEBP photos by up to 80% without sacrificing visual clarity. Perfect for web developers, bloggers, e-commerce sellers, and students needing to shrink images for faster website loading or email attachment limits.\n\nAll image compression runs locally inside your browser using advanced lossy and lossless algorithms, ensuring zero upload delays and complete privacy for your personal photos.";
+        $step1 = "Select one or multiple images (JPG, PNG, WEBP) to compress.";
+        $step2 = "Adjust your preferred quality slider or let our smart engine auto-optimize.";
+        $step3 = "Download your compressed, lightweight images instantly.";
     }
 
     $toolPageContent = [
@@ -1564,7 +1609,14 @@ if ($isToolPage) {
         No tools matched that search. Try a broader keyword or switch back to All.
     </div>
 
+    <!-- Tool page heading -->
     <?php if ($isToolPage): ?>
+    <section style="margin-bottom:32px;text-align:center;">
+        <h2 class="section-heading" style="margin-bottom:8px;">Free online <?= htmlspecialchars($currentToolName, ENT_QUOTES) ?> guide</h2>
+        <p style="font-size:0.95rem;color:var(--text-secondary);max-width:620px;margin:0 auto;line-height:1.6;">
+            <?= htmlspecialchars($currentToolDescription, ENT_QUOTES) ?>
+        </p>
+    </section>
 
     <!-- Overview Banner -->
     <section style="margin:0 auto 48px;max-width:920px;">
