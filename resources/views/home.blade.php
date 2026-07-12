@@ -288,16 +288,7 @@ $currentToolCategory = $isToolPage ? ($toolCategoryMap[$initialToolId] ?? 'Onlin
 $toolPageContent = [];
 $toolPageKeywords = [];
 if ($isToolPage) {
-    if ($initialToolId === 'ocr_pdf' || $initialToolId === 'ocr_tool') {
-        $seoTitle = 'Free OCR PDF Online — Extract Text from Scanned PDF | Any2Convert';
-    } else {
-        $shortDesc = trim(explode('.', $currentToolDescription)[0]);
-        if (strlen($shortDesc) > 5 && strlen($shortDesc) < 60) {
-            $seoTitle = 'Free ' . $currentToolName . ' Online — ' . rtrim($shortDesc, '.') . ' | Any2Convert';
-        } else {
-            $seoTitle = 'Free ' . $currentToolName . ' Online Tool | Any2Convert';
-        }
-    }
+    $seoTitle = $currentToolName . ' Online Free Tool | Any2Convert';
     $toolDesc = $currentToolDescription;
     $seoDescription = $toolDesc !== ''
         ? rtrim($toolDesc, ". \t\n\r\0\x0B") . '. Free, fast, and privacy-focused online tool.'
@@ -618,24 +609,6 @@ if ($isToolPage) {
         'step3' => $step3,
         'faqs' => $faqs
     ];
-
-    $faqSchemaEntities = [];
-    foreach (($faqs ?? []) as $faqItem) {
-        $faqSchemaEntities[] = [
-            '@type' => 'Question',
-            'name' => $faqItem['q'],
-            'acceptedAnswer' => [
-                '@type' => 'Answer',
-                'text' => $faqItem['a']
-            ]
-        ];
-    }
-    $faqPageSchema = [
-        '@context' => 'https://schema.org',
-        '@type' => 'FAQPage',
-        'mainEntity' => $faqSchemaEntities
-    ];
-
     $seoKeywords = implode(', ', $toolPageKeywords);
 }
 ?>
@@ -1464,11 +1437,6 @@ if ($isToolPage) {
     <?php if (!$isToolPage && isset($itemListSchema)): ?>
     <script type="application/ld+json">
         <?= json_encode($itemListSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
-    </script>
-    <?php endif; ?>
-    <?php if ($isToolPage && isset($faqPageSchema) && !empty($faqPageSchema['mainEntity'])): ?>
-    <script type="application/ld+json">
-        <?= json_encode($faqPageSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
     </script>
     <?php endif; ?>
 </head>
@@ -2431,6 +2399,11 @@ document.addEventListener('keydown', e => {
     <a href="https://startupbase.io/products/any2convert-com?utm_source=startupbase&utm_medium=badge&utm_campaign=featured-badge-dark" target="_blank" rel="noopener noreferrer">
       <img src="https://statics.startupbase.io/site/badges/featured-on-sb-dark.svg" alt="Featured on StartupBase" height="55" style="height:55px;width:auto;" />
     </a>
+</div>
+
+<!-- SEO Homepage Keywords -->
+<div class="fixed bottom-0 left-0 right-0 p-1 text-[9px] text-gray-400/20 hover:text-gray-400/80 transition-opacity select-none z-[-1] text-justify" aria-hidden="true" style="line-height: 1.2;">
+    anyconv, any conversion, any converter, any2convert, any 2 convert, any to convert, free online converter tools anyconv alternative, anyconversion online free without email, any2convert image pdf calculator word ocr tool, best anyconv tools free alternative no signup, fast any2convert utility, any converter no watermark online, any conversion online free tool, any2convert ocr scanner, any2convert generator, anyconvert web tools, any converter fast secure privacy safe local processing.
 </div>
 
 </body>
