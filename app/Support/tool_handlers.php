@@ -5759,28 +5759,18 @@ function getCompressPdfHTML() {
                 const saved = Math.max(0, originalSize - compressedSize);
                 const percentSaved = originalSize > 0 ? (saved / originalSize) * 100 : 0;
                 if (compressedSize >= originalSize) {
-                    progress.textContent = "Compression completed (larger size).";
-                    const isLossless = (level === "lossless");
-                    const message = isLossless
-                        ? "This PDF is already highly optimized. Lossless compression did not reduce the size further.\\n\\n" +
-                          "Original: " + originalSize.toFixed(2) + " KB\\n" +
-                          "Compressed: " + compressedSize.toFixed(2) + " KB\\n\\n" +
-                          "Do you still want to download the file?"
-                        : "The compressed PDF is larger than the original because this document contains mostly text or vector graphics. Converting them to images for compression increases file size.\\n\\n" +
-                          "Original: " + originalSize.toFixed(2) + " KB\\n" +
-                          "Compressed: " + compressedSize.toFixed(2) + " KB\\n\\n" +
-                          "Do you still want to download it?";
-                    
-                    const downloadAnyway = confirm(message);
-                    if (downloadAnyway) {
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement("a");
-                        a.href = url;
-                        const baseName = file.name.replace(/\.pdf$/i, "") || "compressed";
-                        a.download = baseName + "-compressed.pdf";
-                        a.click();
-                        URL.revokeObjectURL(url);
-                    }
+                    progress.textContent = "Original file kept (already optimized).";
+                    alert(
+                        "This PDF is already highly optimized. To preserve its original high quality and prevent size increase, the original PDF has been saved without modifications.\\n\\n" +
+                        "Original Size: " + originalSize.toFixed(2) + " KB\\n" +
+                        "Compressed attempt: " + compressedSize.toFixed(2) + " KB"
+                    );
+                    const url = URL.createObjectURL(file);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = file.name;
+                    a.click();
+                    URL.revokeObjectURL(url);
                 } else {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement("a");
