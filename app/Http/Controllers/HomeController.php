@@ -93,54 +93,37 @@ class HomeController extends Controller
 
     public function blogIndex(): View
     {
-        return view('page', [
-            'title' => 'Any2Convert Blog for File Conversion Tips',
-            'description' => 'Discover expert tips, guides, and insights on file conversion, document processing, and digital tools. Learn how to optimize your workflow with our comprehensive blog articles.',
-            'keywords' => 'file conversion blog, PDF tips, document processing, digital tools, conversion guides',
-            'subtitle' => 'Any2Convert Blog',
-            'headline' => 'Any2Convert Blog',
-            'content' => '<p>Explore our comprehensive collection of articles and guides designed to help you master file conversion and digital document management. Whether you\'re a beginner learning the basics or an experienced user seeking advanced techniques, our blog provides valuable insights and practical advice.</p>
+        $posts = \App\Support\BlogContent::getAllPosts();
 
-<p>Our articles cover a wide range of topics including PDF manipulation, image optimization, data conversion, productivity tips, and the latest trends in digital tools. Each post is written by our team of experts who understand the challenges of modern file processing and are committed to sharing knowledge that helps you work more efficiently.</p>
-
-<p>From step-by-step tutorials on using our tools to in-depth explanations of file formats and conversion techniques, our blog serves as a valuable resource for anyone working with digital documents. We regularly update our content to reflect the latest developments in file processing technology and best practices.</p>
-
-<p>Whether you\'re looking to improve your workflow, learn new skills, or stay informed about digital tools, our blog is your go-to destination for reliable, practical information.</p>' .
-                '<ul>' .
-                '<li><a href="/blog/security-benefits">Why Image to PDF is More Secure</a></li>' .
-                '<li><a href="/blog/qr-guide">Business QR Code Best Practices</a></li>' .
-                '</ul>',
+        return view('blog', [
+            'posts' => $posts,
+            'title' => 'Any2Convert Blog - Free Online Tools & Conversion Tutorials',
+            'description' => 'Discover step-by-step guides, privacy tips, and tutorials for 80+ PDF, image, document, and utility tools on Any2Convert.',
+            'keywords' => 'file conversion, digital tools, PDF guides, image compressor tutorials, formatting guides',
         ]);
     }
 
     public function blogArticle(string $slug): View
     {
-        $articles = [
-            'security-benefits' => [
-                'title' => 'Why Image to PDF is More Secure',
-                'desc' => 'Learn PDF security benefits for photos.',
-                'keywords' => 'PDF security, image to PDF, file protection, document security, password protection',
-                'content' => '<p>Putting photos in a PDF is smart. It keeps them safe in one file. You can easily add a password. You can also stop people from changing your file.</p>',
-            ],
-            'qr-guide' => [
-                'title' => 'Business QR Code Best Practices',
-                'desc' => 'Best practices for business QR codes.',
-                'keywords' => 'QR code, business QR codes, QR code design, best practices, marketing tools',
-                'content' => '<p>A good QR code is clear and dark. Keep the design very simple. Do not put it on messy backgrounds. Always scan it with your phone before you print it.</p>',
-            ],
-        ];
+        $article = \App\Support\BlogContent::getPostBySlug($slug);
 
-        abort_unless(isset($articles[$slug]), 404);
+        abort_unless($article !== null, 404);
 
-        $article = $articles[$slug];
+        // Fetch a few recent/other posts for the sidebar, excluding the current article
+        $allPosts = \App\Support\BlogContent::getAllPosts();
+        $recentPosts = array_values(array_filter($allPosts, function($post) use ($slug) {
+            return $post['slug'] !== $slug;
+        }));
+        
+        // Pick first 3 as recent posts
+        $recentPosts = array_slice($recentPosts, 0, 3);
 
-        return view('page', [
-            'title' => $article['title'] . ' Guide | Any2Convert',
-            'description' => $article['desc'],
-            'keywords' => $article['keywords'] ?? '',
-            'subtitle' => $article['title'],
-            'headline' => $article['title'],
-            'content' => '<p>' . $article['content'] . '</p>',
+        return view('blog_article', [
+            'article' => $article,
+            'recentPosts' => $recentPosts,
+            'title' => $article['title'] . ' | Any2Convert Blog',
+            'description' => $article['excerpt'],
+            'keywords' => $article['category'] . ', tutorial, any2convert, free online tools',
         ]);
     }
 

@@ -128,7 +128,7 @@ Route::get('/highlights/{topic}', [HomeController::class, 'highlight'])
     ->name('highlights');
 Route::get('/blog', [HomeController::class, 'blogIndex'])->name('blog.index');
 Route::get('/blog/{slug}', [HomeController::class, 'blogArticle'])
-    ->where('slug', 'qr-guide|security-benefits')
+    ->where('slug', '[a-z0-9-]+')
     ->name('blog.article');
 
 Route::get('/highlights.php', function (Request $request) {

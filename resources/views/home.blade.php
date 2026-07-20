@@ -1381,6 +1381,7 @@ if ($isToolPage) {
 
             <!-- Right side -->
             <div class="flex items-center gap-2">
+                <a href="/blog" class="nav-pill">Blog</a>
 
                 <!-- Dark / Light mode toggle -->
                 <button id="themeToggle" onclick="toggleDarkMode()" title="Toggle dark mode" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease;flex-shrink:0;">
