@@ -352,13 +352,9 @@
                     </div>
                 </header>
 
-                <!-- Stripe-style Minimal Card Cover -->
-                <div class="aspect-video w-full rounded-2xl overflow-hidden border border-[var(--border)] bg-zinc-50 dark:bg-zinc-900/40 flex items-center justify-center mb-8 shadow-sm">
-                    <div class="w-20 h-20 rounded-3xl flex items-center justify-center {{ $article['text_class'] }} transition-transform duration-300 hover:scale-105">
-                        <div class="w-10 h-10">
-                            {!! $article['icon_svg'] !!}
-                        </div>
-                    </div>
+                <!-- Featured Image -->
+                <div class="aspect-video w-full rounded-2xl overflow-hidden mb-8 shadow-sm border border-[var(--border)] bg-zinc-800">
+                    <img src="{{ asset($article['image']) }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
                 </div>
 
                 <!-- Reading content -->
@@ -430,12 +426,8 @@
                     <div class="space-y-5">
                         @foreach($recentPosts as $post)
                         <div class="flex gap-3">
-                            <a href="/blog/{{ $post['slug'] }}" class="w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-zinc-50 dark:bg-zinc-900/40 border border-[var(--border)] flex items-center justify-center group">
-                                <div class="w-8 h-8 flex items-center justify-center {{ $post['text_class'] }} transition-transform duration-300 group-hover:scale-110">
-                                    <div class="w-4 h-4">
-                                        {!! $post['icon_svg'] !!}
-                                    </div>
-                                </div>
+                            <a href="/blog/{{ $post['slug'] }}" class="w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-zinc-800 border border-[var(--border)] block">
+                                <img src="{{ asset($post['image']) }}" alt="{{ $post['title'] }}" class="w-full h-full object-cover">
                             </a>
                             <div>
                                 <h4 class="text-xs font-bold text-[var(--text-primary)] leading-snug m-0 mb-1 hover:text-[var(--accent)] transition-colors">

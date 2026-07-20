@@ -343,13 +343,10 @@
             @foreach($posts as $post)
             <article class="card-wp flex flex-col h-full" data-title="{{ strtolower($post['title']) }}" data-excerpt="{{ strtolower($post['excerpt']) }}" data-category="{{ $post['category_slug'] }}">
                 
-                <!-- Stripe-style Minimal Card Cover -->
-                <a href="/blog/{{ $post['slug'] }}" class="block relative aspect-video overflow-hidden border-b border-[var(--border)] bg-zinc-50 dark:bg-zinc-900/40 flex items-center justify-center group">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center {{ $post['text_class'] }} transition-transform duration-300 group-hover:scale-110">
-                        <div class="w-8 h-8">
-                            {!! $post['icon_svg'] !!}
-                        </div>
-                    </div>
+                <!-- Card Cover Image -->
+                <a href="/blog/{{ $post['slug'] }}" class="block relative aspect-video overflow-hidden border-b border-[var(--border)] group">
+                    <img src="{{ asset($post['image']) }}" alt="{{ $post['title'] }}" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </a>
 
                 <!-- Card Content -->

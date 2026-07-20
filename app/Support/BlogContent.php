@@ -52,7 +52,7 @@ class BlogContent
             'category_slug' => 'pdf',
             'read_time' => '3 min read',
             'date' => 'May 12, 2026',
-            'image' => '/images/blog/pdf_blog.png',
+            'image' => '/images/blog/pdf_blog.jpg',
             'author' => 'Security Analyst',
             'gradient_class' => $pdfGradients['gradient'],
             'glow_class' => $pdfGradients['glow'],
@@ -70,7 +70,7 @@ class BlogContent
             'category_slug' => 'business',
             'read_time' => '4 min read',
             'date' => 'June 05, 2026',
-            'image' => '/images/blog/utility_blog.png',
+            'image' => '/images/blog/utility_blog.jpg',
             'author' => 'Marketing Team',
             'gradient_class' => $bizGradients['gradient'],
             'glow_class' => $bizGradients['glow'],
@@ -127,15 +127,15 @@ class BlogContent
     {
         switch ($category) {
             case 'pdf':
-                return '/images/blog/pdf_blog.png';
+                return '/images/blog/pdf_blog.jpg';
             case 'convert':
             case 'conversion':
-                return '/images/blog/converter_blog.png';
+                return '/images/blog/converter_blog.jpg';
             case 'gaming':
             case 'fun':
-                return '/images/blog/gaming_blog.png';
+                return '/images/blog/gaming_blog.jpg';
             default:
-                return '/images/blog/utility_blog.png';
+                return '/images/blog/utility_blog.jpg';
         }
     }
 
