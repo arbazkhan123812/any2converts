@@ -287,8 +287,8 @@
                 Any2Convert Knowledge Hub
             </span>
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--text-primary)] leading-tight mb-4">
-                Mastering Online Conversion & <br>
-                <span class="bg-gradient-to-r from-[#6C63FF] via-[#A78BFA] to-[#818CF8] bg-clip-text text-transparent">Digital Productivity Guides</span>
+                Any2Convert Blog & <br>
+                <span class="text-[var(--accent)]">Productivity Guides</span>
             </h1>
             <p class="text-sm md:text-base text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed mb-8">
                 Explore comprehensive tutorials, optimization tips, and privacy guides for all 80+ document, PDF, image, and dynamic gaming utilities.
@@ -343,14 +343,10 @@
             @foreach($posts as $post)
             <article class="card-wp flex flex-col h-full" data-title="{{ strtolower($post['title']) }}" data-excerpt="{{ strtolower($post['excerpt']) }}" data-category="{{ $post['category_slug'] }}">
                 
-                <!-- Glowing Vector Graphic Cover -->
-                <a href="/blog/{{ $post['slug'] }}" class="block relative aspect-video overflow-hidden border-b border-[var(--border)] bg-gradient-to-br {{ $post['gradient_class'] }} flex items-center justify-center group">
-                    <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:16px_16px] opacity-25 dark:opacity-10"></div>
-                    <div class="absolute w-32 h-32 rounded-full filter blur-xl opacity-35 bg-gradient-to-tr {{ $post['glow_class'] }} mix-blend-screen dark:mix-blend-normal"></div>
-                    <div class="absolute top-4 left-4 w-12 h-12 rounded-full border border-white/5 opacity-10"></div>
-                    <div class="absolute bottom-4 right-4 w-16 h-16 rounded-full border border-white/5 opacity-5"></div>
-                    <div class="relative z-10 w-14 h-14 rounded-2xl bg-white/10 dark:bg-black/40 backdrop-filter backdrop-blur-md border border-white/20 dark:border-white/5 flex items-center justify-center shadow-lg shadow-black/5 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
-                        <div class="w-7 h-7 flex items-center justify-center {{ $post['text_class'] }}">
+                <!-- Stripe-style Minimal Card Cover -->
+                <a href="/blog/{{ $post['slug'] }}" class="block relative aspect-video overflow-hidden border-b border-[var(--border)] bg-zinc-50 dark:bg-zinc-900/40 flex items-center justify-center group">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center {{ $post['text_class'] }} transition-transform duration-300 group-hover:scale-110">
+                        <div class="w-8 h-8">
                             {!! $post['icon_svg'] !!}
                         </div>
                     </div>
