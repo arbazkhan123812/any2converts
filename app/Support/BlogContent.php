@@ -97,7 +97,7 @@ class BlogContent
     private static function getPublishDate(string $toolId): string
     {
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        $charSum = array_sum(str_split(bin2hex($toolId)));
+        $charSum = crc32($toolId);
         $day = 1 + ($charSum % 28);
         $month = $months[$charSum % 12];
         $year = 2025 + ($charSum % 2);
@@ -149,7 +149,7 @@ class BlogContent
             'Optimize Your Files: %s Tutorial and Tips',
             'Mastering %s: Online File Processing Simplified',
         ];
-        $sum = array_sum(str_split(bin2hex($toolId)));
+        $sum = crc32($toolId);
         $tpl = $templates[$sum % count($templates)];
         return sprintf($tpl, $name);
     }
