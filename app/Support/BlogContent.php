@@ -20,6 +20,8 @@ class BlogContent
 
             $slug = $slugs[$toolId];
             $category = $tool['category'];
+            $gradients = self::getCategoryGradients($category);
+
             $post = [
                 'slug' => $slug,
                 'tool_id' => $toolId,
@@ -31,11 +33,16 @@ class BlogContent
                 'date' => self::getPublishDate($toolId),
                 'image' => self::getCategoryImage($category),
                 'author' => 'Any2Convert Tech Team',
+                'gradient_class' => $gradients['gradient'],
+                'glow_class' => $gradients['glow'],
+                'text_class' => $gradients['text'],
+                'icon_svg' => self::getIconSvg($toolId, $category),
             ];
             $posts[] = $post;
         }
 
         // Add legacy blog posts to the list for backwards compatibility
+        $pdfGradients = self::getCategoryGradients('pdf');
         $posts[] = [
             'slug' => 'security-benefits',
             'tool_id' => null,
@@ -47,8 +54,13 @@ class BlogContent
             'date' => 'May 12, 2026',
             'image' => '/images/blog/pdf_blog.png',
             'author' => 'Security Analyst',
+            'gradient_class' => $pdfGradients['gradient'],
+            'glow_class' => $pdfGradients['glow'],
+            'text_class' => $pdfGradients['text'],
+            'icon_svg' => self::getIconSvg(null, 'pdf'),
         ];
 
+        $bizGradients = self::getCategoryGradients('business');
         $posts[] = [
             'slug' => 'qr-guide',
             'tool_id' => null,
@@ -60,6 +72,10 @@ class BlogContent
             'date' => 'June 05, 2026',
             'image' => '/images/blog/utility_blog.png',
             'author' => 'Marketing Team',
+            'gradient_class' => $bizGradients['gradient'],
+            'glow_class' => $bizGradients['glow'],
+            'text_class' => $bizGradients['text'],
+            'icon_svg' => self::getIconSvg(null, 'business'),
         ];
 
         return $posts;
@@ -348,5 +364,126 @@ class BlogContent
             </div>
         </div>
         ';
+    }
+
+    public static function getCategoryGradients(string $category): array
+    {
+        $map = [
+            'pdf' => [
+                'gradient' => 'from-red-600/10 via-red-500/5 to-transparent',
+                'glow' => 'from-red-500 to-orange-500',
+                'text' => 'text-red-500'
+            ],
+            'convert' => [
+                'gradient' => 'from-blue-600/10 via-blue-500/5 to-transparent',
+                'glow' => 'from-blue-500 to-indigo-500',
+                'text' => 'text-blue-500'
+            ],
+            'utility' => [
+                'gradient' => 'from-violet-600/10 via-violet-500/5 to-transparent',
+                'glow' => 'from-violet-500 to-fuchsia-500',
+                'text' => 'text-violet-500'
+            ],
+            'conversion' => [
+                'gradient' => 'from-emerald-600/10 via-emerald-500/5 to-transparent',
+                'glow' => 'from-emerald-500 to-teal-500',
+                'text' => 'text-emerald-500'
+            ],
+            'calculator' => [
+                'gradient' => 'from-amber-600/10 via-amber-500/5 to-transparent',
+                'glow' => 'from-amber-500 to-yellow-500',
+                'text' => 'text-amber-500'
+            ],
+            'business' => [
+                'gradient' => 'from-emerald-600/10 via-emerald-500/5 to-transparent',
+                'glow' => 'from-emerald-500 to-teal-500',
+                'text' => 'text-emerald-500'
+            ],
+            'writing' => [
+                'gradient' => 'from-indigo-600/10 via-indigo-500/5 to-transparent',
+                'glow' => 'from-indigo-500 to-purple-500',
+                'text' => 'text-indigo-500'
+            ],
+            'developer' => [
+                'gradient' => 'from-cyan-600/10 via-cyan-500/5 to-transparent',
+                'glow' => 'from-cyan-500 to-blue-500',
+                'text' => 'text-cyan-500'
+            ],
+            'gaming' => [
+                'gradient' => 'from-pink-600/10 via-pink-500/5 to-transparent',
+                'glow' => 'from-pink-500 to-rose-500',
+                'text' => 'text-pink-500'
+            ],
+            'fun' => [
+                'gradient' => 'from-fuchsia-600/10 via-fuchsia-500/5 to-transparent',
+                'glow' => 'from-fuchsia-500 to-pink-500',
+                'text' => 'text-fuchsia-500'
+            ]
+        ];
+
+        return $map[$category] ?? [
+            'gradient' => 'from-gray-600/10 via-gray-500/5 to-transparent',
+            'glow' => 'from-gray-500 to-slate-500',
+            'text' => 'text-gray-500'
+        ];
+    }
+
+    public static function getIconSvg(?string $toolId, string $category): string
+    {
+        if ($toolId === null) {
+            if ($category === 'pdf') {
+                return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            }
+            return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/></svg>';
+        }
+
+        $iconMap = [
+            'img_to_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+            'pdf_to_img' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="10" y1="12" x2="14" y2="12"/><line x1="12" y1="10" x2="12" y2="14"/></svg>',
+            'pdf_to_word' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>',
+            'pdf_to_ppt' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+            'pdf_to_excel' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
+            'merge_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/><rect x="10" y="2" width="12" height="12" rx="2" ry="2"/></svg>',
+            'compress_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="21" y2="3"/><line x1="3" y1="21" x2="14" y2="10"/></svg>',
+            'protect_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+            
+            'word_to_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+            'excel_to_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
+            'ppt_to_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+            'html_to_pdf' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+            'json_to_csv' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+            'csv_to_json' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+            'image_to_svg' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+            
+            'qr_generator' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/></svg>',
+            'password_gen' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
+            'word_counter' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="19" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+            'image_compressor' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/><line x1="12" y1="12" x2="16" y2="16"/></svg>',
+            'invoice_generator' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>',
+            'ats_resume_checker' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>',
+            'grammar_checker' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h6"/><path d="M7 5v14"/><path d="M15 5l5 14"/><path d="M13 14h5"/></svg>',
+            'paraphrase_tool' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10"/><path d="M7 12h7"/><path d="M7 17h10"/><path d="M17 10l3 2-3 2"/></svg>',
+            'jwt_decoder' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9h10"/><path d="M7 13h7"/><path d="M7 17h4"/></svg>',
+            'youtube_downloader' => '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>'
+        ];
+
+        if (isset($iconMap[$toolId])) {
+            return $iconMap[$toolId];
+        }
+
+        switch ($category) {
+            case 'pdf':
+                return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+            case 'convert':
+            case 'conversion':
+                return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
+            case 'calculator':
+                return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="22" x2="16" y2="16"/><line x1="9" y1="16" x2="16" y2="16"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="10.5" r="1"/><circle cx="16.5" cy="10.5" r="1"/></svg>';
+            case 'gaming':
+            case 'fun':
+                return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M15 10v4"/><path d="M17 12h2"/><path d="M6 12h4"/><path d="M8 10v4"/></svg>';
+            default:
+                return '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+        }
     }
 }

@@ -352,9 +352,17 @@
                     </div>
                 </header>
 
-                <!-- Featured Image -->
-                <div class="aspect-video w-full rounded-2xl overflow-hidden mb-8 shadow-sm border border-[var(--border)] bg-zinc-800">
-                    <img src="{{ asset($article['image']) }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
+                <!-- Premium Glowing Graphic Cover -->
+                <div class="aspect-video w-full relative overflow-hidden rounded-2xl border border-[var(--border)] bg-gradient-to-br {{ $article['gradient_class'] }} flex items-center justify-center mb-8 shadow-sm">
+                    <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px] opacity-25 dark:opacity-10"></div>
+                    <div class="absolute w-48 h-48 rounded-full filter blur-2xl opacity-40 bg-gradient-to-tr {{ $article['glow_class'] }} mix-blend-screen dark:mix-blend-normal"></div>
+                    <div class="absolute top-8 left-8 w-20 h-20 rounded-full border border-white/5 opacity-10"></div>
+                    <div class="absolute bottom-8 right-8 w-28 h-28 rounded-full border border-white/5 opacity-5"></div>
+                    <div class="relative z-10 w-18 h-18 rounded-3xl bg-white/10 dark:bg-black/40 backdrop-filter backdrop-blur-md border border-white/20 dark:border-white/5 flex items-center justify-center text-white shadow-xl shadow-black/5 transform transition-transform duration-500 hover:scale-105">
+                        <div class="w-9 h-9 flex items-center justify-center {{ $article['text_class'] }}">
+                            {!! $article['icon_svg'] !!}
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Reading content -->
@@ -426,8 +434,14 @@
                     <div class="space-y-5">
                         @foreach($recentPosts as $post)
                         <div class="flex gap-3">
-                            <a href="/blog/{{ $post['slug'] }}" class="w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-zinc-800 border border-[var(--border)] block">
-                                <img src="{{ asset($post['image']) }}" alt="{{ $post['title'] }}" class="w-full h-full object-cover">
+                            <a href="/blog/{{ $post['slug'] }}" class="w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-gradient-to-br {{ $post['gradient_class'] }} border border-[var(--border)] relative flex items-center justify-center group">
+                                <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:8px_8px] opacity-15"></div>
+                                <div class="absolute w-10 h-10 rounded-full filter blur-md opacity-35 bg-gradient-to-tr {{ $post['glow_class'] }} mix-blend-screen dark:mix-blend-normal"></div>
+                                <div class="relative z-10 w-7 h-7 rounded-lg bg-white/10 dark:bg-black/40 backdrop-filter backdrop-blur-sm border border-white/20 dark:border-white/5 flex items-center justify-center shadow-md">
+                                    <div class="w-3.5 h-3.5 flex items-center justify-center {{ $post['text_class'] }}">
+                                        {!! $post['icon_svg'] !!}
+                                    </div>
+                                </div>
                             </a>
                             <div>
                                 <h4 class="text-xs font-bold text-[var(--text-primary)] leading-snug m-0 mb-1 hover:text-[var(--accent)] transition-colors">
