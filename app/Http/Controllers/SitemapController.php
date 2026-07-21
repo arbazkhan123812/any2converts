@@ -9,7 +9,10 @@ class SitemapController extends Controller
 {
     public function index(): Response
     {
-        $siteUrl = URL::to('/');
+        $siteUrl = rtrim(config('app.url', 'https://any2convert.com'), '/');
+        if (!str_starts_with($siteUrl, 'http')) {
+            $siteUrl = 'https://any2convert.com';
+        }
         $slugs = require app_path('Support/tool_slugs.php');
         
         $urls = [
@@ -37,11 +40,11 @@ class SitemapController extends Controller
             ];
         }
 
-        // Add blog posts
-        $blogPosts = ['security-benefits', 'qr-guide'];
-        foreach ($blogPosts as $slug) {
+        // Add all blog posts
+        $allBlogPosts = \App\Support\BlogContent::getAllPosts();
+        foreach ($allBlogPosts as $post) {
             $urls[] = [
-                'loc' => $siteUrl . '/blog/' . $slug,
+                'loc' => $siteUrl . '/blog/' . $post['slug'],
                 'lastmod' => date('Y-m-d'),
                 'changefreq' => 'monthly',
                 'priority' => '0.7',

@@ -165,11 +165,11 @@ Route::get('/public/terms.php', fn() => redirect('/terms', 301));
 Route::get('/public/blog/index.php', fn() => redirect('/blog', 301));
 Route::get('/public/blog/qr-guide.php', fn() => redirect('/blog/qr-guide', 301));
 Route::get('/public/blog/security-benefits.php', fn() => redirect('/blog/security-benefits', 301));
-Route::get('/public/highlights.php', function (Request $request) {
-    $target = $request->query('topic')
-        ? '/highlights/' . rawurlencode($request->query('topic'))
-        : '/highlights';
-    return redirect($target, 301);
-});
+Route::get('/{slug}/', function (string $slug) {
+    return redirect('/' . $slug, 301);
+})->where('slug', '[a-z0-9-]+');
+
+// --- 404 Redirects Placeholder for GSC Export ---
+// Paste 404 URLs here once exported from Google Search Console to 301 redirect to valid routes.
 
 Route::get('/{slug}', [HomeController::class, 'tool'])->name('tools.show');

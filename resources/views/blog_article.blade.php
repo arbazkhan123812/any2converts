@@ -1,18 +1,48 @@
+<?php
+$canonicalUrl = 'https://any2convert.com' . rtrim(request()->getPathInfo(), '/');
+$blogSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'BlogPosting',
+    'headline' => $article['title'],
+    'description' => $article['excerpt'],
+    'url' => $canonicalUrl,
+    'datePublished' => date('Y-m-d', strtotime($article['date'] ?? 'now')),
+    'author' => [
+        '@type' => 'Organization',
+        'name' => $article['author'] ?? 'Any2Convert Team'
+    ],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => 'Any2Convert',
+        'logo' => [
+            '@type' => 'ImageObject',
+            'url' => 'https://any2convert.com/mylogo.png'
+        ]
+    ]
+];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="{{ url()->current() }}">
-    <link rel="alternate" href="{{ url()->current() }}" hreflang="en">
-    <link rel="alternate" href="{{ url()->current() }}" hreflang="x-default">
+    <link rel="canonical" href="<?= $canonicalUrl ?>">
+    <link rel="alternate" href="<?= $canonicalUrl ?>" hreflang="en">
+    <link rel="alternate" href="<?= $canonicalUrl ?>" hreflang="x-default">
     <title>{{ $title }}</title>
     <link rel="icon" type="image/png" href="{{ asset('mylogo.png') }}">
     <meta name="description" content="{{ $description }}">
     <meta name="keywords" content="{{ $keywords }}">
     <meta property="og:title" content="{{ $title }}">
     <meta property="og:description" content="{{ $description }}">
+    <meta property="og:url" content="<?= $canonicalUrl ?>">
+    <meta property="og:type" content="article">
     <meta name="theme-color" content="#3B82F6">
+
+    <!-- BlogPosting JSON-LD -->
+    <script type="application/ld+json">
+    <?= json_encode($blogSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
 
     <!-- Tailwind CSS v4 -->
     <script>

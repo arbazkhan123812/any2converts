@@ -535,15 +535,42 @@ if ($isToolPage) {
     ];
     $seoKeywords = implode(', ', $toolPageKeywords);
 }
+
+$canonicalBase = 'https://any2convert.com';
+$currentPath = request()->getPathInfo();
+if ($currentPath === '/') {
+    $canonicalUrl = $canonicalBase;
+} else {
+    $canonicalUrl = $canonicalBase . rtrim($currentPath, '/');
+}
+
+$webAppSchema = null;
+if ($isToolPage) {
+    $webAppSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'WebApplication',
+        'name' => $currentToolName,
+        'url' => $canonicalUrl,
+        'description' => $seoDescription,
+        'applicationCategory' => 'UtilityApplication',
+        'operatingSystem' => 'All',
+        'browserRequirements' => 'Requires JavaScript. Requires HTML5.',
+        'offers' => [
+            '@type' => 'Offer',
+            'price' => '0',
+            'priceCurrency' => 'USD'
+        ]
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="{{ url()->current() }}">
-    <link rel="alternate" href="{{ url()->current() }}" hreflang="en">
-    <link rel="alternate" href="{{ url()->current() }}" hreflang="x-default">
+    <link rel="canonical" href="<?= $canonicalUrl ?>">
+    <link rel="alternate" href="<?= $canonicalUrl ?>" hreflang="en">
+    <link rel="alternate" href="<?= $canonicalUrl ?>" hreflang="x-default">
     <title><?= htmlspecialchars($seoTitle, ENT_QUOTES) ?></title>
     <link rel="icon" type="image/png" href="mylogo.png">
     <meta name="description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
@@ -552,7 +579,28 @@ if ($isToolPage) {
     <meta name="twitter:title" content="<?= htmlspecialchars($seoTitle, ENT_QUOTES) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
     <meta name="twitter:description" content="<?= htmlspecialchars($seoDescription, ENT_QUOTES) ?>">
+    <meta property="og:url" content="<?= $canonicalUrl ?>">
+    <meta property="og:type" content="<?= $isToolPage ? 'website' : 'website' ?>">
     <meta name="theme-color" content="#3B82F6">
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    <?= json_encode($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
+    <script type="application/ld+json">
+    <?= json_encode($organizationSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
+    <script type="application/ld+json">
+    <?= json_encode($collectionPageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
+    <script type="application/ld+json">
+    <?= json_encode($itemListSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
+    <?php if ($webAppSchema): ?>
+    <script type="application/ld+json">
+    <?= json_encode($webAppSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    </script>
+    <?php endif; ?>
 
     <script>
     tailwind.config = {
