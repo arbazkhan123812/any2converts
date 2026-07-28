@@ -234,11 +234,6 @@ $websiteSchema = [
     'url' => $siteUrl . '/',
     'description' => 'Free online PDF, image, calculator, converter, OCR, and utility tools with privacy-first local processing on your device.',
     'inLanguage' => 'en',
-    'potentialAction' => [
-        '@type' => 'SearchAction',
-        'target' => $siteUrl . '/?q={search_term_string}',
-        'query-input' => 'required name=search_term_string',
-    ],
 ];
 $organizationSchema = [
     '@context' => 'https://schema.org',
