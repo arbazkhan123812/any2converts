@@ -37,13 +37,12 @@ class BlogContent
                 'text_class' => $gradients['text'],
                 'icon_svg' => self::getIconSvg($toolId, $category),
             ];
-            $post['read_time'] = self::calculateReadTime($post);
             $posts[] = $post;
         }
 
         // Add legacy blog posts to the list for backwards compatibility
         $pdfGradients = self::getCategoryGradients('pdf');
-        $postPdf = [
+        $posts[] = [
             'slug' => 'security-benefits',
             'tool_id' => null,
             'title' => 'Why Image to PDF is More Secure',
@@ -58,11 +57,9 @@ class BlogContent
             'text_class' => $pdfGradients['text'],
             'icon_svg' => self::getIconSvg(null, 'pdf'),
         ];
-        $postPdf['read_time'] = self::calculateReadTime($postPdf);
-        $posts[] = $postPdf;
 
         $bizGradients = self::getCategoryGradients('business');
-        $postBiz = [
+        $posts[] = [
             'slug' => 'qr-guide',
             'tool_id' => null,
             'title' => 'Business QR Code Best Practices',
@@ -77,8 +74,6 @@ class BlogContent
             'text_class' => $bizGradients['text'],
             'icon_svg' => self::getIconSvg(null, 'business'),
         ];
-        $postBiz['read_time'] = self::calculateReadTime($postBiz);
-        $posts[] = $postBiz;
 
         return $posts;
     }
@@ -99,23 +94,7 @@ class BlogContent
         return null;
     }
 
-    /**
-     * Calculate actual read time based on word count of the generated content.
-     */
-    private static function calculateReadTime(array $post): string
-    {
-        $content = self::generateContent($post);
-        // Remove HTML tags to get clean text
-        $cleanText = strip_tags($content);
-        // Count words
-        $wordCount = str_word_count($cleanText);
-        // Average adult reading speed is ~200 WPM
-        $minutes = (int) ceil($wordCount / 200);
-        if ($minutes < 1) {
-            $minutes = 1;
-        }
-        return $minutes . ' min read';
-    }
+
 
     /**
      * Generate a deterministic publish date.

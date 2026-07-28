@@ -359,12 +359,6 @@ $canonicalUrl = 'https://any2convert.com/blog';
                     <!-- Metadata Header -->
                     <div class="flex items-center justify-between mb-4">
                         <span class="cat-badge cat-{{ $post['category_slug'] }}">{{ $post['category'] }}</span>
-                        <div class="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
-                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-                            </svg>
-                            <span>{{ $post['read_time'] }}</span>
-                        </div>
                     </div>
 
                     <!-- Article Title -->
