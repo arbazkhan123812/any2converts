@@ -9,7 +9,10 @@ class SitemapController extends Controller
 {
     public function index(): Response
     {
-        $siteUrl = 'https://any2convert.com';
+        $siteUrl = rtrim(config('app.url', 'https://any2convert.com'), '/');
+        if (!str_starts_with($siteUrl, 'http')) {
+            $siteUrl = 'https://any2convert.com';
+        }
         $slugs = require app_path('Support/tool_slugs.php');
         
         $urls = [

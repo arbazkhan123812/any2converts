@@ -5,26 +5,6 @@
 
     RewriteEngine On
 
-    # 1. Force HTTP to HTTPS redirect
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://any2convert.com/$1 [L,R=301]
-
-    # 2. Force www. to non-www redirect
-    RewriteCond %{HTTP_HOST} ^www\.any2convert\.com [NC]
-    RewriteRule ^(.*)$ https://any2convert.com/$1 [L,R=301]
-
-    # 3. Redirect /public/index.php to root /
-    RewriteCond %{THE_REQUEST} /public/index\.php [NC]
-    RewriteRule ^ https://any2convert.com/ [L,R=301]
-
-    # 4. Redirect any other /public/xyz URL to /xyz
-    RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
-    RewriteRule ^ https://any2convert.com/%1 [L,R=301]
-
-    # 5. Redirect root index.php to root /
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php [NC]
-    RewriteRule ^index\.php$ https://any2convert.com/ [L,R=301]
-
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
