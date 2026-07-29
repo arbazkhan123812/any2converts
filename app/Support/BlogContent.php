@@ -29,6 +29,7 @@ class BlogContent
                 'excerpt' => $tool['desc'] . '. Learn how to use this free online tool to optimize your workflow with privacy-focused, browser-based processing.',
                 'category' => self::getCategoryLabel($category),
                 'category_slug' => $category,
+                'read_time' => self::calculateReadTime($toolId),
                 'date' => self::getPublishDate($toolId),
                 'image' => self::getCategoryImage($category),
                 'author' => 'Any2Convert Tech Team',
@@ -37,19 +38,19 @@ class BlogContent
                 'text_class' => $gradients['text'],
                 'icon_svg' => self::getIconSvg($toolId, $category),
             ];
-            $post['read_time'] = self::calculateReadTime($post);
             $posts[] = $post;
         }
 
         // Add legacy blog posts to the list for backwards compatibility
         $pdfGradients = self::getCategoryGradients('pdf');
-        $postPdf = [
+        $posts[] = [
             'slug' => 'security-benefits',
             'tool_id' => null,
             'title' => 'Why Image to PDF is More Secure',
             'excerpt' => 'Learn the key PDF security benefits of converting photos to PDF documents, including password protection and formatting preservation.',
             'category' => 'Security',
             'category_slug' => 'pdf',
+            'read_time' => '3 min read',
             'date' => 'May 12, 2026',
             'image' => '/images/blog/pdf_blog.jpg',
             'author' => 'Security Analyst',
@@ -58,17 +59,16 @@ class BlogContent
             'text_class' => $pdfGradients['text'],
             'icon_svg' => self::getIconSvg(null, 'pdf'),
         ];
-        $postPdf['read_time'] = self::calculateReadTime($postPdf);
-        $posts[] = $postPdf;
 
         $bizGradients = self::getCategoryGradients('business');
-        $postBiz = [
+        $posts[] = [
             'slug' => 'qr-guide',
             'tool_id' => null,
             'title' => 'Business QR Code Best Practices',
             'excerpt' => 'A comprehensive guide on creating clear, scan-friendly QR codes for links, menus, contacts, and marketing campaigns.',
             'category' => 'Business & Marketing',
             'category_slug' => 'business',
+            'read_time' => '4 min read',
             'date' => 'June 05, 2026',
             'image' => '/images/blog/utility_blog.jpg',
             'author' => 'Marketing Team',
@@ -77,8 +77,6 @@ class BlogContent
             'text_class' => $bizGradients['text'],
             'icon_svg' => self::getIconSvg(null, 'business'),
         ];
-        $postBiz['read_time'] = self::calculateReadTime($postBiz);
-        $posts[] = $postBiz;
 
         return $posts;
     }
@@ -100,21 +98,13 @@ class BlogContent
     }
 
     /**
-     * Calculate actual read time based on word count of the generated content.
+     * Calculate static read time based on tool ID.
      */
-    private static function calculateReadTime(array $post): string
+    private static function calculateReadTime(string $toolId): string
     {
-        $content = self::generateContent($post);
-        // Remove HTML tags to get clean text
-        $cleanText = strip_tags($content);
-        // Count words
-        $wordCount = str_word_count($cleanText);
-        // Average adult reading speed is ~200 WPM
-        $minutes = (int) ceil($wordCount / 200);
-        if ($minutes < 1) {
-            $minutes = 1;
-        }
-        return $minutes . ' min read';
+        $len = strlen($toolId);
+        $min = 3 + ($len % 3);
+        return $min . ' min read';
     }
 
     /**
