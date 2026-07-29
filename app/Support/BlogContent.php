@@ -113,18 +113,10 @@ class BlogContent
     private static function getPublishDate(string $toolId): string
     {
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        $charSum = abs(crc32($toolId));
+        $charSum = crc32($toolId);
         $day = 1 + ($charSum % 28);
-        $monthIndex = $charSum % 12;
-        $month = $months[$monthIndex];
+        $month = $months[$charSum % 12];
         $year = 2025 + ($charSum % 2);
-
-        // Ensure the date is not in the future relative to current time
-        $dateStr = "$year-" . str_pad($monthIndex + 1, 2, '0', STR_PAD_LEFT) . "-" . str_pad($day, 2, '0', STR_PAD_LEFT);
-        if (strtotime($dateStr) > time()) {
-            $year--;
-        }
-
         return "$month " . str_pad($day, 2, '0', STR_PAD_LEFT) . ", $year";
     }
 
