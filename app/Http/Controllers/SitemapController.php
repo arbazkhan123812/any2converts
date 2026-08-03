@@ -9,10 +9,7 @@ class SitemapController extends Controller
 {
     public function index(): Response
     {
-        $siteUrl = rtrim(config('app.url', 'https://any2convert.com'), '/');
-        if (!str_starts_with($siteUrl, 'http')) {
-            $siteUrl = 'https://any2convert.com';
-        }
+        $siteUrl = 'https://any2convert.com';
         $slugs = require app_path('Support/tool_slugs.php');
         
         $urls = [
@@ -21,6 +18,30 @@ class SitemapController extends Controller
                 'lastmod' => date('Y-m-d'),
                 'changefreq' => 'daily',
                 'priority' => '1.0',
+            ],
+            [
+                'loc' => $siteUrl . '/about',
+                'lastmod' => date('Y-m-d'),
+                'changefreq' => 'monthly',
+                'priority' => '0.8',
+            ],
+            [
+                'loc' => $siteUrl . '/contact',
+                'lastmod' => date('Y-m-d'),
+                'changefreq' => 'monthly',
+                'priority' => '0.8',
+            ],
+            [
+                'loc' => $siteUrl . '/privacy',
+                'lastmod' => date('Y-m-d'),
+                'changefreq' => 'monthly',
+                'priority' => '0.8',
+            ],
+            [
+                'loc' => $siteUrl . '/terms',
+                'lastmod' => date('Y-m-d'),
+                'changefreq' => 'monthly',
+                'priority' => '0.8',
             ],
             [
                 'loc' => $siteUrl . '/blog',
@@ -59,7 +80,8 @@ class SitemapController extends Controller
             'free-forever',
             'works-in-browser',
             'works-on-any-device',
-            'always-free-no-watermarks'
+            'always-free-no-watermarks',
+            'instant-results'
         ];
         foreach ($highlights as $slug) {
             $urls[] = [

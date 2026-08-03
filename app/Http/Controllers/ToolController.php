@@ -12,7 +12,8 @@ class ToolController extends Controller
     {
         require_once app_path('Support/tool_handlers.php');
 
-        return response(renderToolHandlerHTML((string) $request->query('tool', '')));
+        return response(renderToolHandlerHTML((string) $request->query('tool', '')))
+            ->header('X-Robots-Tag', 'noindex, nofollow');
     }
 
     public function unavailable(): JsonResponse

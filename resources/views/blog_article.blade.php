@@ -26,6 +26,11 @@ $blogSchema = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (request()->has('topic') || request()->has('noindex')): ?>
+    <meta name="robots" content="noindex, follow">
+    <?php else: ?>
+    <meta name="robots" content="index, follow">
+    <?php endif; ?>
     <link rel="canonical" href="<?= $canonicalUrl ?>">
     <link rel="alternate" href="<?= $canonicalUrl ?>" hreflang="en">
     <link rel="alternate" href="<?= $canonicalUrl ?>" hreflang="x-default">

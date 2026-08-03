@@ -5,6 +5,15 @@
 
     RewriteEngine On
 
+    # 1. Force HTTPS for any2convert.com & www.any2convert.com
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} ^(www\.)?any2convert\.com$ [NC]
+    RewriteRule ^(.*)$ https://any2convert.com/$1 [L,R=301]
+
+    # 2. Force non-WWW (www.any2convert.com -> any2convert.com)
+    RewriteCond %{HTTP_HOST} ^www\.any2convert\.com$ [NC]
+    RewriteRule ^(.*)$ https://any2convert.com/$1 [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
