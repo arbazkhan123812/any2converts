@@ -9162,7 +9162,7 @@ function getAiImageGeneratorHTML() {
                 ctx.fillRect(0, 0, w, h);
 
                 ctx.save();
-                ctx.font = "bold 15px 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, Helvetica, sans-serif";
+                ctx.font = "bold 15px \"Segoe UI\", Roboto, -apple-system, BlinkMacSystemFont, Helvetica, sans-serif";
                 const textWidth = ctx.measureText(prompt).width;
                 const paddingX = 18;
                 const paddingY = 9;
