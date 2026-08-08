@@ -8519,74 +8519,760 @@ function getAiImageGeneratorHTML() {
                 });
             }
 
-            async function renderPromptImage(prompt, negative, width, height) {
-                const canvas = document.createElement("canvas");
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                const seed = hashText(prompt + "|" + negative + "|" + width + "x" + height);
-                const random = seededRandom(seed);
-                const palettes = [
-                    ["#0f172a", "#2563eb", "#22c55e", "#f8fafc"],
-                    ["#111827", "#db2777", "#f59e0b", "#ffffff"],
-                    ["#082f49", "#06b6d4", "#a7f3d0", "#f0f9ff"],
-                    ["#1f2937", "#7c3aed", "#f97316", "#fff7ed"],
-                    ["#14532d", "#84cc16", "#14b8a6", "#f7fee7"]
-                ];
-                const palette = palettes[seed % palettes.length];
+            const palettes = {
+                cyberpunk: ["#0f172a", "#db2777", "#2563eb", "#06b6d4", "#f8fafc"],
+                space: ["#090d16", "#4f46e5", "#7c3aed", "#ec4899", "#ffffff"],
+                sunset: ["#1e1b4b", "#7c2d12", "#db2777", "#f97316", "#fef08a"],
+                forest: ["#064e3b", "#047857", "#10b981", "#84cc16", "#f0fdf4"],
+                ocean: ["#075985", "#0284c7", "#0ea5e9", "#38bdf8", "#f0f9ff"],
+                desert: ["#7c2d12", "#c2410c", "#ea580c", "#f97316", "#fef08a"],
+                neutral: ["#1e293b", "#475569", "#64748b", "#94a3b8", "#f8fafc"],
+                blueprint: ["#0b3c5d", "#328cc1", "#ffffff", "#ffffff", "#d9b310"],
+                monochrome: ["#000000", "#333333", "#777777", "#cccccc", "#ffffff"]
+            };
 
-                const bg = ctx.createLinearGradient(0, 0, width, height);
+            function containsAny(text, list) {
+                return list.some(word => text.includes(word));
+            }
+
+            function drawSpaceScene(ctx, w, h, random, palette, keywords) {
+                const bg = ctx.createLinearGradient(0, 0, w, h);
                 bg.addColorStop(0, palette[0]);
-                bg.addColorStop(0.55, palette[1]);
-                bg.addColorStop(1, palette[2]);
+                bg.addColorStop(0.5, "#0b0c16");
+                bg.addColorStop(1, palette[1]);
                 ctx.fillStyle = bg;
-                ctx.fillRect(0, 0, width, height);
+                ctx.fillRect(0, 0, w, h);
 
-                for (let i = 0; i < 36; i++) {
-                    const x = random() * width;
-                    const y = random() * height;
-                    const radius = (0.035 + random() * 0.16) * Math.min(width, height);
-                    const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                    glow.addColorStop(0, palette[3] + "cc");
-                    glow.addColorStop(0.35, palette[2] + "66");
-                    glow.addColorStop(1, palette[0] + "00");
-                    ctx.fillStyle = glow;
+                const numStars = Math.floor(60 + random() * 40);
+                for (let i = 0; i < numStars; i++) {
+                    ctx.fillStyle = random() > 0.8 ? palette[3] : "#ffffff";
                     ctx.beginPath();
-                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.arc(random() * w, random() * h, 0.5 + random() * 1.5, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
-                ctx.save();
-                ctx.translate(width / 2, height / 2);
-                for (let i = 0; i < 18; i++) {
-                    ctx.rotate((Math.PI * 2) / 18);
-                    ctx.strokeStyle = i % 2 ? palette[3] + "55" : palette[2] + "66";
-                    ctx.lineWidth = Math.max(2, Math.min(width, height) * (0.004 + random() * 0.008));
+                const numNebulae = 3;
+                for (let i = 0; i < numNebulae; i++) {
+                    const cx = random() * w;
+                    const cy = random() * h;
+                    const r = (0.2 + random() * 0.3) * Math.min(w, h);
+                    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+                    const color = i === 0 ? palette[2] : (i === 1 ? palette[3] : palette[1]);
+                    grad.addColorStop(0, color + "26");
+                    grad.addColorStop(0.5, color + "0d");
+                    grad.addColorStop(1, "rgba(0,0,0,0)");
+                    ctx.fillStyle = grad;
                     ctx.beginPath();
-                    ctx.moveTo(Math.min(width, height) * 0.05, 0);
+                    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                const planetRadius = (0.08 + random() * 0.08) * Math.min(w, h);
+                const px = w * (0.3 + random() * 0.4);
+                const py = h * (0.3 + random() * 0.3);
+                
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(-Math.PI / 8);
+                ctx.strokeStyle = palette[3] + "55";
+                ctx.lineWidth = planetRadius * 0.15;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, planetRadius * 1.8, planetRadius * 0.35, 0, Math.PI, 0);
+                ctx.stroke();
+                ctx.restore();
+
+                const pGrad = ctx.createRadialGradient(px - planetRadius * 0.3, py - planetRadius * 0.3, planetRadius * 0.1, px, py, planetRadius);
+                pGrad.addColorStop(0, palette[3]);
+                pGrad.addColorStop(0.4, palette[2]);
+                pGrad.addColorStop(1, "#030712");
+                ctx.fillStyle = pGrad;
+                ctx.beginPath();
+                ctx.arc(px, py, planetRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(-Math.PI / 8);
+                ctx.strokeStyle = palette[3] + "bb";
+                ctx.lineWidth = planetRadius * 0.15;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, planetRadius * 1.8, planetRadius * 0.35, 0, 0, Math.PI);
+                ctx.stroke();
+                ctx.restore();
+
+                if (containsAny(keywords, ["ufo", "spaceship", "alien"])) {
+                    const ufoW = w * 0.15;
+                    const ufoH = ufoW * 0.35;
+                    const ux = w * (0.2 + random() * 0.6);
+                    const uy = h * (0.4 + random() * 0.2);
+
+                    const beamGrad = ctx.createLinearGradient(ux, uy, ux, h);
+                    beamGrad.addColorStop(0, "rgba(34, 211, 238, 0.4)");
+                    beamGrad.addColorStop(1, "rgba(34, 211, 238, 0)");
+                    ctx.fillStyle = beamGrad;
+                    ctx.beginPath();
+                    ctx.moveTo(ux - ufoW * 0.2, uy + ufoH * 0.3);
+                    ctx.lineTo(ux - ufoW * 0.6, h);
+                    ctx.lineTo(ux + ufoW * 0.6, h);
+                    ctx.lineTo(ux + ufoW * 0.2, uy + ufoH * 0.3);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.fillStyle = "rgba(165, 243, 252, 0.85)";
+                    ctx.beginPath();
+                    ctx.arc(ux, uy - ufoH * 0.2, ufoW * 0.25, Math.PI, 0);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.fillStyle = palette[2];
+                    ctx.beginPath();
+                    ctx.ellipse(ux, uy, ufoW * 0.5, ufoH * 0.5, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#ffffff";
+                    const numLights = 5;
+                    for (let l = 0; l < numLights; l++) {
+                        const lx = ux + (l - (numLights - 1) / 2) * (ufoW * 0.16);
+                        ctx.beginPath();
+                        ctx.arc(lx, uy, ufoW * 0.03, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            function drawCityScene(ctx, w, h, random, palette, keywords) {
+                const bg = ctx.createLinearGradient(0, 0, 0, h);
+                bg.addColorStop(0, palette[0]);
+                bg.addColorStop(0.5, palette[1]);
+                bg.addColorStop(1, palette[2]);
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, w, h);
+
+                if (containsAny(keywords, ["night", "dark", "midnight", "moon", "star"])) {
+                    ctx.fillStyle = "#fef08a";
+                    ctx.beginPath();
+                    ctx.arc(w * 0.8, h * 0.25, Math.min(w, h) * 0.05, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = palette[0];
+                    ctx.beginPath();
+                    ctx.arc(w * 0.78, h * 0.23, Math.min(w, h) * 0.05, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#ffffff";
+                    for (let i = 0; i < 30; i++) {
+                        ctx.fillRect(random() * w, random() * (h * 0.4), 1, 1);
+                    }
+                }
+
+                const layers = 3;
+                const buildingColors = [
+                    palette[0] + "bb",
+                    palette[1] + "dd",
+                    palette[0]
+                ];
+
+                for (let layer = 0; layer < layers; layer++) {
+                    ctx.fillStyle = buildingColors[layer];
+                    let bx = 0;
+
+                    while (bx < w) {
+                        const bw = w * (0.08 + random() * 0.12);
+                        const bh = h * (0.2 + random() * (0.45 - layer * 0.1));
+                        const by = h - bh;
+
+                        ctx.fillRect(bx, by, bw, bh);
+
+                        if (layer >= 1) {
+                            ctx.fillStyle = random() > 0.5 ? "#fde047" : "#22d3ee";
+                            const rows = Math.floor(bh / 16);
+                            const cols = Math.floor(bw / 12);
+                            const activeRate = 0.15 + random() * 0.25;
+
+                            for (let r = 2; r < rows - 1; r++) {
+                                for (let c = 1; c < cols - 1; c++) {
+                                    if (random() < activeRate) {
+                                        ctx.fillRect(bx + c * 10, by + r * 12, 4, 6);
+                                    }
+                                }
+                            }
+                            ctx.fillStyle = buildingColors[layer];
+                        }
+
+                        if (random() > 0.7) {
+                            ctx.strokeStyle = buildingColors[layer];
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.moveTo(bx + bw / 2, by);
+                            ctx.lineTo(bx + bw / 2, by - 25);
+                            ctx.stroke();
+                        }
+
+                        bx += bw - 2;
+                    }
+                }
+
+                if (containsAny(keywords, ["cyber", "neon", "fly", "future"])) {
+                    for (let i = 0; i < 3; i++) {
+                        const ty = h * (0.2 + random() * 0.3);
+                        const tx = w * random();
+                        const tw = w * (0.15 + random() * 0.2);
+                        const slope = (random() - 0.5) * 20;
+
+                        const tGrad = ctx.createLinearGradient(tx, ty, tx + tw, ty + slope);
+                        tGrad.addColorStop(0, "rgba(236, 72, 153, 0)");
+                        tGrad.addColorStop(0.5, palette[3]);
+                        tGrad.addColorStop(1, "rgba(34, 211, 238, 0)");
+                        ctx.strokeStyle = tGrad;
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(tx, ty);
+                        ctx.lineTo(tx + tw, ty + slope);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            function drawDesertScene(ctx, w, h, random, palette, keywords) {
+                const bg = ctx.createLinearGradient(0, 0, 0, h);
+                const isNight = containsAny(keywords, ["night", "dark", "moon"]);
+                if (isNight) {
+                    bg.addColorStop(0, "#090d16");
+                    bg.addColorStop(0.5, "#1e1b4b");
+                    bg.addColorStop(1, palette[0]);
+                } else {
+                    bg.addColorStop(0, palette[2]);
+                    bg.addColorStop(0.6, palette[3]);
+                    bg.addColorStop(1, palette[1]);
+                }
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, w, h);
+
+                const orbRadius = Math.min(w, h) * (isNight ? 0.06 : 0.12);
+                const ox = w * 0.5;
+                const oy = h * 0.45;
+                const orbGrad = ctx.createRadialGradient(ox, oy, 0, ox, oy, orbRadius);
+                if (isNight) {
+                    orbGrad.addColorStop(0, "#ffffff");
+                    orbGrad.addColorStop(1, palette[4] + "22");
+                } else {
+                    orbGrad.addColorStop(0, "#ffffff");
+                    orbGrad.addColorStop(0.4, palette[4]);
+                    orbGrad.addColorStop(1, palette[3] + "00");
+                }
+                ctx.fillStyle = orbGrad;
+                ctx.beginPath();
+                ctx.arc(ox, oy, orbRadius * 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (isNight) {
+                    ctx.fillStyle = "#ffffff";
+                    for (let i = 0; i < 40; i++) {
+                        ctx.fillRect(random() * w, random() * (h * 0.45), 1, 1);
+                    }
+                }
+
+                const dunes = 3;
+                const duneColors = isNight ? [
+                    "#311432",
+                    "#200f27",
+                    "#12071a"
+                ] : [
+                    palette[2],
+                    palette[1],
+                    palette[0]
+                ];
+
+                for (let d = 0; d < dunes; d++) {
+                    const startY = h * 0.55 + d * (h * 0.12);
+                    const controlY1 = startY - (0.05 + random() * 0.1) * h;
+                    const controlY2 = startY + (0.05 + random() * 0.1) * h;
+
+                    ctx.fillStyle = duneColors[d];
+                    ctx.beginPath();
+                    ctx.moveTo(0, h);
+                    ctx.lineTo(0, startY);
+                    ctx.bezierCurveTo(w * 0.35, controlY1, w * 0.65, controlY2, w, startY + (random() - 0.5) * 15);
+                    ctx.lineTo(w, h);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    if (random() > 0.4) {
+                        const cx = w * (0.15 + random() * 0.7);
+                        const cy = startY + (cx / w) * (random() - 0.5) * 15 - 5;
+                        const cSize = Math.min(w, h) * (0.06 + random() * 0.05);
+
+                        ctx.fillStyle = isNight ? "#080312" : duneColors[d];
+                        ctx.fillRect(cx - 3, cy - cSize, 6, cSize);
+                        ctx.fillRect(cx - 10, cy - cSize * 0.7, 8, 3);
+                        ctx.fillRect(cx - 10, cy - cSize * 0.9, 3, cSize * 0.35);
+                        ctx.fillRect(cx + 2, cy - cSize * 0.55, 8, 3);
+                        ctx.fillRect(cx + 8, cy - cSize * 0.8, 3, cSize * 0.35);
+                    }
+                }
+            }
+
+            function drawOceanScene(ctx, w, h, random, palette, keywords) {
+                const bg = ctx.createLinearGradient(0, 0, 0, h);
+                const isSunset = containsAny(keywords, ["sunset", "sunrise", "evening", "dusk"]);
+                if (isSunset) {
+                    bg.addColorStop(0, "#1e1b4b");
+                    bg.addColorStop(0.3, "#7c2d12");
+                    bg.addColorStop(0.65, "#db2777");
+                    bg.addColorStop(1, "#fef08a");
+                } else {
+                    bg.addColorStop(0, "#bae6fd");
+                    bg.addColorStop(0.7, "#f0f9ff");
+                    bg.addColorStop(1, "#bae6fd");
+                }
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, w, h);
+
+                const sunR = Math.min(w, h) * 0.085;
+                const sx = w * 0.5;
+                const sy = h * 0.58;
+                const sunGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, sunR);
+                sunGrad.addColorStop(0, "#ffffff");
+                sunGrad.addColorStop(0.4, isSunset ? "#f97316" : "#fef08a");
+                sunGrad.addColorStop(1, "rgba(255,255,255,0)");
+                ctx.fillStyle = sunGrad;
+                ctx.beginPath();
+                ctx.arc(sx, sy, sunR * 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                const waveLayers = 5;
+                const oceanColors = isSunset ? [
+                    "#4c0519",
+                    "#3b0764",
+                    "#1e1b4b",
+                    "#0f172a",
+                    "#020617"
+                ] : [
+                    palette[3] + "88",
+                    palette[2] + "bb",
+                    palette[1],
+                    palette[0],
+                    "#082f49"
+                ];
+
+                for (let i = 0; i < waveLayers; i++) {
+                    const waveY = h * 0.58 + (i * 0.09) * h;
+                    const amp = 8 + i * 4;
+                    const freq = 0.015 - i * 0.002;
+                    const phase = random() * 100;
+
+                    ctx.fillStyle = oceanColors[i];
+                    ctx.beginPath();
+                    ctx.moveTo(0, h);
+                    ctx.lineTo(0, waveY);
+
+                    for (let x = 0; x <= w; x += 15) {
+                        const y = waveY + Math.sin(x * freq + phase) * amp;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.lineTo(w, h);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.strokeStyle = "rgba(255,255,255,0.22)";
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(0, waveY + Math.sin(phase) * amp);
+                    for (let x = 0; x <= w; x += 15) {
+                        const y = waveY + Math.sin(x * freq + phase) * amp;
+                        ctx.lineTo(x, y - 1);
+                    }
+                    ctx.stroke();
+
+                    if (i === 2 && (containsAny(keywords, ["boat", "ship", "sail"]) || random() > 0.4)) {
+                        const bx = w * 0.65;
+                        const by = waveY + Math.sin(bx * freq + phase) * amp;
+                        const boatW = w * 0.06;
+                        
+                        ctx.save();
+                        ctx.translate(bx, by);
+
+                        ctx.fillStyle = "#f8fafc";
+                        ctx.beginPath();
+                        ctx.moveTo(-boatW * 0.5, 0);
+                        ctx.lineTo(boatW * 0.5, 0);
+                        ctx.lineTo(boatW * 0.35, boatW * 0.25);
+                        ctx.lineTo(-boatW * 0.35, boatW * 0.25);
+                        ctx.closePath();
+                        ctx.fill();
+
+                        ctx.fillStyle = isSunset ? "#fcd34d" : "#f1f5f9";
+                        ctx.beginPath();
+                        ctx.moveTo(-boatW * 0.1, -boatW * 0.1);
+                        ctx.lineTo(-boatW * 0.1, -boatW * 0.95);
+                        ctx.lineTo(boatW * 0.32, -boatW * 0.25);
+                        ctx.closePath();
+                        ctx.fill();
+
+                        ctx.strokeStyle = "#475569";
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(-boatW * 0.1, 0);
+                        ctx.lineTo(-boatW * 0.1, -boatW * 1.0);
+                        ctx.stroke();
+
+                        ctx.restore();
+                    }
+                }
+            }
+
+            function drawLandscapeScene(ctx, w, h, random, palette, keywords) {
+                const bg = ctx.createLinearGradient(0, 0, 0, h);
+                const isSunset = containsAny(keywords, ["sunset", "sunrise", "golden hour", "orange"]);
+                const isNight = containsAny(keywords, ["night", "dark", "midnight", "stars"]);
+
+                if (isNight) {
+                    bg.addColorStop(0, "#020617");
+                    bg.addColorStop(0.65, "#0f172a");
+                    bg.addColorStop(1, "#1e1b4b");
+                } else if (isSunset) {
+                    bg.addColorStop(0, "#1e1b4b");
+                    bg.addColorStop(0.45, "#7c2d12");
+                    bg.addColorStop(0.8, "#ea580c");
+                    bg.addColorStop(1, "#fde047");
+                } else {
+                    bg.addColorStop(0, "#bae6fd");
+                    bg.addColorStop(0.7, "#f0f9ff");
+                    bg.addColorStop(1, "#e0f2fe");
+                }
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, w, h);
+
+                if (isNight) {
+                    ctx.fillStyle = "#ffffff";
+                    ctx.beginPath();
+                    ctx.arc(w * 0.8, h * 0.2, Math.min(w, h) * 0.045, 0, Math.PI * 2);
+                    ctx.fill();
+                    for (let i = 0; i < 40; i++) {
+                        ctx.fillRect(random() * w, random() * (h * 0.4), 1.5, 1.5);
+                    }
+                } else {
+                    const sunRadius = Math.min(w, h) * 0.08;
+                    const sx = w * 0.75;
+                    const sy = h * (isSunset ? 0.42 : 0.22);
+                    const sunGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, sunRadius);
+                    sunGrad.addColorStop(0, "#ffffff");
+                    sunGrad.addColorStop(0.5, isSunset ? "#f97316" : "#fef08a");
+                    sunGrad.addColorStop(1, "rgba(255,255,255,0)");
+                    ctx.fillStyle = sunGrad;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, sunRadius * 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                if (!isNight) {
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+                    for (let c = 0; c < 3; c++) {
+                        const cx = w * (0.1 + c * 0.35);
+                        const cy = h * (0.15 + random() * 0.1);
+                        const cr = w * 0.06;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, cr, 0, Math.PI * 2);
+                        ctx.arc(cx - cr * 0.55, cy + cr * 0.1, cr * 0.7, 0, Math.PI * 2);
+                        ctx.arc(cx + cr * 0.55, cy + cr * 0.1, cr * 0.7, 0, Math.PI * 2);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                }
+
+                const ranges = 3;
+                const mountainColors = isNight ? [
+                    "#121124",
+                    "#0a0916",
+                    "#03020b"
+                ] : (isSunset ? [
+                    "#4c1228",
+                    "#3b0a21",
+                    "#1c0210"
+                ] : [
+                    palette[2] + "88",
+                    palette[1] + "cc",
+                    palette[0]
+                ]);
+
+                for (let r = 0; r < ranges; r++) {
+                    const startY = h * 0.48 + r * (h * 0.1);
+                    const roughness = 22 + r * 15;
+                    const step = Math.max(8, Math.floor(w / 45));
+
+                    ctx.fillStyle = mountainColors[r];
+                    ctx.beginPath();
+                    ctx.moveTo(0, h);
+                    
+                    let currY = startY + (random() - 0.5) * roughness;
+                    ctx.lineTo(0, currY);
+                    
+                    for (let x = step; x <= w; x += step) {
+                        currY += (random() - 0.5) * roughness;
+                        currY = Math.max(h * 0.28, Math.min(currY, h * 0.85));
+                        ctx.lineTo(x, currY);
+                    }
+                    ctx.lineTo(w, h);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    if (r >= 1) {
+                        const numTrees = Math.floor(6 + r * 5);
+                        ctx.fillStyle = isNight ? "#02040a" : (isSunset ? "#14010a" : palette[0]);
+                        for (let t = 0; t < numTrees; t++) {
+                            const tx = w * (0.05 + random() * 0.9);
+                            const ty = startY + (random() - 0.5) * roughness - 10;
+                            const treeSize = 6 + (3 - r) * 4 + random() * 6;
+
+                            ctx.beginPath();
+                            ctx.moveTo(tx, ty - treeSize * 1.5);
+                            ctx.lineTo(tx - treeSize * 0.5, ty - treeSize * 0.45);
+                            ctx.lineTo(tx + treeSize * 0.5, ty - treeSize * 0.45);
+                            ctx.closePath();
+                            ctx.fill();
+
+                            ctx.beginPath();
+                            ctx.moveTo(tx, ty - treeSize * 0.95);
+                            ctx.lineTo(tx - treeSize * 0.7, ty);
+                            ctx.lineTo(tx + treeSize * 0.7, ty);
+                            ctx.closePath();
+                            ctx.fill();
+
+                            ctx.fillRect(tx - 1, ty, 2, treeSize * 0.45);
+                        }
+                    }
+                }
+
+                if (containsAny(keywords, ["house", "cabin", "cottage", "home"])) {
+                    const hx = w * 0.35;
+                    const hy = h * 0.74;
+                    const hw = w * 0.12;
+                    const hh = hw * 0.75;
+
+                    ctx.save();
+                    ctx.translate(hx, hy);
+
+                    ctx.fillStyle = "#4b5563";
+                    ctx.fillRect(hw * 0.65, -hh * 0.8, hw * 0.14, hh * 0.6);
+
+                    ctx.fillStyle = isNight ? "#0c0a0f" : "#b45309";
+                    ctx.fillRect(0, 0, hw, hh);
+
+                    ctx.fillStyle = isNight ? "#020102" : "#78350f";
+                    ctx.fillRect(hw * 0.15, hh * 0.35, hw * 0.25, hh * 0.65);
+
+                    ctx.fillStyle = "#fef08a";
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = "#fef08a";
+                    ctx.fillRect(hw * 0.55, hh * 0.25, hw * 0.28, hh * 0.35);
+                    ctx.shadowBlur = 0;
+
+                    ctx.fillStyle = isNight ? "#08060a" : "#991b1b";
+                    ctx.beginPath();
+                    ctx.moveTo(-hw * 0.1, 0);
+                    ctx.lineTo(hw * 0.5, -hh * 0.5);
+                    ctx.lineTo(hw * 1.1, 0);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    ctx.restore();
+                }
+            }
+
+            function drawAbstractScene(ctx, w, h, random, palette, keywords) {
+                ctx.fillStyle = palette[0];
+                ctx.fillRect(0, 0, w, h);
+
+                const numParticles = 300;
+                const pathLength = 35;
+                const angleScale = 0.006 + random() * 0.008;
+
+                for (let p = 0; p < numParticles; p++) {
+                    let px = random() * w;
+                    let py = random() * h;
+                    const trailColor = p % 3 === 0 ? palette[1] : (p % 3 === 1 ? palette[2] : palette[3]);
+
+                    ctx.strokeStyle = trailColor + "1a";
+                    ctx.lineWidth = 1.2 + random() * 2.0;
+                    ctx.beginPath();
+                    ctx.moveTo(px, py);
+
+                    for (let step = 0; step < pathLength; step++) {
+                        const theta = Math.sin(px * angleScale) * Math.cos(py * angleScale) * Math.PI * 4.5;
+                        px += Math.cos(theta) * 6;
+                        py += Math.sin(theta) * 6;
+
+                        if (px < 0 || px > w || py < 0 || py > h) {
+                            break;
+                        }
+                        ctx.lineTo(px, py);
+                    }
+                    ctx.stroke();
+                }
+
+                ctx.save();
+                ctx.translate(w / 2, h / 2);
+                const spikes = 24 + Math.floor(random() * 24);
+                for (let s = 0; s < spikes; s++) {
+                    ctx.rotate((Math.PI * 2) / spikes);
+                    ctx.strokeStyle = s % 2 === 0 ? palette[3] + "22" : palette[2] + "33";
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
                     ctx.bezierCurveTo(
-                        Math.min(width, height) * (0.18 + random() * 0.2), Math.min(width, height) * (random() - 0.5),
-                        Math.min(width, height) * (0.32 + random() * 0.28), Math.min(width, height) * (random() - 0.5),
-                        Math.min(width, height) * 0.56, 0
+                        Math.min(w, h) * 0.15, Math.min(w, h) * (random() - 0.5) * 0.45,
+                        Math.min(w, h) * 0.35, Math.min(w, h) * (random() - 0.5) * 0.45,
+                        Math.min(w, h) * 0.46, 0
                     );
                     ctx.stroke();
                 }
                 ctx.restore();
+            }
 
-                ctx.fillStyle = "rgba(15, 23, 42, 0.58)";
-                ctx.fillRect(width * 0.08, height * 0.72, width * 0.84, height * 0.18);
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "700 " + Math.max(22, Math.floor(width * 0.035)) + "px Arial, sans-serif";
+            function applyOverlays(ctx, w, h, style, random, prompt) {
+                if (style === "blueprint") {
+                    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+                    ctx.lineWidth = 1;
+                    const gridSz = 25;
+                    for (let x = 0; x < w; x += gridSz) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, h);
+                        ctx.stroke();
+                    }
+                    for (let y = 0; y < h; y += gridSz) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(w, y);
+                        ctx.stroke();
+                    }
+                }
+
+                if (style === "retro-neon") {
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.07)";
+                    for (let y = 0; y < h; y += 4) {
+                        ctx.fillRect(0, y, w, 1);
+                    }
+                }
+
+                const vGrad = ctx.createRadialGradient(w/2, h/2, Math.min(w, h) * 0.35, w/2, h/2, Math.max(w, h) * 0.72);
+                vGrad.addColorStop(0, "rgba(0,0,0,0)");
+                vGrad.addColorStop(0.8, "rgba(0,0,0,0.18)");
+                vGrad.addColorStop(1, "rgba(0,0,0,0.65)");
+                ctx.fillStyle = vGrad;
+                ctx.fillRect(0, 0, w, h);
+
+                ctx.save();
+                ctx.font = "bold 15px 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, Helvetica, sans-serif";
+                const textWidth = ctx.measureText(prompt).width;
+                const paddingX = 18;
+                const paddingY = 9;
+                const badgeW = textWidth + paddingX * 2;
+                const badgeH = 15 + paddingY * 2;
+                const badgeX = (w - badgeW) / 2;
+                const badgeY = h - badgeH - 30;
+
+                ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 10);
+                } else {
+                    ctx.rect(badgeX, badgeY, badgeW, badgeH);
+                }
+                ctx.fill();
+
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                ctx.fillStyle = "#f8fafc";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                const lines = wrapText(ctx, prompt, width * 0.74);
-                const lineHeight = Math.max(28, Math.floor(width * 0.044));
-                const startY = height * 0.81 - ((lines.length - 1) * lineHeight) / 2;
-                lines.forEach(function (line, index) {
-                    ctx.fillText(line, width / 2, startY + index * lineHeight);
-                });
+                ctx.fillText(prompt, w / 2, badgeY + badgeH / 2);
+                ctx.restore();
+            }
 
-                return canvasToBlob(canvas);
+            async function renderPromptImage(prompt, negative, width, height) {
+                const keywords = prompt.toLowerCase();
+                let sceneType = "abstract";
+                let style = "default";
+
+                if (containsAny(keywords, ["space", "galaxy", "cosmic", "nebula", "universe", "planet", "stars", "ufo", "alien", "spaceship"])) {
+                    sceneType = "space";
+                } else if (containsAny(keywords, ["city", "skyline", "buildings", "skyscraper", "cyberpunk", "cybercity", "neon"])) {
+                    sceneType = "city";
+                } else if (containsAny(keywords, ["desert", "dunes", "sand", "sahara", "oasis"])) {
+                    sceneType = "desert";
+                } else if (containsAny(keywords, ["ocean", "sea", "wave", "beach", "shore", "coast", "water", "sailboat", "boat", "ship"])) {
+                    sceneType = "ocean";
+                } else if (containsAny(keywords, ["mountain", "mountains", "hill", "hills", "forest", "tree", "trees", "lake", "cabin", "valley", "landscape", "nature"])) {
+                    sceneType = "landscape";
+                }
+
+                if (containsAny(keywords, ["pixel art", "pixel", "8-bit", "16-bit", "retro game"])) {
+                    style = "pixel";
+                } else if (containsAny(keywords, ["blueprint"])) {
+                    style = "blueprint";
+                } else if (containsAny(keywords, ["sketch", "pencil", "line art", "outline"])) {
+                    style = "sketch";
+                } else if (containsAny(keywords, ["minimalist", "flat", "flat design"])) {
+                    style = "minimalist";
+                } else if (containsAny(keywords, ["cyberpunk", "vaporwave", "synthwave", "neon"])) {
+                    style = "retro-neon";
+                }
+
+                const isPixel = style === "pixel";
+                const drawWidth = isPixel ? Math.max(64, Math.floor(width / 8)) : width;
+                const drawHeight = isPixel ? Math.max(64, Math.floor(height / 8)) : height;
+
+                const canvas = document.createElement("canvas");
+                canvas.width = drawWidth;
+                canvas.height = drawHeight;
+                const ctx = canvas.getContext("2d");
+                
+                const seed = hashText(prompt + "|" + negative + "|" + width + "x" + height);
+                const random = seededRandom(seed);
+                
+                let palette = palettes.neutral;
+                if (sceneType === "space") palette = palettes.space;
+                else if (sceneType === "city") palette = palettes.cyberpunk;
+                else if (sceneType === "desert") palette = palettes.desert;
+                else if (sceneType === "ocean") palette = palettes.ocean;
+                else if (sceneType === "landscape") palette = palettes.forest;
+                
+                if (containsAny(keywords, ["sunset", "sunrise"])) palette = palettes.sunset;
+                if (style === "blueprint") palette = palettes.blueprint;
+                if (style === "sketch" || containsAny(keywords, ["black and white", "monochrome"])) palette = palettes.monochrome;
+                
+                if (sceneType === "space") {
+                    drawSpaceScene(ctx, drawWidth, drawHeight, random, palette, keywords);
+                } else if (sceneType === "city") {
+                    drawCityScene(ctx, drawWidth, drawHeight, random, palette, keywords);
+                } else if (sceneType === "desert") {
+                    drawDesertScene(ctx, drawWidth, drawHeight, random, palette, keywords);
+                } else if (sceneType === "ocean") {
+                    drawOceanScene(ctx, drawWidth, drawHeight, random, palette, keywords);
+                } else if (sceneType === "landscape") {
+                    drawLandscapeScene(ctx, drawWidth, drawHeight, random, palette, keywords);
+                } else {
+                    drawAbstractScene(ctx, drawWidth, drawHeight, random, palette, keywords);
+                }
+                
+                const finalCanvas = document.createElement("canvas");
+                finalCanvas.width = width;
+                finalCanvas.height = height;
+                const finalCtx = finalCanvas.getContext("2d");
+                
+                if (isPixel) {
+                    finalCtx.imageSmoothingEnabled = false;
+                    finalCtx.msImageSmoothingEnabled = false;
+                    finalCtx.drawImage(canvas, 0, 0, drawWidth, drawHeight, 0, 0, width, height);
+                } else {
+                    finalCtx.drawImage(canvas, 0, 0);
+                }
+                
+                applyOverlays(finalCtx, width, height, style, random, prompt);
+
+                return canvasToBlob(finalCanvas);
             }
 
             async function generateImage() {
