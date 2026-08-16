@@ -26,7 +26,7 @@ $tool_slugs = [
     'password_gen' => 'password-generator', 'word_counter' => 'word-counter', 'image_compressor' => 'image-compressor',
     'bg_remover' => 'background-remover', 'image_to_dxf' => 'image-to-dxf', 'image_to_svg' => 'image-to-svg',
     'resize_image' => 'resize-image', 'crop_image' => 'crop-image', 'image_enhancer' => 'image-enhancer', 'image_converter' => 'image-converter', 'heic_converter' => 'heic-to-jpg-png-pdf', 'jpg_converter' => 'jpg-to-png-jpeg-pdf', 'webp_converter' => 'webp-to-png-jpg-jpeg-pdf', 'video_to_audio' => 'video-to-audio', 'video_compressor' => 'video-compressor', 'ai_image_generator' => 'ai-image-generator',
-    'ocr_tool' => 'ocr-image-to-text', 'currency_converter' => 'currency-converter', 'length_converter' => 'length-converter',
+    'ocr_tool' => 'ocr-image-to-text', 'repair_media' => 'repair-corrupt-photos-videos', 'currency_converter' => 'currency-converter', 'length_converter' => 'length-converter',
     'weight_converter' => 'weight-converter', 'temperature_converter' => 'temperature-converter', 'area_converter' => 'area-converter',
     'volume_converter' => 'volume-converter', 'speed_converter' => 'speed-converter', 'time_converter' => 'time-converter',
     'invoice_generator' => 'invoice-generator', 'ats_resume_checker' => 'ats-resume-checker',
@@ -120,6 +120,7 @@ $tools = [
             ['id' => 'ai_image_generator', 'name' => 'AI Image Generator', 'icon' => 'ai_image_generator', 'desc' => 'Create images from prompts'],
             ['id' => 'ocr_tool', 'name' => 'OCR Tool', 'icon' => 'ocr_tool', 'desc' => 'Extract text from images'],
             ['id' => 'scan_to_pdf', 'name' => 'Scan to PDF', 'icon' => 'img_to_pdf', 'desc' => 'Convert captured pages into a PDF'],
+            ['id' => 'repair_media', 'name' => 'Repair Photos & Videos', 'icon' => 'bg_remover', 'desc' => 'Fix corrupt or unopenable images and videos in bulk'],
         ]
     ],
     'conversion' => [
@@ -1940,7 +1941,8 @@ window.any2convertRoutes = {
 window.any2convertInitialTool = @json($initialToolId ?? null);
 const toolDependencyMap = {
     img_to_pdf: ["https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"],
-    protect_pdf: ["https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"]
+    protect_pdf: ["https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"],
+    repair_media: ["https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"]
 };
 
 function loadScriptOnce(src) {
@@ -2023,6 +2025,7 @@ const toolSlugMap = {
     video_compressor: 'video-compressor',
     ai_image_generator: 'ai-image-generator',
     ocr_tool: 'ocr-image-to-text',
+    repair_media: 'repair-corrupt-photos-videos',
     currency_converter: 'currency-converter',
     length_converter: 'length-converter',
     weight_converter: 'weight-converter',
@@ -2204,7 +2207,7 @@ function getToolName(toolId) {
         'word_counter':'Word Counter','image_compressor':'Image Compressor','bg_remover':'Background Remover',
         'image_to_dxf':'Image to DXF','image_to_svg':'Image to SVG','resize_image':'Resize Image','image_enhancer':'Image Enhancer',
         'image_converter':'Image Converter','heic_converter':'HEIC to JPG PNG PDF','jpg_converter':'JPG to PNG JPEG PDF','webp_converter':'WEBP to PNG JPG JPEG PDF','video_to_audio':'Video to Audio','video_compressor':'Video Compressor','crop_image':'Crop Image','ai_image_generator':'AI Image Generator','ocr_tool':'OCR Tool',
-        'scan_to_pdf':'Scan to PDF','currency_converter':'Currency Converter','length_converter':'Length Converter',
+        'scan_to_pdf':'Scan to PDF','repair_media':'Repair Photos & Videos','currency_converter':'Currency Converter','length_converter':'Length Converter',
         'weight_converter':'Weight Converter','temperature_converter':'Temperature Converter','area_converter':'Area Converter',
         'volume_converter':'Volume Converter','speed_converter':'Speed Converter','time_converter':'Time Converter',
         'invoice_generator':'Invoice Generator','ats_resume_checker':'ATS Resume Checker','social_image_resizer':'Social Image Resizer',

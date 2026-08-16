@@ -85,4 +85,5 @@ return [
     'meme_caption_generator' => 'meme-caption-generator',
     'truth_or_dare_generator' => 'truth-or-dare-generator',
     'memory_match_game' => 'memory-match-game',
+    'repair_media' => 'repair-corrupt-photos-videos',
 ];

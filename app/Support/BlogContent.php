@@ -230,6 +230,7 @@ class BlogContent
             'ai_image_generator' => ['name' => 'AI Image Generator', 'desc' => 'Create images from prompts', 'category' => 'utility'],
             'ocr_tool' => ['name' => 'OCR Tool', 'desc' => 'Extract text from images', 'category' => 'utility'],
             'scan_to_pdf' => ['name' => 'Scan to PDF', 'desc' => 'Convert captured pages into a PDF', 'category' => 'utility'],
+            'repair_media' => ['name' => 'Repair Photos & Videos', 'desc' => 'Repair corrupt image and video files directly in your browser', 'category' => 'utility'],
             
             'currency_converter' => ['name' => 'Currency Converter', 'desc' => 'Live exchange rates with daily updates', 'category' => 'conversion'],
             'length_converter' => ['name' => 'Length Converter', 'desc' => 'Convert km to millimeter and more', 'category' => 'conversion'],

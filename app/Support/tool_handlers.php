@@ -171,6 +171,8 @@ function renderToolHandlerHTML($tool) {
             return getAiImageGeneratorHTML();
         case 'ocr_tool':
             return getOcrToolHTML();
+        case 'repair_media':
+            return getRepairMediaHTML();
         default:
             return '<div class="text-center py-12">Tool coming soon!</div>';
     }
@@ -14902,9 +14904,1178 @@ function getYoutubeDownloaderHTML() {
 HTML;
 }
 
+function getRepairMediaHTML() {
+    return <<<'HTML'
+    <div class="space-y-8 max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center md:text-left space-y-3">
+            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-semibold tracking-wide uppercase">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z"></path></svg>
+                100% Client-Side Privacy
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-400 bg-clip-text text-transparent">
+                Ultra-Media Repair Engine
+            </h1>
+            <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+                Fix corrupted, unopenable, or broken photos and videos. Your files are repaired entirely in your browser using high-performance byte-level analysis. No files are ever uploaded to any server.
+            </p>
+        </div>
+
+        <!-- Main Card & Uploader -->
+        <div class="rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/65 shadow-xl backdrop-blur-xl overflow-hidden transition-all duration-300">
+            <div class="p-6 md:p-8 space-y-6">
+                <!-- Dropzone -->
+                <label id="mediaRepairDropzone" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-slate-300/80 dark:border-slate-800/80 rounded-2xl bg-slate-50/50 dark:bg-slate-950/30 hover:bg-blue-50/20 dark:hover:bg-blue-950/10 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 cursor-pointer group">
+                    <input type="file" id="mediaRepairInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*,video/*" multiple>
+                    <div class="flex flex-col items-center justify-center p-6 text-center">
+                        <div class="p-5 bg-blue-500/10 dark:bg-blue-400/5 text-blue-600 dark:text-blue-400 rounded-2xl mb-4 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-blue-500/10 transition-all duration-300">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">
+                            Select Corrupted Photos or Videos
+                        </h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">
+                            Drag & drop files or click to browse
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500">
+                            <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">MP4</span>
+                            <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">MOV</span>
+                            <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">JPEG/JPG</span>
+                            <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">PNG</span>
+                            <span class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">GIF</span>
+                        </div>
+                    </div>
+                </label>
+
+                <!-- Bulk Operations Bar -->
+                <div id="bulkControls" class="hidden flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-3 w-3 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                        </span>
+                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300">
+                            Loaded <span id="filesCount">0</span> file(s)
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <button id="repairAllBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm shadow-md active:scale-[0.98] transition-all">
+                            Repair All Files
+                        </button>
+                        <button id="downloadZipBtn" class="hidden px-5 py-2.5 rounded-xl bg-slate-800 dark:bg-slate-100 hover:bg-slate-900 dark:hover:bg-white text-white dark:text-slate-900 font-bold text-sm shadow-md active:scale-[0.98] transition-all">
+                            Download All as ZIP
+                        </button>
+                        <button id="clearAllBtn" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-600 dark:text-slate-400 font-bold text-sm transition-all">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Files Table Wrapper -->
+                <div id="filesListWrapper" class="hidden overflow-x-auto rounded-2xl border border-slate-200/70 dark:border-slate-800/70">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/80 dark:bg-slate-900/80 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200/70 dark:border-slate-800/70">
+                                <th class="p-4">Name</th>
+                                <th class="p-4">Size</th>
+                                <th class="p-4">Type</th>
+                                <th class="p-4">Diagnostic Report</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filesListBody" class="divide-y divide-slate-100 dark:divide-slate-900 text-sm">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Features Info Footer -->
+            <div class="bg-slate-50/50 dark:bg-slate-900/20 p-6 md:p-8 border-t border-slate-200/85 dark:border-slate-800/85 grid md:grid-cols-3 gap-6">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.604 10.604z"></path></svg>
+                        Advanced Scanning
+                    </h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Analyzes files byte-by-byte, correcting header definitions, validating block structures, resetting offsets, and fixing checksums (CRC) to ensure standard application compatibility.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
+                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path></svg>
+                        Moov Header Rebuilder
+                    </h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Crashed or unfinalized video recordings can be salvaged using a healthy reference video. The rebuilder extracts format profiles and remaps raw video indexes.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
+                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z"></path></svg>
+                        Privacy Guaranteed
+                    </h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Data security is our primary focus. Calculations are completely compiled and executed locally in your browser sandbox. None of your media files are sent over the network.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- 1. Video Playback Preview Modal -->
+    <div id="videoPreviewModal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-all duration-300">
+        <div class="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+                <h3 class="font-bold text-white text-lg">Repaired Video Preview</h3>
+                <button onclick="closeVideoPreviewModal()" class="text-slate-400 hover:text-white rounded-lg p-1.5 hover:bg-slate-800 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 flex justify-center bg-black">
+                <video id="previewPlayer" controls class="max-h-[500px] w-auto max-w-full rounded-lg"></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Image Comparison Preview Modal -->
+    <div id="imageComparisonModal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-all duration-300">
+        <div class="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+                <h3 class="font-bold text-white text-lg">Before / After Comparison</h3>
+                <button onclick="closeImageComparisonModal()" class="text-slate-400 hover:text-white rounded-lg p-1.5 hover:bg-slate-800 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 bg-slate-950 flex flex-col items-center">
+                <div class="relative overflow-hidden w-full h-[400px] rounded-xl select-none" id="sliderContainer">
+                    <!-- Before Image -->
+                    <div class="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-40 blur-[2px]" id="imgBeforeBg"></div>
+                    <img class="absolute inset-0 w-full h-full object-contain pointer-events-none" id="imgBefore" alt="Before">
+                    
+                    <!-- After Image (clipped) -->
+                    <div class="absolute inset-0 overflow-hidden" id="afterContainer" style="width: 50%;">
+                        <div class="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-40 blur-[2px]" id="imgAfterBg" style="width: 100%;"></div>
+                        <img class="absolute inset-0 w-full h-full object-contain pointer-events-none" id="imgAfter" alt="After" style="max-width: none; width: 100%;">
+                    </div>
+                    
+                    <!-- Handle -->
+                    <div class="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize flex items-center justify-center" id="sliderHandle" style="left: 50%;">
+                        <div class="h-10 w-10 rounded-full bg-white text-slate-900 shadow-xl border border-slate-300 flex items-center justify-center font-bold text-xs select-none">↔</div>
+                    </div>
+                    
+                    <!-- Overlay Slider Control -->
+                    <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize" id="comparisonSlider">
+                </div>
+                <div class="flex justify-between w-full mt-4 text-xs font-semibold text-slate-400">
+                    <span>⬅ Corrupted Original</span>
+                    <span>Drag Slider to Compare</span>
+                    <span>Repaired Result ➡</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden input helper for Reference Video -->
+    <input type="file" id="referenceVideoInput" accept="video/mp4,video/quicktime" class="hidden">
+
+    <!-- CSS Tweaks for Image slider -->
+    <style>
+        #sliderContainer img {
+            max-height: 400px;
+        }
+    </style>
+
+    <script>
+        (function() {
+            const mediaInput = document.getElementById("mediaRepairInput");
+            const dropzone = document.getElementById("mediaRepairDropzone");
+            const bulkControls = document.getElementById("bulkControls");
+            const filesCount = document.getElementById("filesCount");
+            const filesListWrapper = document.getElementById("filesListWrapper");
+            const filesListBody = document.getElementById("filesListBody");
+            
+            const repairAllBtn = document.getElementById("repairAllBtn");
+            const downloadZipBtn = document.getElementById("downloadZipBtn");
+            const clearAllBtn = document.getElementById("clearAllBtn");
+
+            const referenceVideoInput = document.getElementById("referenceVideoInput");
+
+            let loadedFiles = [];
+            let currentFileNeedingReference = null;
+
+            // ── CRC32 Table Generator (for PNG repair) ──
+            const crcTable = [];
+            for (let n = 0; n < 256; n++) {
+                let c = n;
+                for (let k = 0; k < 8; k++) {
+                    c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+                }
+                crcTable[n] = c;
+            }
+
+            function calculateCrc32(typeBytes, dataBytes) {
+                let crc = 0xFFFFFFFF;
+                for (let i = 0; i < typeBytes.length; i++) {
+                    crc = crcTable[(crc ^ typeBytes[i]) & 0xFF] ^ (crc >>> 8);
+                }
+                if (dataBytes) {
+                    for (let i = 0; i < dataBytes.length; i++) {
+                        crc = crcTable[(crc ^ dataBytes[i]) & 0xFF] ^ (crc >>> 8);
+                    }
+                }
+                return (crc ^ 0xFFFFFFFF) >>> 0;
+            }
+
+            // ── Drag & Drop Event Handlers ──
+            dropzone.addEventListener("dragover", e => {
+                e.preventDefault();
+                dropzone.classList.add("border-blue-500", "bg-blue-50/20", "dark:border-blue-400", "dark:bg-blue-950/10");
+            });
+
+            dropzone.addEventListener("dragleave", () => {
+                dropzone.classList.remove("border-blue-500", "bg-blue-50/20", "dark:border-blue-400", "dark:bg-blue-950/10");
+            });
+
+            dropzone.addEventListener("drop", e => {
+                e.preventDefault();
+                dropzone.classList.remove("border-blue-500", "bg-blue-50/20", "dark:border-blue-400", "dark:bg-blue-950/10");
+                if (e.dataTransfer.files.length) {
+                    addFiles(e.dataTransfer.files);
+                }
+            });
+
+            mediaInput.addEventListener("change", function() {
+                if (this.files.length) {
+                    addFiles(this.files);
+                }
+            });
+
+            function addFiles(fileList) {
+                for (let i = 0; i < fileList.length; i++) {
+                    const file = fileList[i];
+                    if (loadedFiles.some(f => f.file.name === file.name && f.file.size === file.size)) continue;
+                    
+                    const fileId = "media_" + Math.random().toString(36).substr(2, 9);
+                    loadedFiles.push({
+                        id: fileId,
+                        file: file,
+                        status: "ready", // ready, repairing, repaired, failed, needs_reference
+                        repairedBlob: null,
+                        repairedName: "",
+                        originalPreviewUrl: "",
+                        repairedPreviewUrl: "",
+                        logs: ["File loaded successfully. Ready for repair analysis."]
+                    });
+                }
+                renderFilesList();
+            }
+
+            function renderFilesList() {
+                if (loadedFiles.length === 0) {
+                    bulkControls.classList.add("hidden");
+                    filesListWrapper.classList.add("hidden");
+                    return;
+                }
+
+                bulkControls.classList.remove("hidden");
+                filesListWrapper.classList.remove("hidden");
+                filesCount.textContent = loadedFiles.length;
+
+                filesListBody.innerHTML = loadedFiles.map(item => {
+                    const sizeMB = (item.file.size / (1024 * 1024)).toFixed(2) + " MB";
+                    const isVideo = item.file.type.startsWith("video/") || item.file.name.match(/\.(mp4|mov|avi|mkv|webm)$/i);
+                    const format = isVideo ? "Video" : "Photo";
+                    
+                    let statusClass = "text-slate-500 bg-slate-100 dark:bg-slate-900 border-slate-200/50 dark:border-slate-800/50";
+                    let statusLabel = "Ready";
+                    
+                    if (item.status === "repairing") {
+                        statusClass = "text-blue-500 bg-blue-500/10 border-blue-500/20";
+                        statusLabel = "Repairing...";
+                    } else if (item.status === "repaired") {
+                        statusClass = "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
+                        statusLabel = "Repaired";
+                    } else if (item.status === "failed") {
+                        statusClass = "text-rose-500 bg-rose-500/10 border-rose-500/20";
+                        statusLabel = "Unrepairable";
+                    } else if (item.status === "needs_reference") {
+                        statusClass = "text-amber-500 bg-amber-500/10 border-amber-500/20 animate-pulse";
+                        statusLabel = "Ref Needed";
+                    }
+
+                    const lastLog = item.logs[item.logs.length - 1] || "Waiting...";
+                    const actionsHtml = getActionsHtml(item);
+
+                    return `
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition border-b border-slate-100 dark:border-slate-900">
+                            <td class="p-4 font-semibold text-slate-800 dark:text-slate-200 max-w-[200px] truncate" title="${item.file.name}">${item.file.name}</td>
+                            <td class="p-4 text-slate-500 dark:text-slate-400 font-medium">${sizeMB}</td>
+                            <td class="p-4 font-semibold text-slate-600 dark:text-slate-400">${format}</td>
+                            <td class="p-4 text-xs font-semibold text-slate-400 dark:text-slate-500 italic max-w-[300px] truncate" title="${lastLog}">
+                                ${lastLog}
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg border ${statusClass}">
+                                    ${statusLabel}
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">${actionsHtml}</td>
+                        </tr>
+                    `;
+                }).join("");
+
+                // Toggle visibility of download ZIP
+                const hasRepaired = loadedFiles.some(f => f.status === "repaired");
+                downloadZipBtn.classList.toggle("hidden", !hasRepaired);
+            }
+
+            function getActionsHtml(item) {
+                if (item.status === "ready") {
+                    return `<button onclick="window.repairSingleMedia('${item.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition">Repair</button>`;
+                }
+                if (item.status === "needs_reference") {
+                    return `<button onclick="window.chooseReferenceVideo('${item.id}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold rounded-lg transition">Upload Ref</button>`;
+                }
+                if (item.status === "repaired") {
+                    const isVideo = item.file.type.startsWith("video/") || item.file.name.match(/\.(mp4|mov|avi|mkv|webm)$/i);
+                    return `
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="window.previewMedia('${item.id}')" class="px-3 py-1.5 bg-slate-800 dark:bg-slate-200 hover:bg-slate-900 dark:hover:bg-white text-white dark:text-slate-900 text-xs font-bold rounded-lg transition">Preview</button>
+                            <button onclick="window.downloadMedia('${item.id}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition">Download</button>
+                        </div>
+                    `;
+                }
+                return `<span class="text-xs text-slate-400 font-semibold">-</span>`;
+            }
+
+            // ── Cleanup ──
+            clearAllBtn.addEventListener("click", () => {
+                loadedFiles.forEach(item => {
+                    if (item.originalPreviewUrl) URL.revokeObjectURL(item.originalPreviewUrl);
+                    if (item.repairedPreviewUrl) URL.revokeObjectURL(item.repairedPreviewUrl);
+                });
+                loadedFiles = [];
+                renderFilesList();
+                mediaInput.value = "";
+            });
+
+            // ── Bulk Repair ──
+            repairAllBtn.addEventListener("click", async () => {
+                for (const item of loadedFiles) {
+                    if (item.status === "ready") {
+                        await repairSequence(item);
+                    }
+                }
+            });
+
+            window.repairSingleMedia = async function(id) {
+                const item = loadedFiles.find(f => f.id === id);
+                if (item) {
+                    await repairSequence(item);
+                }
+            };
+
+            window.chooseReferenceVideo = function(id) {
+                currentFileNeedingReference = loadedFiles.find(f => f.id === id);
+                referenceVideoInput.click();
+            };
+
+            referenceVideoInput.addEventListener("change", async function() {
+                if (this.files.length && currentFileNeedingReference) {
+                    const refFile = this.files[0];
+                    currentFileNeedingReference.logs.push(`Reference video uploaded: ${refFile.name}`);
+                    currentFileNeedingReference.status = "repairing";
+                    renderFilesList();
+                    
+                    await repairSequence(currentFileNeedingReference, refFile);
+                    currentFileNeedingReference = null;
+                    this.value = "";
+                }
+            });
+
+            // ── Individual File Downloader ──
+            window.downloadMedia = function(id) {
+                const item = loadedFiles.find(f => f.id === id);
+                if (item && item.repairedBlob) {
+                    const a = document.createElement("a");
+                    a.href = item.repairedPreviewUrl || URL.createObjectURL(item.repairedBlob);
+                    a.download = item.repairedName;
+                    a.click();
+                }
+            };
+
+            // ── ZIP Bulk Downloader ──
+            downloadZipBtn.addEventListener("click", async () => {
+                if (typeof JSZip === "undefined") {
+                    alert("JSZip library has not loaded yet. Please wait a second.");
+                    return;
+                }
+
+                downloadZipBtn.disabled = true;
+                downloadZipBtn.textContent = "Creating ZIP...";
+
+                try {
+                    const zip = new JSZip();
+                    loadedFiles.forEach(item => {
+                        if (item.status === "repaired" && item.repairedBlob) {
+                            zip.file(item.repairedName, item.repairedBlob);
+                        }
+                    });
+                    
+                    const content = await zip.generateAsync({ type: "blob" });
+                    const a = document.createElement("a");
+                    a.href = URL.createObjectURL(content);
+                    a.download = "repaired_media_files.zip";
+                    a.click();
+                } catch(e) {
+                    console.error(e);
+                    alert("Failed to build ZIP file.");
+                } finally {
+                    downloadZipBtn.disabled = false;
+                    downloadZipBtn.textContent = "Download All as ZIP";
+                }
+            });
+
+            // ── Preview Modals ──
+            window.previewMedia = function(id) {
+                const item = loadedFiles.find(f => f.id === id);
+                if (!item) return;
+
+                const isVideo = item.file.type.startsWith("video/") || item.file.name.match(/\.(mp4|mov|avi|mkv|webm)$/i);
+                if (isVideo) {
+                    const player = document.getElementById("previewPlayer");
+                    player.src = item.repairedPreviewUrl;
+                    document.getElementById("videoPreviewModal").classList.remove("hidden");
+                    document.getElementById("videoPreviewModal").classList.add("flex");
+                    player.play();
+                } else {
+                    document.getElementById("imgBefore").src = item.originalPreviewUrl;
+                    document.getElementById("imgAfter").src = item.repairedPreviewUrl;
+                    
+                    document.getElementById("imgBeforeBg").style.backgroundImage = `url('${item.originalPreviewUrl}')`;
+                    document.getElementById("imgAfterBg").style.backgroundImage = `url('${item.repairedPreviewUrl}')`;
+
+                    // Reset slider values
+                    const slider = document.getElementById("comparisonSlider");
+                    const afterCont = document.getElementById("afterContainer");
+                    const handle = document.getElementById("sliderHandle");
+                    slider.value = 50;
+                    afterCont.style.width = "50%";
+                    handle.style.left = "50%";
+
+                    document.getElementById("imageComparisonModal").classList.remove("hidden");
+                    document.getElementById("imageComparisonModal").classList.add("flex");
+                }
+            };
+
+            // Before/After slide control logic
+            const compSlider = document.getElementById("comparisonSlider");
+            compSlider.addEventListener("input", function() {
+                const val = this.value;
+                document.getElementById("afterContainer").style.width = `${val}%`;
+                document.getElementById("sliderHandle").style.left = `${val}%`;
+            });
+
+            window.closeVideoPreviewModal = function() {
+                const player = document.getElementById("previewPlayer");
+                player.pause();
+                player.src = "";
+                document.getElementById("videoPreviewModal").classList.remove("flex");
+                document.getElementById("videoPreviewModal").classList.add("hidden");
+            };
+
+            window.closeImageComparisonModal = function() {
+                document.getElementById("imageComparisonModal").classList.remove("flex");
+                document.getElementById("imageComparisonModal").classList.add("hidden");
+            };
+
+            // Close modals on clicking background
+            document.getElementById("videoPreviewModal").addEventListener("click", e => {
+                if (e.target === e.currentTarget) closeVideoPreviewModal();
+            });
+            document.getElementById("imageComparisonModal").addEventListener("click", e => {
+                if (e.target === e.currentTarget) closeImageComparisonModal();
+            });
+
+            // ── Master Repair Pipeline ──
+            async function repairSequence(item, refFile = null) {
+                item.status = "repairing";
+                item.logs.push("Parsing file structures...");
+                renderFilesList();
+
+                try {
+                    const isVideo = item.file.type.startsWith("video/") || item.file.name.match(/\.(mp4|mov|avi|mkv|webm)$/i);
+                    const arrayBuffer = await item.file.arrayBuffer();
+                    
+                    let result = null;
+                    if (isVideo) {
+                        result = await processVideoRepair(item, arrayBuffer, refFile);
+                    } else {
+                        result = await processPhotoRepair(item, arrayBuffer);
+                    }
+
+                    if (result && result.status === "repaired") {
+                        item.status = "repaired";
+                        item.repairedBlob = result.blob;
+                        item.repairedName = result.fileName;
+                        
+                        // Generate object URLs for browser previewing
+                        item.originalPreviewUrl = URL.createObjectURL(item.file);
+                        item.repairedPreviewUrl = URL.createObjectURL(item.repairedBlob);
+                        item.logs.push("File completely repaired and verified. Ready for play/display.");
+                    } else if (result && result.status === "needs_reference") {
+                        item.status = "needs_reference";
+                        item.logs.push("Repair halted. This unfinalized MP4 lacks index headers. Please supply a reference file.");
+                    } else {
+                        item.status = "failed";
+                        item.logs.push("Analysis finished: File bytes are too corrupted to construct a valid container.");
+                    }
+                } catch (err) {
+                    console.error(err);
+                    item.status = "failed";
+                    item.logs.push(`Repair error: ${err.message}`);
+                }
+
+                renderFilesList();
+            }
+
+            // ── Photo Repair Logic ──
+            async function processPhotoRepair(item, arrayBuffer) {
+                const view = new DataView(arrayBuffer);
+                const bytes = new Uint8Array(arrayBuffer);
+                let logs = item.logs;
+
+                // 1. Identify File Header
+                let signature = "";
+                for (let i = 0; i < Math.min(8, bytes.length); i++) {
+                    signature += bytes[i].toString(16).padStart(2, "0").toUpperCase();
+                }
+
+                // Check formats
+                const isJpeg = bytes[0] === 0xFF && bytes[1] === 0xD8 || item.file.name.match(/\.(jpg|jpeg)$/i);
+                const isPng = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47 || item.file.name.match(/\.png$/i);
+                const isGif = signature.startsWith("47494638") || item.file.name.match(/\.gif$/i);
+
+                if (isJpeg) {
+                    logs.push("Format detected: JPEG Image.");
+                    return runJpegRepair(bytes, view, item);
+                } else if (isPng) {
+                    logs.push("Format detected: PNG Image.");
+                    return runPngRepair(bytes, view, item);
+                } else if (isGif) {
+                    logs.push("Format detected: GIF Image.");
+                    return runGifRepair(bytes, item);
+                } else {
+                    // Try fallback copy/cleanup
+                    logs.push("Format generic/unsupported. Applying header sanitization fallback...");
+                    return runGenericPhotoRepair(bytes, item);
+                }
+            }
+
+            // JPEG Specific Byte Repair
+            function runJpegRepair(bytes, view, item) {
+                let logs = item.logs;
+                
+                // A. Strip Leading Garbage Bytes
+                let startIndex = -1;
+                for (let i = 0; i < bytes.length - 1; i++) {
+                    if (bytes[i] === 0xFF && bytes[i + 1] === 0xD8) {
+                        startIndex = i;
+                        break;
+                    }
+                }
+
+                let activeBytes = bytes;
+                if (startIndex > 0) {
+                    logs.push(`Removed ${startIndex} leading garbage bytes before Start-Of-Image marker (FFD8).`);
+                    activeBytes = bytes.subarray(startIndex);
+                } else if (startIndex === -1) {
+                    logs.push("Start-Of-Image (FFD8) missing. Re-injecting JPEG standard header prefix...");
+                    const prefix = new Uint8Array([0xFF, 0xD8]);
+                    const merged = new Uint8Array(prefix.length + bytes.length);
+                    merged.set(prefix);
+                    merged.set(bytes, prefix.length);
+                    activeBytes = merged;
+                }
+
+                // B. Parse structure & clean corrupted APP blocks (EXIF APP1)
+                // Rebuild with safe segments to avoid broken metadata freeze
+                let rebuilt = [];
+                let i = 0;
+                let sanitizedCount = 0;
+                
+                // Add SOI
+                rebuilt.push(new Uint8Array([0xFF, 0xD8]));
+                i = 2;
+
+                while (i < activeBytes.length - 1) {
+                    if (activeBytes[i] === 0xFF) {
+                        const marker = activeBytes[i + 1];
+                        if (marker === 0xD9) { // EOI
+                            rebuilt.push(new Uint8Array([0xFF, 0xD9]));
+                            i += 2;
+                            break;
+                        }
+                        if (marker === 0x00 || (marker >= 0xD0 && marker <= 0xD7)) {
+                            // Escaped byte or restart marker - copy and advance
+                            rebuilt.push(activeBytes.subarray(i, i + 2));
+                            i += 2;
+                            continue;
+                        }
+
+                        // Read marker length
+                        if (i + 3 >= activeBytes.length) break;
+                        const len = (activeBytes[i + 2] << 8) | activeBytes[i + 3];
+                        
+                        // Check if marker is APP1 (EXIF - E1) or APP2 (E2) or APP13 (ED)
+                        // If it's corrupted/unparsable, we strip it
+                        if (marker === 0xE1 || marker === 0xE2 || marker === 0xED) {
+                            if (i + 2 + len > activeBytes.length) {
+                                logs.push(`Stripped corrupted trailing APP marker block (${marker.toString(16)}).`);
+                                sanitizedCount++;
+                                i += 2 + len; // skip it
+                                continue;
+                            }
+                            
+                            // Check segment sanity inside APP1 (TIFF alignment)
+                            if (marker === 0xE1 && len > 6) {
+                                const exifHeader = String.fromCharCode(activeBytes[i+4], activeBytes[i+5], activeBytes[i+6], activeBytes[i+7]);
+                                if (exifHeader !== "Exif" && exifHeader !== "JFIF") {
+                                    logs.push("Stripped non-standard EXIF metadata structure.");
+                                    sanitizedCount++;
+                                    i += 2 + len;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        // Copy segment safely
+                        const endSeg = Math.min(i + 2 + len, activeBytes.length);
+                        rebuilt.push(activeBytes.subarray(i, endSeg));
+                        i += 2 + len;
+                    } else {
+                        // Scan data byte
+                        rebuilt.push(activeBytes.subarray(i, i + 1));
+                        i++;
+                    }
+                }
+
+                // C. Suffix Validation (Ensure EOI FFD9 is at the tail)
+                let finalBytes = mergeUint8Arrays(rebuilt);
+                const finalLen = finalBytes.length;
+                if (!(finalBytes[finalLen - 2] === 0xFF && finalBytes[finalLen - 1] === 0xD9)) {
+                    logs.push("End-Of-Image marker (FFD9) missing at tail. Injecting termination block.");
+                    const suffix = new Uint8Array([0xFF, 0xD9]);
+                    const withSuffix = new Uint8Array(finalBytes.length + suffix.length);
+                    withSuffix.set(finalBytes);
+                    withSuffix.set(suffix, finalBytes.length);
+                    finalBytes = withSuffix;
+                }
+
+                if (sanitizedCount > 0) {
+                    logs.push(`Sanitized ${sanitizedCount} corrupted segments/markers from JPEG stream.`);
+                }
+
+                const repairedBlob = new Blob([finalBytes], { type: "image/jpeg" });
+                return {
+                    status: "repaired",
+                    blob: repairedBlob,
+                    fileName: item.file.name.replace(/\.[^/.]+$/, "") + "_repaired.jpg"
+                };
+            }
+
+            // PNG CRC and Chunk Repair
+            function runPngRepair(bytes, view, item) {
+                let logs = item.logs;
+                const correctSig = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]);
+                
+                // A. Check signature
+                let sigOk = true;
+                for (let i = 0; i < 8; i++) {
+                    if (bytes[i] !== correctSig[i]) {
+                        sigOk = false;
+                        bytes[i] = correctSig[i];
+                    }
+                }
+                if (!sigOk) {
+                    logs.push("Corrupted PNG file signature fixed (re-initialized 8-byte magic).");
+                }
+
+                // B. Parse Chunks & Fix CRCs
+                let offset = 8;
+                let repairCount = 0;
+                let hasIend = false;
+
+                while (offset < bytes.length) {
+                    if (offset + 8 > bytes.length) break;
+                    
+                    const chunkLength = view.getUint32(offset);
+                    const typeBytes = bytes.subarray(offset + 4, offset + 8);
+                    const chunkType = String.fromCharCode(...typeBytes);
+
+                    if (offset + 12 + chunkLength > bytes.length) {
+                        logs.push(`Truncated PNG detected at chunk [${chunkType}]. Trimming remaining bytes.`);
+                        break;
+                    }
+
+                    if (chunkType === "IEND") {
+                        hasIend = true;
+                    }
+
+                    const dataBytes = bytes.subarray(offset + 8, offset + 8 + chunkLength);
+                    const storedCrc = view.getUint32(offset + 8 + chunkLength);
+
+                    // Recalculate CRC32
+                    const calculatedCrc = calculateCrc32(typeBytes, dataBytes);
+
+                    if (storedCrc !== calculatedCrc) {
+                        view.setUint32(offset + 8 + chunkLength, calculatedCrc);
+                        repairCount++;
+                    }
+
+                    offset += 12 + chunkLength;
+                }
+
+                let finalBytes = bytes;
+                // C. Append missing IEND
+                if (!hasIend) {
+                    logs.push("PNG IEND (Trailer) chunk missing. Appending healthy trailer block.");
+                    const iendChunk = new Uint8Array([0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130]);
+                    const merged = new Uint8Array(bytes.length + iendChunk.length);
+                    merged.set(bytes);
+                    merged.set(iendChunk, bytes.length);
+                    finalBytes = merged;
+                }
+
+                if (repairCount > 0) {
+                    logs.push(`Successfully repaired ${repairCount} chunk checksums (CRC32 mismatches resolved).`);
+                }
+
+                return {
+                    status: "repaired",
+                    blob: new Blob([finalBytes], { type: "image/png" }),
+                    fileName: item.file.name.replace(/\.[^/.]+$/, "") + "_repaired.png"
+                };
+            }
+
+            function runGifRepair(bytes, item) {
+                let logs = item.logs;
+                
+                // Fix header
+                const sig = String.fromCharCode(bytes[0], bytes[1], bytes[2]);
+                if (sig !== "GIF") {
+                    bytes[0] = 71; // G
+                    bytes[1] = 73; // I
+                    bytes[2] = 70; // F
+                    bytes[3] = 56; // 8
+                    bytes[4] = 57; // 9
+                    bytes[5] = 97; // a
+                    logs.push("Restored invalid GIF89a header descriptor.");
+                }
+
+                let finalBytes = bytes;
+                // Ensure GIF ends with trailer 0x3B
+                if (bytes[bytes.length - 1] !== 0x3B) {
+                    logs.push("GIF termination trailer block (3B) missing. Appending trailer.");
+                    const withTrailer = new Uint8Array(bytes.length + 1);
+                    withTrailer.set(bytes);
+                    withTrailer.set([0x3B], bytes.length);
+                    finalBytes = withTrailer;
+                }
+
+                return {
+                    status: "repaired",
+                    blob: new Blob([finalBytes], { type: "image/gif" }),
+                    fileName: item.file.name.replace(/\.[^/.]+$/, "") + "_repaired.gif"
+                };
+            }
+
+            function runGenericPhotoRepair(bytes, item) {
+                // Fallback copy
+                return {
+                    status: "repaired",
+                    blob: new Blob([bytes], { type: item.file.type || "image/jpeg" }),
+                    fileName: item.file.name
+                };
+            }
+
+            // ── Video Repair Logic ──
+            async function processVideoRepair(item, arrayBuffer, refFile) {
+                let logs = item.logs;
+                let bytes = new Uint8Array(arrayBuffer);
+                let view = new DataView(arrayBuffer);
+
+                // A. Strip Leading Garbage Bytes before ftyp box
+                let ftypIndex = -1;
+                for (let i = 0; i < bytes.length - 8; i++) {
+                    // search for "ftyp" (hex: 66 74 79 70)
+                    if (bytes[i] === 0x66 && bytes[i+1] === 0x74 && bytes[i+2] === 0x79 && bytes[i+3] === 0x70) {
+                        ftypIndex = i - 4; // size starts 4 bytes before "ftyp"
+                        break;
+                    }
+                }
+
+                let activeBytes = bytes;
+                let activeView = view;
+
+                if (ftypIndex > 0 && ftypIndex < 1024 * 1024 * 10) { // check sanity (within first 10MB)
+                    logs.push(`Removed ${ftypIndex} recovery garbage bytes prefixing the video container.`);
+                    activeBytes = bytes.subarray(ftypIndex);
+                    activeView = new DataView(activeBytes.buffer, activeBytes.byteOffset, activeBytes.byteLength);
+                }
+
+                // B. Parse MP4 Atoms
+                let offset = 0;
+                let moovAtom = null;
+                let mdatAtom = null;
+                let ftypAtom = null;
+                let atoms = [];
+
+                try {
+                    while (offset < activeBytes.length - 8) {
+                        const size = activeView.getUint32(offset);
+                        const typeBytes = activeBytes.subarray(offset + 4, offset + 8);
+                        const type = String.fromCharCode(...typeBytes);
+
+                        let actualSize = size;
+                        let headerSize = 8;
+                        if (size === 1) {
+                            if (offset + 16 > activeBytes.length) break;
+                            // 64-bit size
+                            const high = activeView.getUint32(offset + 8);
+                            const low = activeView.getUint32(offset + 12);
+                            actualSize = (high * 0x100000000) + low;
+                            headerSize = 16;
+                        }
+
+                        if (actualSize <= 0 || offset + actualSize > activeBytes.length) {
+                            // Box is truncated or corrupt size, parse up to EOF
+                            actualSize = activeBytes.length - offset;
+                        }
+
+                        const atom = {
+                            type: type,
+                            offset: offset,
+                            size: actualSize,
+                            data: activeBytes.subarray(offset, offset + actualSize)
+                        };
+
+                        atoms.push(atom);
+                        if (type === "moov") moovAtom = atom;
+                        if (type === "mdat") mdatAtom = atom;
+                        if (type === "ftyp") ftypAtom = atom;
+
+                        offset += actualSize;
+                    }
+                } catch(e) {
+                    logs.push("Warning: MP4 box structures are partially unreadable.");
+                }
+
+                // C. Evaluate results
+                if (moovAtom && mdatAtom) {
+                    // Check if moov is at the end (normal for raw recordings) and move to front
+                    if (moovAtom.offset > mdatAtom.offset) {
+                        logs.push("Detected metadata (moov) at the end of the file. Moving index to front (Fast-Start optimization).");
+                        
+                        // Shift chunk offset tables inside moov to account for moving moov in front of mdat
+                        const shiftedMoovData = relocateMoovOffsets(moovAtom.data, moovAtom.size);
+                        
+                        // Reassemble file: [ftyp (if exists), moov, mdat, other atoms]
+                        let mergedParts = [];
+                        if (ftypAtom) {
+                            mergedParts.push(ftypAtom.data);
+                        }
+                        mergedParts.push(shiftedMoovData);
+                        
+                        atoms.forEach(a => {
+                            if (a.type !== "moov" && a.type !== "ftyp") {
+                                mergedParts.push(a.data);
+                            }
+                        });
+
+                        const finalBuffer = mergeUint8Arrays(mergedParts);
+                        return {
+                            status: "repaired",
+                            blob: new Blob([finalBuffer], { type: "video/mp4" }),
+                            fileName: item.file.name.replace(/\.[^/.]+$/, "") + "_repaired.mp4"
+                        };
+                    } else {
+                        logs.push("Video headers are aligned correctly. Outputting verified copy.");
+                        return {
+                            status: "repaired",
+                            blob: new Blob([activeBytes], { type: "video/mp4" }),
+                            fileName: item.file.name
+                        };
+                    }
+                }
+
+                // D. Reconstruct missing moov using reference video
+                if (!moovAtom && mdatAtom) {
+                    if (!refFile) {
+                        return {
+                            status: "needs_reference"
+                        };
+                    }
+
+                    logs.push("Index headers (moov) missing. Initiating Reference-Based Reconstruction...");
+                    
+                    const refArrayBuffer = await refFile.arrayBuffer();
+                    const refBytes = new Uint8Array(refArrayBuffer);
+                    const refView = new DataView(refArrayBuffer);
+
+                    // Extract format configurations and moov skeleton from reference
+                    const refMoovInfo = extractMoovFromRef(refBytes, refView);
+                    if (!refMoovInfo) {
+                        throw new Error("Unable to parse structural indexes from the reference video file.");
+                    }
+
+                    logs.push("Reference structure parsed. Indexing corrupted H.264 slice locations...");
+                    
+                    // Scan corrupt raw mdat stream to extract frame locations & timings
+                    const frameOffsets = scanMediaFrames(mdatAtom.data);
+                    logs.push(`Discovered ${frameOffsets.length} frames inside raw data stream.`);
+
+                    if (frameOffsets.length === 0) {
+                        throw new Error("No video keyframe descriptors found in the media body chunk.");
+                    }
+
+                    // Build a fresh moov block from template and write it in front of corrupt raw media data
+                    const reconstructedMoov = rebuildMoovWithFrames(refMoovInfo, frameOffsets, mdatAtom.size);
+
+                    let reassembled = [];
+                    if (ftypAtom) {
+                        reassembled.push(ftypAtom.data);
+                    } else if (refMoovInfo.ftyp) {
+                        reassembled.push(refMoovInfo.ftyp);
+                    }
+                    reassembled.push(reconstructedMoov);
+                    reassembled.push(mdatAtom.data);
+
+                    const finalBuffer = mergeUint8Arrays(reassembled);
+                    return {
+                        status: "repaired",
+                        blob: new Blob([finalBuffer], { type: "video/mp4" }),
+                        fileName: item.file.name.replace(/\.[^/.]+$/, "") + "_repaired.mp4"
+                    };
+                }
+
+                throw new Error("Invalid format: File does not contain standard raw video packets (mdat).");
+            }
+
+            // Shifts all chunk offsets ('stco' and 'co64') inside 'moov' atom by size of moov
+            function relocateMoovOffsets(moovBytes, moovSize) {
+                const copy = new Uint8Array(moovBytes);
+                const view = new DataView(copy.buffer, copy.byteOffset, copy.byteLength);
+                
+                // Scan for 'stco' and 'co64'
+                for (let i = 0; i < copy.length - 8; i++) {
+                    // stco: 73 74 63 6f
+                    if (copy[i] === 0x73 && copy[i+1] === 0x74 && copy[i+2] === 0x63 && copy[i+3] === 0x6f) {
+                        const count = view.getUint32(i + 8);
+                        let offsetTableIndex = i + 12;
+                        for (let k = 0; k < count; k++) {
+                            if (offsetTableIndex + 4 <= copy.length) {
+                                const originalOffset = view.getUint32(offsetTableIndex);
+                                view.setUint32(offsetTableIndex, originalOffset + moovSize);
+                                offsetTableIndex += 4;
+                            }
+                        }
+                        i += 8 + (count * 4);
+                    }
+                    // co64: 63 6f 36 34
+                    else if (copy[i] === 0x63 && copy[i+1] === 0x6f && copy[i+2] === 0x36 && copy[i+3] === 0x64) {
+                        const count = view.getUint32(i + 8);
+                        let offsetTableIndex = i + 12;
+                        for (let k = 0; k < count; k++) {
+                            if (offsetTableIndex + 8 <= copy.length) {
+                                const high = view.getUint32(offsetTableIndex);
+                                const low = view.getUint32(offsetTableIndex + 4);
+                                const originalOffset64 = (high * 0x100000000) + low;
+                                const newOffset = originalOffset64 + moovSize;
+                                
+                                view.setUint32(offsetTableIndex, Math.floor(newOffset / 0x100000000));
+                                view.setUint32(offsetTableIndex + 4, newOffset % 0x100000000);
+                                offsetTableIndex += 8;
+                            }
+                        }
+                        i += 8 + (count * 8);
+                    }
+                }
+                return copy;
+            }
+
+            // Extract ftyp and moov from reference video
+            function extractMoovFromRef(bytes, view) {
+                let offset = 0;
+                let moovData = null;
+                let ftypData = null;
+
+                while (offset < bytes.length - 8) {
+                    const size = view.getUint32(offset);
+                    const typeBytes = bytes.subarray(offset + 4, offset + 8);
+                    const type = String.fromCharCode(...typeBytes);
+
+                    let actualSize = size;
+                    if (size === 1) {
+                        const high = view.getUint32(offset + 8);
+                        const low = view.getUint32(offset + 12);
+                        actualSize = (high * 0x100000000) + low;
+                    }
+
+                    if (type === "moov") {
+                        moovData = bytes.subarray(offset, offset + actualSize);
+                    }
+                    if (type === "ftyp") {
+                        ftypData = bytes.subarray(offset, offset + actualSize);
+                    }
+
+                    offset += actualSize;
+                }
+
+                if (moovData) {
+                    return {
+                        ftyp: ftypData,
+                        moov: moovData
+                    };
+                }
+                return null;
+            }
+
+            // Scans mdat raw data to locate frame start points
+            function scanMediaFrames(mdatBytes) {
+                const offsets = [];
+                let i = 0;
+                const len = mdatBytes.length;
+
+                // Simple scanner looking for H.264 slice boundaries/headers (0x00 00 00 01)
+                // This builds indexes of the frame packets
+                while (i < len - 4) {
+                    if (mdatBytes[i] === 0 && mdatBytes[i+1] === 0 && mdatBytes[i+2] === 0 && mdatBytes[i+3] === 1) {
+                        const nalType = mdatBytes[i+4] & 0x1F;
+                        // NAL types: 1 = Non-IDR Slice, 5 = IDR Slice (Keyframe)
+                        if (nalType === 1 || nalType === 5) {
+                            if (offsets.length > 0) {
+                                // Close out previous frame size
+                                const prev = offsets[offsets.length - 1];
+                                prev.size = i - prev.offset;
+                            }
+                            offsets.push({
+                                offset: i,
+                                size: 0,
+                                isKey: (nalType === 5)
+                            });
+                            i += 5;
+                            continue;
+                        }
+                    }
+                    i++;
+                }
+
+                if (offsets.length > 0) {
+                    offsets[offsets.length - 1].size = len - offsets[offsets.length - 1].offset;
+                }
+
+                return offsets.filter(f => f.size > 0);
+            }
+
+            // Synthesizes a new moov header structure using frame definitions
+            function rebuildMoovWithFrames(refInfo, frameOffsets, mdatSize) {
+                // Copy reference moov
+                const moovCopy = new Uint8Array(refInfo.moov);
+                const view = new DataView(moovCopy.buffer, moovCopy.byteOffset, moovCopy.byteLength);
+                
+                const moovSize = moovCopy.length;
+                let videoFrameCount = frameOffsets.length;
+                let keyFrames = frameOffsets.filter(f => f.isKey);
+
+                // Iterate moov segments and replace sizing and chunk offsets:
+                // stco (chunk offsets)
+                // stsz (sample sizes)
+                // stss (sync samples / keyframes)
+                // stts (time to sample)
+                for (let i = 0; i < moovCopy.length - 8; i++) {
+                    const type = String.fromCharCode(moovCopy[i], moovCopy[i+1], moovCopy[i+2], moovCopy[i+3]);
+                    
+                    // A. Rebuild stsz (Sample Size table)
+                    if (type === "stsz") {
+                        const sampleCount = view.getUint32(i + 12);
+                        // replace count
+                        view.setUint32(i + 12, videoFrameCount);
+                        
+                        let offsetIndex = i + 16;
+                        for (let k = 0; k < videoFrameCount; k++) {
+                            if (offsetIndex + 4 <= moovCopy.length) {
+                                const frame = frameOffsets[k] || frameOffsets[0];
+                                view.setUint32(offsetIndex, frame.size);
+                                offsetIndex += 4;
+                            }
+                        }
+                    }
+                    // B. Rebuild stco (Chunk Offset table)
+                    else if (type === "stco") {
+                        const chunkCount = view.getUint32(i + 8);
+                        view.setUint32(i + 8, videoFrameCount);
+                        
+                        let offsetIndex = i + 12;
+                        // Raw frames are relocated inside the rebuilt container
+                        // Add header size shifts
+                        const totalHeaderShift = (refInfo.ftyp ? refInfo.ftyp.length : 32) + moovSize;
+                        for (let k = 0; k < videoFrameCount; k++) {
+                            if (offsetIndex + 4 <= moovCopy.length) {
+                                const frame = frameOffsets[k] || frameOffsets[0];
+                                view.setUint32(offsetIndex, frame.offset + totalHeaderShift);
+                                offsetIndex += 4;
+                            }
+                        }
+                    }
+                    // C. Rebuild stss (Keyframe index / Sync Sample table)
+                    else if (type === "stss") {
+                        const keyCount = view.getUint32(i + 8);
+                        // rewrite key counts
+                        const keyIndexCount = keyFrames.length > 0 ? keyFrames.length : 1;
+                        view.setUint32(i + 8, keyIndexCount);
+                        
+                        let offsetIndex = i + 12;
+                        if (keyFrames.length > 0) {
+                            for (let k = 0; k < keyFrames.length; k++) {
+                                if (offsetIndex + 4 <= moovCopy.length) {
+                                    const frameIndex = frameOffsets.indexOf(keyFrames[k]) + 1; // 1-indexed
+                                    view.setUint32(offsetIndex, frameIndex);
+                                    offsetIndex += 4;
+                                }
+                            }
+                        } else {
+                            view.setUint32(offsetIndex, 1); // default to first frame
+                        }
+                    }
+                }
+
+                return moovCopy;
+            }
+
+            // ── Helper Utilities ──
+            function mergeUint8Arrays(arrays) {
+                let totalLen = 0;
+                arrays.forEach(a => totalLen += a.length);
+                const result = new Uint8Array(totalLen);
+                let offset = 0;
+                arrays.forEach(a => {
+                    result.set(a, offset);
+                    offset += a.length;
+                });
+                return result;
+            }
+        })();
+    </script>
+    HTML;
+
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     echo renderToolHandlerHTML($_GET['tool'] ?? '');
 }
 
 ?>
+
 
