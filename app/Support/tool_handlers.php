@@ -255,7 +255,7 @@ function any2convertPdfServiceScript(): string
             };
         })();
     </script>
-    HTML;
+HTML;
 }
 
 function any2convertRenderServerPdfCard(array $config): string
@@ -16070,7 +16070,8 @@ function getRepairMediaHTML() {
             }
         })();
     </script>
-    HTML;
+HTML;
+}
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     echo renderToolHandlerHTML($_GET['tool'] ?? '');
